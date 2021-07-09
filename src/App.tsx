@@ -1,26 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useContext} from "react";
+import Task from './components/tasks/Task'
+import Appbar from "./components/appbar/Appbar";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import {HashRouter as Router, Route, Switch} from "react-router-dom";
+
+import {AuthContext} from "./util/Auth";
+import SimpleAppbar from "./components/appbar/SimpleAppbar";
+import Campaigns from "./components/campaigns/Campaigns";
+import TaskMenu from "./components/tasks/TaskMenu";
+
+
+const App = () => {
+    const {currentUser} = useContext(AuthContext)
+
+    return (
+        <div>
+            <Router>
+                <Switch>
+                    <Route path={"/campaign/:campaignId"}>
+                        <Appbar>
+                            <Route exact path="/campaign/:campaignId/tasks">
+                                <TaskMenu/>
+                            </Route>
+                            <Route exact path="/campaign/:campaignId/tasks/:id">
+                                <Task/>
+                            </Route>
+                        </Appbar>
+                    </Route>
+                    <Route path="/">
+                        <SimpleAppbar>
+                            <Campaigns/>
+                        </SimpleAppbar>
+                    </Route>
+                </Switch>
+            </Router>
+
+        </div>
+    );
 }
 
-export default App;
+export default App

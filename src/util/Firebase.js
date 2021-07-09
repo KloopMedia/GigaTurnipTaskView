@@ -29,7 +29,9 @@ export const signInWithGoogle = () => {
 };
 
 export const signOut = () => {
-    firebase.auth().signOut()
+    return firebase.auth().signOut()
+        .then(() => localStorage.removeItem("token"))
+        .then(() => window.location.reload(false))
 }
 
 export default firebase;

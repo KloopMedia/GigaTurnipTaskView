@@ -12,8 +12,9 @@ const TaskList = (props: TaskListProps) => {
     const [tasks, setTasks] = useState([])
 
     useEffect(() => {
-        console.log(`stage=&assignee=${assignee}&complete=${complete}&assignee__username=${username}`)
-        axios.get(`${tasksUrl}?stage=&assignee=&complete=${complete}&assignee__username=${username}`)
+        // const userRelevant = `?complete=${complete}&assignee__username=${username}`
+        // console.log(userRelevant)
+        axios.get(`${tasksUrl}user_relevant/?complete=${complete}`)
             .then(res => res.data)
             .then(res => setTasks(res))
     }, [])

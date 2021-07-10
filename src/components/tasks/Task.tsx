@@ -67,7 +67,7 @@ const Task = () => {
     }, [id])
 
     const handleSubmit = () => {
-        console.log(formResponses)
+        console.log("formResponses", formResponses)
         let data = {responses: formResponses, complete: true}
         axios.patch(tasksUrl + id + '/', data)
             .then(() => alert("Saved"))

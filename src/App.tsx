@@ -11,8 +11,6 @@ import TaskMenu from "./components/tasks/TaskMenu";
 
 
 const App = () => {
-    const {currentUser} = useContext(AuthContext)
-
     return (
         <div>
             <Router>

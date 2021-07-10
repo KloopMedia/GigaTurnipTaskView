@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import Form from "@rjsf/bootstrap-4";
 import {useHistory, useParams} from "react-router-dom";
 import axios from "../../util/Axios";
@@ -6,20 +6,23 @@ import {tasksUrl} from '../../config/Urls'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CustomFileWidget from "../custom-widgets/file-widget/CustomFileWidget";
 import {Button} from "react-bootstrap";
-import {log} from "util";
 import {Grid, Typography} from "@material-ui/core";
+import {AuthContext} from "../../util/Auth";
 
-type RouterParams = { id: string }
+type RouterParams = { id: string, campaignId: string }
+type dataForStoragePathParams = {campaignId: number, chainId: number, stageId: number, userId: string, taskId: number}
 
 const Task = () => {
-    const {id} = useParams<RouterParams>();
+    const {id, campaignId} = useParams<RouterParams>();
     const history = useHistory()
+    const {currentUser} = useContext(AuthContext)
 
     const [schema, setSchema] = useState({})
     const [uiSchema, setUiSchema] = useState({})
     const [formResponses, setFormResponses] = useState({})
     const [complete, setComplete] = useState(false)
     const [prevTasks, setPrevTasks] = useState<any>([])
+    const [dataForStoragePath, setDataForStoragePath] = useState<dataForStoragePathParams | {}>({})
 
     const widgets = {
         customfile: CustomFileWidget
@@ -36,6 +39,14 @@ const Task = () => {
             let task = await getTask()
             let stage = task.stage
             console.log(task, stage)
+
+            setDataForStoragePath({
+                campaignId: campaignId.toString(),
+                chainId: stage.chain.toString(),
+                stageId: stage.id.toString(),
+                userId: currentUser.uid,
+                taskId: task.id.toString()
+            })
 
             let parsed_schema = JSON.parse(stage.json_schema)
             let parsed_ui = JSON.parse(stage.ui_schema)
@@ -61,10 +72,10 @@ const Task = () => {
             setUiSchema(parsed_ui)
             setComplete(task.complete)
         }
-        if (id) {
+        if (id && currentUser) {
             setData()
         }
-    }, [id])
+    }, [id, currentUser])
 
     const handleSubmit = () => {
         console.log("formResponses", formResponses)
@@ -102,6 +113,7 @@ const Task = () => {
                     schema={schema}
                     uiSchema={uiSchema}
                     formData={formResponses}
+                    formContext={dataForStoragePath}
                     widgets={widgets}
                     disabled={complete}
                     onChange={handleChange}

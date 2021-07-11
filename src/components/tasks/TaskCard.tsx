@@ -19,11 +19,11 @@ const useStyles = makeStyles({
     }
 });
 
-type CardProps = { id: number, complete: boolean, name: string, description?: string, creatable?: boolean }
+type CardProps = { id: number, complete: boolean, name: string, description?: string, creatable?: boolean, selectable?: boolean }
 
 const TaskCard = (props: CardProps) => {
     const classes = useStyles();
-    const {id, complete, name, description, creatable} = props;
+    const {id, complete, name, description, creatable, selectable} = props;
     const history = useHistory()
 
     const handleOpen = () => {
@@ -37,22 +37,39 @@ const TaskCard = (props: CardProps) => {
             .then(res => history.push(`${history.location.pathname}/${res.id}`))
     };
 
+    const handleSelectable = () => {
+        axios.post(tasksUrl + id + '/request_assignment/')
+            .then(res => history.push(`${history.location.pathname}/${id}`))
+            .catch(res => alert(res))
+    }
+
+    const returnButton = () => {
+        if (selectable) {
+            return <Button size="small" onClick={handleSelectable}>Open</Button>
+        }
+        else if (creatable) {
+            return <Button size="small" onClick={handleCreate}>Create</Button>
+        }
+        else {
+            return <Button size="small" onClick={handleOpen}>Open</Button>
+        }
+    }
+
     return (
         <Card className={classes.root}>
             <CardContent>
                 <Typography variant="h5" component="h2" gutterBottom={true}>
                     {name}
                 </Typography>
+                <Typography variant="subtitle2" component="p">
+                    ID: {id ? id : <br/>}
+                </Typography>
                 <Typography variant="body1" component="p">
                     {description ? description : <br/>}
                 </Typography>
             </CardContent>
             <CardActions>
-                {creatable ?
-                    <Button size="small" onClick={handleCreate}>Create</Button>
-                    :
-                    <Button size="small" onClick={handleOpen}>Open</Button>
-                }
+                {returnButton()}
             </CardActions>
         </Card>
     );

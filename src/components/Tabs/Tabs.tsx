@@ -28,6 +28,7 @@ const SimpleTabs = (props: any) => {
                 <Tabs value={value} onChange={handleChange} variant="fullWidth" centered aria-label="simple tabs example">
                     <Tab label="Невыполненные" {...a11yProps(0)} />
                     <Tab label="Выполненные" {...a11yProps(1)} />
+                    <Tab label="Доступные" {...a11yProps(2)} />
                 </Tabs>
             </div>
             {props.children}

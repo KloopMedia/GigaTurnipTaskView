@@ -5,18 +5,24 @@ import {tasksUrl} from "../../config/Urls";
 import TaskCard from "./TaskCard";
 
 
-type TaskListProps = { stage?: number, assignee?: number, complete: boolean, username: string }
+type TaskListProps = { stage?: number, assignee?: number, complete: boolean, username: string, selectable?: true }
 
 const TaskList = (props: TaskListProps) => {
-    const {stage, assignee, complete, username} = props;
+    const {stage, assignee, complete, username, selectable} = props;
     const [tasks, setTasks] = useState([])
 
     useEffect(() => {
-        // const userRelevant = `?complete=${complete}&assignee__username=${username}`
-        // console.log(userRelevant)
-        axios.get(`${tasksUrl}user_relevant/?complete=${complete}`)
-            .then(res => res.data)
-            .then(res => setTasks(res))
+        if (selectable) {
+            console.log('selectable')
+            axios.get(`${tasksUrl}user_selectable/`)
+                .then(res => res.data)
+                .then((res) => res.map((task:any) => ({...task, selectable: true})))
+                .then(res => setTasks(res))
+        } else {
+            axios.get(`${tasksUrl}user_relevant/?complete=${complete}`)
+                .then(res => res.data)
+                .then(res => setTasks(res))
+        }
     }, [])
 
     return (
@@ -33,6 +39,7 @@ const TaskList = (props: TaskListProps) => {
                         name={task.stage.name}
                         description={task.stage.description}
                         complete={task.complete}
+                        selectable={task?.selectable}
                     />
                 </Grid>
             )}

@@ -26,6 +26,9 @@ const TaskMenu = (props: any) => {
                 <TabPanel value={value} index={1}>
                     <TaskList username={currentUser.uid} complete={true}/>
                 </TabPanel>
+                <TabPanel value={value} index={2}>
+                    <TaskList username={currentUser.uid} complete={true} selectable={true}/>
+                </TabPanel>
             </SimpleTabs>
         </Grid>
     )

@@ -10,7 +10,7 @@ import {Grid, Typography} from "@material-ui/core";
 import {AuthContext} from "../../util/Auth";
 
 type RouterParams = { id: string, campaignId: string }
-type dataForStoragePathParams = {campaignId: number, chainId: number, stageId: number, userId: string, taskId: number}
+type dataForStoragePathParams = { campaignId: number, chainId: number, stageId: number, userId: string, taskId: number }
 
 const Task = () => {
     const {id, campaignId} = useParams<RouterParams>();
@@ -85,6 +85,12 @@ const Task = () => {
             .then(() => history.goBack())
     }
 
+    const handleRelease = () => {
+        axios.post(tasksUrl + id + '/release_assignment/')
+            .then(() => alert("Released"))
+            .then(() => history.goBack())
+    }
+
     const handleChange = (e: any) => {
         setFormResponses(e.formData)
     }
@@ -108,7 +114,8 @@ const Task = () => {
             </Grid>
             }
             <Grid>
-                {prevTasks.length > 0 && <Typography variant={"h4"} align="center" style={{padding: 10}}>Current Task</Typography>}
+                {prevTasks.length > 0 &&
+                <Typography variant={"h4"} align="center" style={{padding: 10}}>Current Task</Typography>}
                 <Form
                     schema={schema}
                     uiSchema={uiSchema}
@@ -120,6 +127,7 @@ const Task = () => {
                     onSubmit={handleSubmit}
                 >
                     <Button type="submit" disabled={complete}>Submit</Button>
+                    <Button variant="danger" disabled={complete} style={{marginLeft: 7}} onClick={handleRelease}>Release</Button>
                 </Form>
             </Grid>
         </div>

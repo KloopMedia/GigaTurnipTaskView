@@ -19,7 +19,7 @@ const Task = () => {
 
     const [schema, setSchema] = useState({})
     const [uiSchema, setUiSchema] = useState({})
-    const [formResponses, setFormResponses] = useState({})
+    const [formResponses, setFormResponses] = useState<any>({})
     const [complete, setComplete] = useState(false)
     const [prevTasks, setPrevTasks] = useState<any>([])
     const [dataForStoragePath, setDataForStoragePath] = useState<dataForStoragePathParams | {}>({})
@@ -58,14 +58,25 @@ const Task = () => {
                 .then(res => {
                     console.log(res)
                     return res.map((t: any) => {
-                        return t.map((tt: any) => ({
-                            responses: tt.responses,
-                            json_schema: JSON.parse(tt.stage.json_schema),
-                            ui_schema: JSON.parse(tt.stage.ui_schema)
-                        }))
+                        return t.map((tt: any) => {
+                            let brokenUi = JSON.parse(tt.stage.ui_schema)
+                            let {file, ...r} = brokenUi
+                            if (file && file["ui:widget"] !== "customfile") {
+                                file = {"ui:widget": "customfile"}
+                            }
+                            let fixedUi = {file, ...r}
+                            return {
+                                responses: tt.responses,
+                                json_schema: JSON.parse(tt.stage.json_schema),
+                                ui_schema: fixedUi
+                            }
+                        })
                     }).flat()
                 })
             console.log("inTasks", inTasks)
+            console.log("task.responses", task.responses)
+            console.log("parsed_schema", parsed_schema)
+            console.log("parsed_ui", parsed_ui)
             setPrevTasks(inTasks)
             setFormResponses(task.responses)
             setSchema(parsed_schema)

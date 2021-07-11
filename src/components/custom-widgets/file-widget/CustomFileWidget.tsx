@@ -13,24 +13,29 @@ const CustomFileWidget = (props: any) => {
     let pathToFolder: any = undefined
     if (campaignId && chainId && stageId && userId && taskId) {
         pathToFolder = firebase
-        .storage()
-        .ref(campaignId)
-        .child(chainId)
-        .child(stageId)
-        .child(userId)
-        .child(taskId)
+            .storage()
+            .ref(campaignId)
+            .child(chainId)
+            .child(stageId)
+            .child(userId)
+            .child(taskId)
     }
 
 
     useEffect(() => {
         console.log("value", value)
         if (value) {
-            let newFiles: any = {}
-            let parsed = JSON.parse(value)
-            Object.keys(parsed).forEach(filename => {
-                newFiles[filename] = {url: parsed[filename], status: "complete"}
-            })
-            setFileBeingUploaded(newFiles)
+            try {
+                let newFiles: any = {}
+                let parsed = JSON.parse(value)
+                Object.keys(parsed).forEach(filename => {
+                    newFiles[filename] = {url: parsed[filename], status: "complete"}
+                })
+                setFileBeingUploaded(newFiles)
+
+            } catch (error) {
+                // setFileBeingUploaded({})
+            }
         }
     }, [value])
 
@@ -40,9 +45,11 @@ const CustomFileWidget = (props: any) => {
     };
 
     useEffect(() => {
-        console.log("fileLinks", fileLinks)
-        let stringify = JSON.stringify(fileLinks)
-        props.onChange(stringify)
+        if (fileLinks) {
+            console.log("fileLinks", fileLinks)
+            let stringify = JSON.stringify(fileLinks)
+            props.onChange(stringify)
+        }
     }, [fileLinks])
 
     return (
@@ -56,7 +63,8 @@ const CustomFileWidget = (props: any) => {
                     <div style={{display: "flex"}}>
                         <p>{filename}</p>
                         {fileBeingUploaded[filename].status === 'complete' &&
-                        <a className="text-success" href={fileBeingUploaded[filename]?.url} style={{paddingLeft: 10}}>saved</a>}
+                        <a className="text-success" href={fileBeingUploaded[filename]?.url}
+                           style={{paddingLeft: 10}}>saved</a>}
                     </div>
                     {fileBeingUploaded[filename].status === 'loading' &&
                     <LinearProgressWithLabel value={fileBeingUploaded[filename].progress}/>}

@@ -127,7 +127,7 @@ const Task = () => {
                     onSubmit={handleSubmit}
                 >
                     <Button type="submit" disabled={complete}>Submit</Button>
-                    <Button variant="danger" disabled={complete} style={{marginLeft: 7}} onClick={handleRelease}>Release</Button>
+                    {/*<Button variant="danger" disabled={complete} style={{marginLeft: 7}} onClick={handleRelease}>Release</Button>*/}
                 </Form>
             </Grid>
         </div>

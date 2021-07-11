@@ -12,6 +12,10 @@ const CustomFileWidget = (props: any) => {
 
     let pathToFolder: any = undefined
     if (campaignId && chainId && stageId && userId && taskId) {
+        // let chain = chainId
+        // if (typeof chainId === "object") {
+        //     chain = chainId.id
+        // }
         pathToFolder = firebase
             .storage()
             .ref(campaignId)
@@ -31,7 +35,7 @@ const CustomFileWidget = (props: any) => {
                 Object.keys(parsed).forEach(filename => {
                     newFiles[filename] = {url: parsed[filename], status: "complete"}
                 })
-                setFileBeingUploaded(newFiles)
+                setFileBeingUploaded((prevState: any) => ({...prevState, ...newFiles}))
 
             } catch (error) {
                 // setFileBeingUploaded({})
@@ -47,8 +51,19 @@ const CustomFileWidget = (props: any) => {
     useEffect(() => {
         if (fileLinks) {
             console.log("fileLinks", fileLinks)
-            let stringify = JSON.stringify(fileLinks)
-            props.onChange(stringify)
+            try {
+                let parsed = JSON.parse(value)
+                let allFiles = {...parsed, ...fileLinks}
+                console.log(allFiles)
+                let stringify = JSON.stringify(allFiles)
+
+                props.onChange(stringify)
+            }
+            catch (error) {
+                let stringify = JSON.stringify(fileLinks)
+
+                props.onChange(stringify)
+            }
         }
     }, [fileLinks])
 

@@ -18,17 +18,25 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
 }));
 
-const SimpleTabs = (props: any) => {
+type SimpleTabsProps = {
+    value: number | string,
+    handleChange: (event: any, newValue: number) => void,
+    showSelectable: boolean,
+    children: any
+}
+
+const SimpleTabs = (props: SimpleTabsProps) => {
     const classes = useStyles();
     const {value, handleChange} = props;
 
     return (
         <Grid>
             <div className={classes.root}>
-                <Tabs value={value} onChange={handleChange} variant="fullWidth" centered aria-label="simple tabs example">
+                <Tabs value={value} onChange={handleChange} variant="fullWidth" centered
+                      aria-label="simple tabs example">
                     <Tab label="Невыполненные" {...a11yProps(0)} />
                     <Tab label="Выполненные" {...a11yProps(1)} />
-                    <Tab label="Доступные" {...a11yProps(2)} />
+                    {props.showSelectable && <Tab label="Доступные" {...a11yProps(2)} />}
                 </Tabs>
             </div>
             {props.children}

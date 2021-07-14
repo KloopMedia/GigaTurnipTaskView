@@ -156,7 +156,7 @@ const Appbar = (props: AppbarProps) => {
         let value = event.target.value;
         console.log(value)
         setCampaign(value)
-        history.push(`/campaign/${value}`)
+        history.push(`/campaign/${value}/tasks`)
     }
 
     const redirectToMain = () => {

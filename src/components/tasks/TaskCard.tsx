@@ -19,7 +19,13 @@ const useStyles = makeStyles({
     }
 });
 
-type CardProps = { id: number, complete: boolean, name: string, description?: string, creatable?: boolean, selectable?: boolean }
+type CardProps = {
+    id: number,
+    complete?: boolean,
+    name: string,
+    description?: string,
+    creatable?: boolean,
+    selectable?: boolean }
 
 const TaskCard = (props: CardProps) => {
     const classes = useStyles();
@@ -32,15 +38,17 @@ const TaskCard = (props: CardProps) => {
 
     const handleCreate = () => {
         let data = {stage: id}
+        console.log(data)
         axios.post(tasksUrl, data)
             .then(res => res.data)
             .then(res => history.push(`${history.location.pathname}/${res.id}`))
+            .catch(err => alert(err))
     };
 
     const handleSelectable = () => {
         axios.post(tasksUrl + id + '/request_assignment/')
             .then(res => history.push(`${history.location.pathname}/${id}`))
-            .catch(res => alert(res))
+            .catch(err => alert(err))
     }
 
     const returnButton = () => {
@@ -58,13 +66,15 @@ const TaskCard = (props: CardProps) => {
     return (
         <Card className={classes.root}>
             <CardContent>
-                <Typography variant="h5" component="h2" gutterBottom={true}>
+                <Typography variant="h5" component="span" gutterBottom={true}>
                     {name}
                 </Typography>
-                <Typography variant="subtitle2" component="p">
-                    ID: {id ? id : <br/>}
+                <br/>
+                <Typography variant="subtitle2" component="span">
+                    {id && !creatable ? `ID: ${id}` : <br/>}
                 </Typography>
-                <Typography variant="body1" component="p">
+                <br/>
+                <Typography variant="body1" component="span">
                     {description ? description : <br/>}
                 </Typography>
             </CardContent>

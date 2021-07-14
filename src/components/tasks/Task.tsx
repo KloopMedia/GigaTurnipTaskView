@@ -16,6 +16,7 @@ const Task = () => {
     const {id, campaignId} = useParams<RouterParams>();
     const history = useHistory()
     const {currentUser} = useContext(AuthContext)
+    const path = `/campaign/${campaignId}/tasks`
 
     const [schema, setSchema] = useState({})
     const [uiSchema, setUiSchema] = useState({})
@@ -73,10 +74,7 @@ const Task = () => {
                         })
                     }).flat()
                 })
-            console.log("inTasks", inTasks)
-            console.log("task.responses", task.responses)
-            console.log("parsed_schema", parsed_schema)
-            console.log("parsed_ui", parsed_ui)
+
             setPrevTasks(inTasks)
             setFormResponses(task.responses)
             setSchema(parsed_schema)
@@ -89,17 +87,16 @@ const Task = () => {
     }, [id, currentUser])
 
     const handleSubmit = () => {
-        console.log("formResponses", formResponses)
         let data = {responses: formResponses, complete: true}
         axios.patch(tasksUrl + id + '/', data)
             .then(() => alert("Saved"))
-            .then(() => history.goBack())
+            .then(() => history.push(path))
     }
 
     const handleRelease = () => {
         axios.post(tasksUrl + id + '/release_assignment/')
             .then(() => alert("Released"))
-            .then(() => history.goBack())
+            .then(() => history.push(path))
     }
 
     const handleChange = (e: any) => {

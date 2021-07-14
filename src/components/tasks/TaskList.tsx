@@ -1,48 +1,56 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {Grid} from "@material-ui/core";
-import axios from "../../util/Axios";
-import {tasksUrl} from "../../config/Urls";
 import TaskCard from "./TaskCard";
 
 
-type TaskListProps = { stage?: number, assignee?: number, complete: boolean, username: string, selectable?: boolean, tasks: any[] }
+type TaskListProps = {
+    complete?: boolean,
+    selectable?: boolean,
+    creatable?: boolean,
+    tasks: any[]
+}
 
 const TaskList = (props: TaskListProps) => {
-    const {stage, assignee, complete, username, selectable, tasks} = props;
-    // const [tasks, setTasks] = useState([])
+    const {complete, selectable, tasks, creatable} = props;
 
-    // useEffect(() => {
-    //     if (selectable) {
-    //         console.log('selectable')
-    //         axios.get(`${tasksUrl}user_selectable/`)
-    //             .then(res => res.data)
-    //             .then((res) => res.map((task:any) => ({...task, selectable: true})))
-    //             .then(res => setTasks(res))
-    //     } else {
-    //         axios.get(`${tasksUrl}user_relevant/?complete=${complete}`)
-    //             .then(res => res.data)
-    //             .then(res => setTasks(res))
-    //     }
-    // }, [])
+    const listTasks = () => {
+        return tasks.map((task: any) => {
+                let id, name, description;
+                if (creatable) {
+                    id = task.id
+                    name = task.name
+                    description = task.description
+                }
+                else {
+                    id = task.id
+                    name = task.stage.name
+                    description = task.stage.description
+                }
+
+                return (
+                    <Grid item key={task.id} style={{padding: 10}}>
+                        <TaskCard
+                            id={id}
+                            name={name}
+                            description={description}
+                            complete={complete}
+                            selectable={selectable}
+                            creatable={creatable}
+                        />
+                    </Grid>
+                )
+            }
+        )
+    }
 
     return (
         <Grid
             container
-            direction="column"
-            alignItems="center"
-            justify="center"
+            direction={creatable ? "row" : "column"}
+            alignItems={"center"}
+            justifyContent={creatable ? "flex-start" : "center"}
         >
-            {tasks.map((task: any) =>
-                <Grid item key={task.id} style={{padding: 12}}>
-                    <TaskCard
-                        id={task.id}
-                        name={task.stage.name}
-                        description={task.stage.description}
-                        complete={task.complete}
-                        selectable={selectable}
-                    />
-                </Grid>
-            )}
+            {listTasks()}
         </Grid>
     )
 }

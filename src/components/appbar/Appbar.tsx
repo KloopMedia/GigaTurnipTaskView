@@ -188,6 +188,7 @@ const Appbar = (props: AppbarProps) => {
                         {projectName}
                     </Typography>
                     <Grid className={classes.title} />
+                    <Typography>{currentUser?.email}</Typography>
                     <FormControl className={classes.formControl} size="small">
                         <Select
                             className={classes.select}

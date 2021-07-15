@@ -100,6 +100,7 @@ const Appbar = (props: AppbarProps) => {
                     <Typography className={classes.title} variant="h6" noWrap>
                         {projectName}
                     </Typography>
+                    <Typography>{currentUser?.email}</Typography>
                     {currentUser ?
                         <Button onClick={signOut} color={"inherit"}>
                             Log out

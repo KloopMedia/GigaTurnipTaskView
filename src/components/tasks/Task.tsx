@@ -8,6 +8,7 @@ import CustomFileWidget from "../custom-widgets/file-widget/CustomFileWidget";
 import {Button} from "react-bootstrap";
 import {Grid, Typography} from "@material-ui/core";
 import {AuthContext} from "../../util/Auth";
+import {Editor} from "@tinymce/tinymce-react";
 
 type RouterParams = { id: string, campaignId: string }
 type dataForStoragePathParams = { campaignId: number, chainId: number, stageId: number, userId: string, taskId: number }
@@ -24,6 +25,7 @@ const Task = () => {
     const [complete, setComplete] = useState(false)
     const [prevTasks, setPrevTasks] = useState<any>([])
     const [dataForStoragePath, setDataForStoragePath] = useState<dataForStoragePathParams | {}>({})
+    const [editorData, setEditorData] = useState("")
 
     const widgets = {
         customfile: CustomFileWidget
@@ -41,6 +43,10 @@ const Task = () => {
             let stage = task.stage
             console.log(task, stage)
 
+            if (stage && stage.rich_text) {
+                setEditorData(stage.rich_text)
+            }
+
             setDataForStoragePath({
                 campaignId: campaignId.toString(),
                 chainId: stage.chain.toString(),
@@ -49,8 +55,8 @@ const Task = () => {
                 taskId: task.id.toString()
             })
 
-            let parsed_schema = JSON.parse(stage.json_schema)
-            let parsed_ui = JSON.parse(stage.ui_schema)
+            let parsed_schema = JSON.parse(stage.json_schema) ?? {}
+            let parsed_ui = JSON.parse(stage.ui_schema) ?? {}
             let caseId = task.case
             let prevStages = stage.displayed_prev_stages
             console.log(prevStages)
@@ -105,6 +111,23 @@ const Task = () => {
 
     return (
         <div style={{width: '70%', minWidth: '400px', margin: '0 auto', display: 'block', padding: 10}}>
+            {editorData !== "" && <div style={{paddingBottom: 20}}>
+                <Editor
+                    id={"ViewerTinyMCE"}
+                    value={editorData}
+                    toolbar={false}
+                    inline={false}
+                    disabled={true}
+                    tinymceScriptSrc={process.env.PUBLIC_URL + '/tinymce/tinymce.min.js'}
+                    init={{
+                        plugins: 'autoresize',
+                        menubar: false,
+                        image_advtab: true,
+                        importcss_append: true,
+                    }}
+                />
+            </div>}
+
             {prevTasks.length > 0 &&
             <Grid>
                 <Typography variant={"h4"} align="center" style={{padding: 10}}>Previous Tasks</Typography>

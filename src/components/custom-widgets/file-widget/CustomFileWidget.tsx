@@ -5,38 +5,41 @@ import LinearProgressWithLabel from "./LinearProgressWithLabel";
 
 
 const CustomFileWidget = (props: any) => {
-    const {schema, disabled, name, formContext, value} = props;
+    const {schema, uiSchema, disabled, name, formContext, value} = props;
     const {campaignId, chainId, stageId, userId, taskId} = formContext;
     const [fileBeingUploaded, setFileBeingUploaded] = useState<any>({})
     const [fileLinks, setFileLinks] = useState({})
+    const privateUpload = uiSchema["ui:options"] ? uiSchema["ui:options"].private : false
 
     let pathToFolder: any = undefined
     if (campaignId && chainId && stageId && userId && taskId) {
-        // let chain = chainId
-        // if (typeof chainId === "object") {
-        //     chain = chainId.id
-        // }
-        pathToFolder = firebase
-            .storage()
-            .ref(campaignId)
-            .child(chainId)
-            .child(stageId)
-            .child(userId)
-            .child(taskId)
+        pathToFolder = firebase.storage()
+        if (privateUpload) {
+            pathToFolder = pathToFolder.ref("private")
+        } else {
+            pathToFolder = pathToFolder.ref("public")
+        }
+        pathToFolder = pathToFolder.child(campaignId)
+                .child(chainId)
+                .child(stageId)
+                .child(userId)
+                .child(taskId)
     }
 
 
     useEffect(() => {
         console.log("value", value)
+        console.log("uiSchema", uiSchema)
         if (value) {
             try {
-                let newFiles: any = {}
-                let parsed = JSON.parse(value)
+                const parsed = JSON.parse(value)
                 Object.keys(parsed).forEach(filename => {
-                    newFiles[filename] = {url: parsed[filename], status: "complete"}
+                    getDownloadUrl(parsed[filename])
+                        .then(url => setFileBeingUploaded((prevState: any) => ({
+                            ...prevState,
+                            [filename]: {url: url, status: "complete"}
+                        })))
                 })
-                setFileBeingUploaded((prevState: any) => ({...prevState, ...newFiles}))
-
             } catch (error) {
                 // setFileBeingUploaded({})
             }
@@ -48,6 +51,10 @@ const CustomFileWidget = (props: any) => {
         upload([...event.target.files], pathToFolder, setFileBeingUploaded, setFileLinks)
     };
 
+    const getDownloadUrl = (path: string) => {
+        return firebase.storage().ref(path).getDownloadURL()
+    }
+
     useEffect(() => {
         if (fileLinks) {
             console.log("fileLinks", fileLinks)
@@ -58,8 +65,7 @@ const CustomFileWidget = (props: any) => {
                 let stringify = JSON.stringify(allFiles)
 
                 props.onChange(stringify)
-            }
-            catch (error) {
+            } catch (error) {
                 let stringify = JSON.stringify(fileLinks)
 
                 props.onChange(stringify)

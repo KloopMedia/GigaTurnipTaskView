@@ -25,19 +25,22 @@ const upload = async (files, storageRef, setFileBeingUploaded, setFileLinks) => 
                 () => {
                     // Upload completed successfully, now we can get the download URL
                     snap.snapshot.ref.getDownloadURL().then(downloadURL => {
-                        let fileLink = downloadURL
+                        console.log("FILE PATH", snap.snapshot.ref.fullPath)
+                        const filePath = snap.snapshot.ref.fullPath
+                        const fileLink = downloadURL
                         setFileBeingUploaded(prevState => {
                             const update = {[file.name]: {status: "complete", progress: 100, url: fileLink}}
                             return prevState ? {...prevState, ...update} : update
                         })
                         setFileLinks(prevState => {
-                            const update = {[file.name]: fileLink}
+                            const update = {[file.name]: filePath}
                             return prevState ? {...prevState, ...update} : update
                         })
                     });
                 });
         }))
-    };
+    }
+    ;
 }
 
 export default upload

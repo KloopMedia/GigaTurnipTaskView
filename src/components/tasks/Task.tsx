@@ -41,7 +41,6 @@ const Task = () => {
         const setData = async () => {
             let task = await getTask()
             let stage = task.stage
-            console.log(task, stage)
 
             if (stage && stage.rich_text) {
                 setEditorData(stage.rich_text)
@@ -49,7 +48,7 @@ const Task = () => {
 
             setDataForStoragePath({
                 campaignId: campaignId.toString(),
-                chainId: stage.chain.toString(),
+                chainId: stage.chain.id.toString(),
                 stageId: stage.id.toString(),
                 userId: currentUser.uid,
                 taskId: task.id.toString()

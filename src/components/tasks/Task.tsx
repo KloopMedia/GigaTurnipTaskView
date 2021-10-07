@@ -6,7 +6,7 @@ import {tasksUrl} from '../../config/Urls'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CustomFileWidget from "../custom-widgets/file-widget/CustomFileWidget";
 import {Button} from "react-bootstrap";
-import {Grid, Typography} from "@material-ui/core";
+import {Box, CircularProgress, Grid, Typography} from "@material-ui/core";
 import {AuthContext} from "../../util/Auth";
 import {Editor} from "@tinymce/tinymce-react";
 
@@ -26,6 +26,7 @@ const Task = () => {
     const [prevTasks, setPrevTasks] = useState<any>([])
     const [dataForStoragePath, setDataForStoragePath] = useState<dataForStoragePathParams | {}>({})
     const [editorData, setEditorData] = useState("")
+    const [loader, setLoader] = useState(false)
 
     const widgets = {
         customfile: CustomFileWidget
@@ -92,9 +93,11 @@ const Task = () => {
     }, [id, currentUser])
 
     const handleSubmit = () => {
+        setLoader(true)
         let data = {responses: formResponses, complete: true}
         axios.patch(tasksUrl + id + '/', data)
             .then(() => alert("Saved"))
+            .then(() => setLoader(false))
             .then(() => history.push(path))
     }
 
@@ -156,7 +159,10 @@ const Task = () => {
                     onChange={handleChange}
                     onSubmit={handleSubmit}
                 >
-                    <Button type="submit" disabled={complete}>Submit</Button>
+                    <Box display={"flex"}>
+                        <Button type="submit" disabled={complete}>Submit</Button>
+                        {loader && <Box paddingLeft={2}><CircularProgress/></Box>}
+                    </Box>
                     {/*<Button variant="danger" disabled={complete} style={{marginLeft: 7}} onClick={handleRelease}>Release</Button>*/}
                 </Form>
             </Grid>

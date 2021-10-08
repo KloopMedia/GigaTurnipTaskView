@@ -7,8 +7,8 @@ import LinearProgressWithLabel from "./LinearProgressWithLabel";
 const CustomFileWidget = (props: any) => {
     const {schema, uiSchema, disabled, name, formContext, value} = props;
     const {campaignId, chainId, stageId, userId, taskId} = formContext;
-    const [fileBeingUploaded, setFileBeingUploaded] = useState<any>({})
-    const [fileLinks, setFileLinks] = useState({})
+    const [uploadedFiles, setUploadedFiles] = useState<any>({})
+    const [fileLinks, setFileLinks] = useState<any>({})
     const privateUpload = uiSchema["ui:options"] && uiSchema["ui:options"].private ? uiSchema["ui:options"].private : false
     const multipleSelect = uiSchema["ui:options"] && uiSchema["ui:options"].multiple ? uiSchema["ui:options"].multiple : false
 
@@ -21,10 +21,10 @@ const CustomFileWidget = (props: any) => {
             pathToFolder = pathToFolder.ref("public")
         }
         pathToFolder = pathToFolder.child(campaignId)
-                .child(chainId)
-                .child(stageId)
-                .child(userId)
-                .child(taskId)
+            .child(chainId)
+            .child(stageId)
+            .child(userId)
+            .child(taskId)
     }
 
 
@@ -36,7 +36,7 @@ const CustomFileWidget = (props: any) => {
                 const parsed = JSON.parse(value)
                 Object.keys(parsed).forEach(filename => {
                     getDownloadUrl(parsed[filename])
-                        .then(url => setFileBeingUploaded((prevState: any) => ({
+                        .then(url => setUploadedFiles((prevState: any) => ({
                             ...prevState,
                             [filename]: {url: url, status: "complete"}
                         })))
@@ -49,7 +49,7 @@ const CustomFileWidget = (props: any) => {
 
     const handleChange = async (event: any) => {
         console.log("Files selected: ", [...event.target.files,])
-        upload([...event.target.files], pathToFolder, setFileBeingUploaded, setFileLinks)
+        upload([...event.target.files], pathToFolder, setUploadedFiles, setFileLinks, multipleSelect)
     };
 
     const getDownloadUrl = (path: string) => {
@@ -60,19 +60,42 @@ const CustomFileWidget = (props: any) => {
         if (fileLinks) {
             console.log("fileLinks", fileLinks)
             try {
-                let parsed = JSON.parse(value)
-                let allFiles = {...parsed, ...fileLinks}
-                console.log(allFiles)
-                let stringify = JSON.stringify(allFiles)
-
-                props.onChange(stringify)
+                let stringify = "";
+                if (multipleSelect) {
+                    const parsed = JSON.parse(value);
+                    const allFiles = {...parsed, ...fileLinks};
+                    stringify = JSON.stringify(allFiles);
+                } else {
+                    stringify = JSON.stringify(fileLinks);
+                }
+                props.onChange(stringify);
             } catch (error) {
-                let stringify = JSON.stringify(fileLinks)
-
+                const stringify = JSON.stringify(fileLinks)
                 props.onChange(stringify)
             }
         }
     }, [fileLinks])
+
+    const deleteFile = (filename: string) => {
+        const parsed = JSON.parse(value)
+        if (filename in parsed) {
+            delete parsed[filename]
+            const stringify = JSON.stringify(parsed)
+            props.onChange(stringify)
+        }
+
+        const links = {...fileLinks}
+        if (filename in links) {
+            delete links[filename]
+            setFileLinks(links)
+        }
+
+        const uploaded = {...uploadedFiles}
+        if (filename in uploaded) {
+            delete uploaded[filename]
+            setUploadedFiles(uploaded)
+        }
+    };
 
     return (
         <div>
@@ -80,16 +103,27 @@ const CustomFileWidget = (props: any) => {
             <br/>
             <input disabled={disabled} multiple={multipleSelect} type="file" onChange={handleChange}/>
 
-            {Object.keys(fileBeingUploaded).map(filename =>
+            {Object.keys(uploadedFiles).map(filename =>
                 <div key={filename}>
-                    <div style={{display: "flex"}}>
+                    <div style={{display: "flex", alignItems: "baseline"}}>
                         <p>{filename}</p>
-                        {fileBeingUploaded[filename].status === 'complete' &&
-                        <a className="text-success" href={fileBeingUploaded[filename]?.url}
-                           style={{paddingLeft: 10}}>saved</a>}
+                        {uploadedFiles[filename].status === 'complete' &&
+                        <div style={{display: "flex", alignItems: "baseline"}}>
+                            <a className="text-success" href={uploadedFiles[filename]?.url}
+                               style={{paddingLeft: 10}}>посмотреть файл</a>
+                            {!disabled && <button
+                                onClick={() => deleteFile(filename)}
+                                style={{fontSize: "14px", padding: "0 10px"}}
+                                type="button"
+                                className="btn btn-link text-danger"
+                            >
+                                удалить
+                            </button>}
+                        </div>
+                        }
                     </div>
-                    {fileBeingUploaded[filename].status === 'loading' &&
-                    <LinearProgressWithLabel value={fileBeingUploaded[filename].progress}/>}
+                    {uploadedFiles[filename].status === 'loading' &&
+                    <LinearProgressWithLabel value={uploadedFiles[filename].progress}/>}
                 </div>
             )}
         </div>

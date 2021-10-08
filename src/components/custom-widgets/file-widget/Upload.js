@@ -1,7 +1,23 @@
 import firebase from '../../../util/Firebase'
 
-const upload = async (files, storageRef, setFileBeingUploaded, setFileLinks) => {
+const returnNewState = (prevState, update, multiple) => {
+    if (multiple) {
+        if (prevState) {
+            return {...prevState, ...update}
+        } else {
+            return update
+        }
+    } else {
+        return update
+    }
+}
+
+const upload = async (files, storageRef, setFileBeingUploaded, setFileLinks, multiple) => {
     if (storageRef) {
+        if (!multiple) {
+            setFileBeingUploaded({})
+            setFileLinks({})
+        }
         await Promise.all(files.map(async file => {
             const snap = storageRef.child(file.name).put(file)
             setFileBeingUploaded(prevState => {
@@ -30,11 +46,11 @@ const upload = async (files, storageRef, setFileBeingUploaded, setFileLinks) => 
                         const fileLink = downloadURL
                         setFileBeingUploaded(prevState => {
                             const update = {[file.name]: {status: "complete", progress: 100, url: fileLink}}
-                            return prevState ? {...prevState, ...update} : update
+                            return returnNewState(prevState, update, multiple)
                         })
                         setFileLinks(prevState => {
                             const update = {[file.name]: filePath}
-                            return prevState ? {...prevState, ...update} : update
+                            return returnNewState(prevState, update, multiple)
                         })
                     });
                 });

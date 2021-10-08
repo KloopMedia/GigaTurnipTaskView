@@ -9,6 +9,7 @@ import {Button} from "react-bootstrap";
 import {Box, CircularProgress, Grid, Typography} from "@material-ui/core";
 import {AuthContext} from "../../util/Auth";
 import {Editor} from "@tinymce/tinymce-react";
+import TextViewer from "../text-editor/TextViewer";
 
 type RouterParams = { id: string, campaignId: string }
 type dataForStoragePathParams = { campaignId: number, chainId: number, stageId: number, userId: string, taskId: number }
@@ -114,20 +115,7 @@ const Task = () => {
     return (
         <div style={{width: '70%', minWidth: '400px', margin: '0 auto', display: 'block', padding: 10}}>
             {editorData !== "" && <div style={{paddingBottom: 20}}>
-                <Editor
-                    id={"ViewerTinyMCE"}
-                    value={editorData}
-                    toolbar={false}
-                    inline={false}
-                    disabled={true}
-                    tinymceScriptSrc={process.env.PUBLIC_URL + '/tinymce/tinymce.min.js'}
-                    init={{
-                        plugins: 'autoresize',
-                        menubar: false,
-                        image_advtab: true,
-                        importcss_append: true,
-                    }}
-                />
+                <TextViewer data={editorData} />
             </div>}
 
             {prevTasks.length > 0 &&

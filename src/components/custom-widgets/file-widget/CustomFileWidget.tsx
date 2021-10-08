@@ -9,7 +9,8 @@ const CustomFileWidget = (props: any) => {
     const {campaignId, chainId, stageId, userId, taskId} = formContext;
     const [fileBeingUploaded, setFileBeingUploaded] = useState<any>({})
     const [fileLinks, setFileLinks] = useState({})
-    const privateUpload = uiSchema["ui:options"] ? uiSchema["ui:options"].private : false
+    const privateUpload = uiSchema["ui:options"] && uiSchema["ui:options"].private ? uiSchema["ui:options"].private : false
+    const multipleSelect = uiSchema["ui:options"] && uiSchema["ui:options"].multiple ? uiSchema["ui:options"].multiple : false
 
     let pathToFolder: any = undefined
     if (campaignId && chainId && stageId && userId && taskId) {
@@ -77,7 +78,7 @@ const CustomFileWidget = (props: any) => {
         <div>
             <label className={"form-label"}>{schema?.title}</label>
             <br/>
-            <input disabled={disabled} multiple={true} type="file" onChange={handleChange}/>
+            <input disabled={disabled} multiple={multipleSelect} type="file" onChange={handleChange}/>
 
             {Object.keys(fileBeingUploaded).map(filename =>
                 <div key={filename}>

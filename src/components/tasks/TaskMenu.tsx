@@ -38,7 +38,7 @@ const TaskMenu = (props: any) => {
             .then(res => res.data)
             .then(res => setOpenTasks(res))
 
-        axios.get(taskstagesUrl + `user_relevant/?chain__campaign=${campaignId}`)
+        axios.get(`${taskstagesUrl}user_relevant/?chain__campaign=${campaignId}`)
             .then(res => res.data)
             .then(res => setCreatableTasks(res))
     }, [campaignId])

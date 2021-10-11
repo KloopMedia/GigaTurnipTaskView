@@ -53,13 +53,13 @@ const TaskCard = (props: CardProps) => {
 
     const returnButton = () => {
         if (selectable) {
-            return <Button size="small" onClick={handleSelectable}>Open</Button>
+            return <Button size="small" onClick={handleSelectable}>Открыть</Button>
         }
         else if (creatable) {
-            return <Button size="small" onClick={handleCreate}>Create</Button>
+            return <Button size="small" onClick={handleCreate}>Создать</Button>
         }
         else {
-            return <Button size="small" onClick={handleOpen}>Open</Button>
+            return <Button size="small" onClick={handleOpen}>Открыть</Button>
         }
     }
 

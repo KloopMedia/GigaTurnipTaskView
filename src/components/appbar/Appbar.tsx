@@ -31,6 +31,7 @@ import axios from '../../util/Axios';
 
 import {campaignsUrl} from '../../config/Urls';
 import {projectName} from "../../config/Config";
+import {getCampaigns, getUserCampaigns} from "../../util/Util";
 
 const drawerWidth = 240;
 
@@ -132,12 +133,7 @@ const Appbar = (props: AppbarProps) => {
     console.log("CURRENT CAMPAIGN", campaignId)
 
     useEffect(() => {
-        axios.get(campaignsUrl)
-            .then((res: any) => res.data)
-            .then((res: any) => {
-                console.log(res)
-                setAllCampaigns(res)
-            })
+        getUserCampaigns().then(res => setAllCampaigns(res))
     }, [])
 
     const handleDrawerOpen = () => {
@@ -239,12 +235,12 @@ const Appbar = (props: AppbarProps) => {
                     </IconButton>
                 </div>
                 <Divider/>
-                <List>
-                    <ListItem button onClick={() => handleOptionClick("chain")}>
-                        <ListItemIcon><InboxIcon/></ListItemIcon>
-                        <ListItemText primary={"Chains"}/>
-                    </ListItem>
-                </List>
+                {/*<List>*/}
+                {/*    <ListItem button onClick={() => handleOptionClick("chain")}>*/}
+                {/*        <ListItemIcon><InboxIcon/></ListItemIcon>*/}
+                {/*        <ListItemText primary={"Chains"}/>*/}
+                {/*    </ListItem>*/}
+                {/*</List>*/}
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>

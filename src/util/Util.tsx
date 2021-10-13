@@ -1,12 +1,14 @@
 import axios from "./Axios";
-import {campaignsUrl} from "../config/Urls";
+import {campaignsUrl, taskstagesUrl, tasksUrl} from "../config/Urls";
+
+const IS_PAGINATION_ON = false
 
 export const getCampaigns = () => {
     return axios.get(campaignsUrl)
         .then(res => res.data)
         .then(res => {
             console.log(res)
-            return res.results
+            return IS_PAGINATION_ON ? res.results : res
         })
 }
 
@@ -15,7 +17,7 @@ export const getUserCampaigns = () => {
         .then(res => res.data)
         .then(res => {
             console.log("user_campaigns", res)
-            return res
+            return IS_PAGINATION_ON ? res.results : res
         })
 }
 
@@ -24,6 +26,15 @@ export const getSelectableCampaigns = () => {
         .then(res => res.data)
         .then(res => {
             console.log("selectable_campaigns", res)
-            return res
+            return IS_PAGINATION_ON ? res.results : res
         })
+}
+
+export const requestTaskCreation = (id: string | number) => {
+    return axios.post(taskstagesUrl + id + '/create_task/')
+        .then(res => res.data)
+}
+
+export const requestTaskAssignment = (id: string | number) => {
+    return axios.post(tasksUrl + id + '/request_assignment/')
 }

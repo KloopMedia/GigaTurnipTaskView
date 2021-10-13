@@ -6,8 +6,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import {useHistory} from "react-router-dom";
-import {tasksUrl} from "../../config/Urls";
-import axios from "../../util/Axios";
+import {requestTaskAssignment, requestTaskCreation} from "../../util/Util";
 
 const useStyles = makeStyles({
     root: {
@@ -25,7 +24,8 @@ type CardProps = {
     name: string,
     description?: string,
     creatable?: boolean,
-    selectable?: boolean }
+    selectable?: boolean
+}
 
 const TaskCard = (props: CardProps) => {
     const classes = useStyles();
@@ -37,16 +37,13 @@ const TaskCard = (props: CardProps) => {
     }
 
     const handleCreate = () => {
-        let data = {stage: id}
-        console.log(data)
-        axios.post(tasksUrl, data)
-            .then(res => res.data)
+        requestTaskCreation(id)
             .then(res => history.push(`${history.location.pathname}/${res.id}`))
             .catch(err => alert(err))
     };
 
     const handleSelectable = () => {
-        axios.post(tasksUrl + id + '/request_assignment/')
+        requestTaskAssignment(id)
             .then(res => history.push(`${history.location.pathname}/${id}`))
             .catch(err => alert(err))
     }
@@ -54,11 +51,9 @@ const TaskCard = (props: CardProps) => {
     const returnButton = () => {
         if (selectable) {
             return <Button size="small" onClick={handleSelectable}>Открыть</Button>
-        }
-        else if (creatable) {
+        } else if (creatable) {
             return <Button size="small" onClick={handleCreate}>Создать</Button>
-        }
-        else {
+        } else {
             return <Button size="small" onClick={handleOpen}>Открыть</Button>
         }
     }

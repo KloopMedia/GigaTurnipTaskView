@@ -8,7 +8,6 @@ import CustomFileWidget from "../custom-widgets/file-widget/CustomFileWidget";
 import {Button} from "react-bootstrap";
 import {Box, CircularProgress, Grid, Typography} from "@material-ui/core";
 import {AuthContext} from "../../util/Auth";
-import {Editor} from "@tinymce/tinymce-react";
 import TextViewer from "../text-editor/TextViewer";
 
 type RouterParams = { id: string, campaignId: string }
@@ -36,7 +35,9 @@ const Task = () => {
     useEffect(() => {
         const getTask = (stageId?: string | number, caseId?: string | number) => {
             if (stageId && caseId) {
-                return axios.get(`${tasksUrl}?stage=${stageId}&case=${caseId}`).then((res: any) => res.data)
+                return axios
+                    .get(`${tasksUrl}?stage__chain__campaign=${campaignId}&stage=${stageId}&case=${caseId}`)
+                    .then((res: any) => res.data)
             }
             return axios.get(tasksUrl + id + '/').then((res: any) => res.data)
         }
@@ -66,7 +67,7 @@ const Task = () => {
                 .then(res => {
                     console.log(res)
                     return res.map((t: any) => {
-                        return t.map((tt: any) => {
+                        return t.results.map((tt: any) => {
                             let brokenUi = JSON.parse(tt.stage.ui_schema)
                             let {file, ...r} = brokenUi
                             if (file && file["ui:widget"] !== "customfile") {

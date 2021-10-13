@@ -169,17 +169,17 @@ const Appbar = (props: AppbarProps) => {
                 })}
             >
                 <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        className={clsx(classes.menuButton, {
-                            [classes.hide]: open,
-                        })}
-                    >
-                        <MenuIcon/>
-                    </IconButton>
+                    {/*<IconButton*/}
+                    {/*    color="inherit"*/}
+                    {/*    aria-label="open drawer"*/}
+                    {/*    onClick={handleDrawerOpen}*/}
+                    {/*    edge="start"*/}
+                    {/*    className={clsx(classes.menuButton, {*/}
+                    {/*        [classes.hide]: open,*/}
+                    {/*    })}*/}
+                    {/*>*/}
+                    {/*    <MenuIcon/>*/}
+                    {/*</IconButton>*/}
                     <Typography variant="h6" noWrap style={{cursor: "pointer"}} onClick={redirectToMain}>
                         {projectName}
                     </Typography>
@@ -216,32 +216,32 @@ const Appbar = (props: AppbarProps) => {
                     }
                 </Toolbar>
             </AppBar>
-            <Drawer
-                variant="permanent"
-                className={clsx(classes.drawer, {
-                    [classes.drawerOpen]: open,
-                    [classes.drawerClose]: !open,
-                })}
-                classes={{
-                    paper: clsx({
-                        [classes.drawerOpen]: open,
-                        [classes.drawerClose]: !open,
-                    }),
-                }}
-            >
-                <div className={classes.toolbar}>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
-                    </IconButton>
-                </div>
-                <Divider/>
-                {/*<List>*/}
-                {/*    <ListItem button onClick={() => handleOptionClick("chain")}>*/}
-                {/*        <ListItemIcon><InboxIcon/></ListItemIcon>*/}
-                {/*        <ListItemText primary={"Chains"}/>*/}
-                {/*    </ListItem>*/}
-                {/*</List>*/}
-            </Drawer>
+            {/*<Drawer*/}
+            {/*    variant="permanent"*/}
+            {/*    className={clsx(classes.drawer, {*/}
+            {/*        [classes.drawerOpen]: open,*/}
+            {/*        [classes.drawerClose]: !open,*/}
+            {/*    })}*/}
+            {/*    classes={{*/}
+            {/*        paper: clsx({*/}
+            {/*            [classes.drawerOpen]: open,*/}
+            {/*            [classes.drawerClose]: !open,*/}
+            {/*        }),*/}
+            {/*    }}*/}
+            {/*>*/}
+            {/*    <div className={classes.toolbar}>*/}
+            {/*        <IconButton onClick={handleDrawerClose}>*/}
+            {/*            {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}*/}
+            {/*        </IconButton>*/}
+            {/*    </div>*/}
+            {/*    <Divider/>*/}
+            {/*    /!*<List>*!/*/}
+            {/*    /!*    <ListItem button onClick={() => handleOptionClick("chain")}>*!/*/}
+            {/*    /!*        <ListItemIcon><InboxIcon/></ListItemIcon>*!/*/}
+            {/*    /!*        <ListItemText primary={"Chains"}/>*!/*/}
+            {/*    /!*    </ListItem>*!/*/}
+            {/*    /!*</List>*!/*/}
+            {/*</Drawer>*/}
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 {children}

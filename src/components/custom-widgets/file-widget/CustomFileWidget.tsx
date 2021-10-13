@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react'
 import firebase from '../../../util/Firebase'
 import upload from "./Upload";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
+import ImageViewer from 'react-simple-image-viewer';
+import {Dialog} from "@material-ui/core";
 
 
 const CustomFileWidget = (props: any) => {
@@ -9,6 +11,11 @@ const CustomFileWidget = (props: any) => {
     const {campaignId, chainId, stageId, userId, taskId} = formContext;
     const [uploadedFiles, setUploadedFiles] = useState<any>({})
     const [fileLinks, setFileLinks] = useState<any>({})
+    const [currentFile, setCurrentFile] = useState("")
+    const [isImageOpen, setIsImageOpen] = useState(false);
+    const [isVideoOpen, setIsVideoOpen] = useState(false);
+    const [fileType, setFileType] = useState("")
+
     const privateUpload = uiSchema["ui:options"] && uiSchema["ui:options"].private ? uiSchema["ui:options"].private : false
     const multipleSelect = uiSchema["ui:options"] && uiSchema["ui:options"].multiple ? uiSchema["ui:options"].multiple : false
 
@@ -97,23 +104,81 @@ const CustomFileWidget = (props: any) => {
         }
     };
 
+    const handleFileClick = async (filename: string) => {
+        const parsed = JSON.parse(value);
+        const path = parsed[filename];
+        console.log(path)
+        const metadata = await firebase.storage().ref().child(path).getMetadata()
+        const type = metadata.contentType.split("/")[0]
+        console.log("FILE TYPE", type)
+        switch (type) {
+            case "image":
+                setCurrentFile(uploadedFiles[filename].url);
+                setFileType(metadata.contentType);
+                setIsImageOpen(true);
+                break;
+            case "video":
+                setCurrentFile(uploadedFiles[filename].url);
+                setFileType(metadata.contentType);
+                setIsVideoOpen(true);
+                break;
+            default:
+                // window.open(uploadedFiles[filename].url, '_blank');
+                alert("Файл не является фото или видео")
+        }
+    }
+
+    const closeViewer = () => {
+        setCurrentFile("")
+        setFileType("");
+        setIsImageOpen(false);
+        setIsVideoOpen(false);
+    };
+
     return (
         <div>
+            {isImageOpen && <ImageViewer
+                src={[currentFile]}
+                disableScroll={false}
+                backgroundStyle={{
+                    backgroundColor: "rgba(0,0,0,0.8)"
+                }}
+                closeOnClickOutside={true}
+                onClose={closeViewer}
+            />}
+            <Dialog
+                open={isVideoOpen}
+                onClose={closeViewer}
+                fullWidth={true}
+            >
+                    <video height="360px" controls>
+                        <source src={currentFile} type={fileType}/>
+                        Your browser does not support the video tag.
+                    </video>
+            </Dialog>
+
             <label className={"form-label"}>{schema?.title}</label>
             <br/>
             <input disabled={disabled} multiple={multipleSelect} type="file" onChange={handleChange}/>
 
-            {Object.keys(uploadedFiles).map(filename =>
+            {Object.keys(uploadedFiles).map((filename, i) =>
                 <div key={filename}>
                     <div style={{display: "flex", alignItems: "baseline"}}>
                         <p>{filename}</p>
                         {uploadedFiles[filename].status === 'complete' &&
                         <div style={{display: "flex", alignItems: "baseline"}}>
-                            <a className="text-success" href={uploadedFiles[filename]?.url}
-                               style={{paddingLeft: 10}}>посмотреть файл</a>
-                            {!disabled && <button
+                            <button
+                                onClick={() => handleFileClick(filename)}
+                                style={{fontSize: "14px", padding: 0, margin: "0 10px"}}
+                                type="button"
+                                className="btn btn-link text-success"
+                            >
+                                посмотреть файл
+                            </button>
+                            {!disabled &&
+                            <button
                                 onClick={() => deleteFile(filename)}
-                                style={{fontSize: "14px", padding: "0 10px"}}
+                                style={{fontSize: "14px", padding: 0, margin: "0 10px"}}
                                 type="button"
                                 className="btn btn-link text-danger"
                             >

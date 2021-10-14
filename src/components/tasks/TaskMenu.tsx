@@ -7,6 +7,13 @@ import {Grid} from "@material-ui/core";
 import axios from "../../util/Axios";
 import {taskstagesUrl, tasksUrl} from "../../config/Urls";
 import {useParams} from "react-router-dom";
+import {
+    getCompleteTasks,
+    getCreatableTasks,
+    getOpenTasks,
+    getSelectableTasks,
+    requestTaskAssignment
+} from "../../util/Util";
 
 
 type RouterParams = { campaignId: string }
@@ -26,21 +33,10 @@ const TaskMenu = (props: any) => {
     };
 
     useEffect(() => {
-        axios.get(`${tasksUrl}user_selectable/?stage__chain__campaign=${campaignId}`)
-            .then(res => res.data)
-            .then(res => setSelectableTasks(res))
-
-        axios.get(`${tasksUrl}user_relevant/?complete=${true}&stage__chain__campaign=${campaignId}`)
-            .then(res => res.data)
-            .then(res => setCompleteTasks(res))
-
-        axios.get(`${tasksUrl}user_relevant/?complete=${false}&stage__chain__campaign=${campaignId}`)
-            .then(res => res.data)
-            .then(res => setOpenTasks(res))
-
-        axios.get(`${taskstagesUrl}user_relevant/?chain__campaign=${campaignId}`)
-            .then(res => res.data)
-            .then(res => setCreatableTasks(res))
+        getSelectableTasks(campaignId).then(res => setSelectableTasks(res))
+        getCompleteTasks(campaignId).then(res => setCompleteTasks(res))
+        getOpenTasks(campaignId).then(res => setOpenTasks(res))
+        getCreatableTasks(campaignId).then(res => setCreatableTasks(res))
     }, [campaignId])
 
     return (

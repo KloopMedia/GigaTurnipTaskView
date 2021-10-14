@@ -41,7 +41,7 @@ const About = () => {
             <Typography variant={"h3"} align={"center"}>{name}</Typography>
             <Typography variant={"h6"} align={"center"}>{description}</Typography>
             {richText && <TextViewer data={richText}/>}
-            <Grid container justify={"center"} style={{padding: 20}}>
+            <Grid container justifyContent={"center"} style={{padding: 20}}>
                 <Button variant={"contained"} color={"primary"} onClick={joinCampaign}>Join</Button>
             </Grid>
 

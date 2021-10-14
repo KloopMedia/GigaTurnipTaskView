@@ -3,6 +3,8 @@ import {campaignsUrl, taskstagesUrl, tasksUrl} from "../config/Urls";
 
 const IS_PAGINATION_ON = false
 
+
+// Campaigns Functions
 export const getCampaigns = () => {
     return axios.get(campaignsUrl)
         .then(res => res.data)
@@ -30,6 +32,8 @@ export const getSelectableCampaigns = () => {
         })
 }
 
+
+// TaskCard Functions
 export const requestTaskCreation = (id: string | number) => {
     return axios.post(taskstagesUrl + id + '/create_task/')
         .then(res => res.data)
@@ -38,3 +42,25 @@ export const requestTaskCreation = (id: string | number) => {
 export const requestTaskAssignment = (id: string | number) => {
     return axios.post(tasksUrl + id + '/request_assignment/')
 }
+
+
+// TaskMenu Functions
+export const getSelectableTasks = (campaignId: string | number) => {
+    return axios.get(`${tasksUrl}user_selectable/?stage__chain__campaign=${campaignId}`)
+        .then(res => res.data)
+};
+
+export const getCompleteTasks = (campaignId: string | number) => {
+    return axios.get(`${tasksUrl}user_relevant/?complete=${true}&stage__chain__campaign=${campaignId}`)
+        .then(res => res.data)
+};
+
+export const getOpenTasks = (campaignId: string | number) => {
+    return axios.get(`${tasksUrl}user_relevant/?complete=${false}&stage__chain__campaign=${campaignId}`)
+        .then(res => res.data)
+};
+
+export const getCreatableTasks = (campaignId: string | number) => {
+    return axios.get(`${taskstagesUrl}user_relevant/?chain__campaign=${campaignId}`)
+        .then(res => res.data)
+};

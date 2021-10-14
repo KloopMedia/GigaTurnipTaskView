@@ -9,6 +9,7 @@ import {Button} from "react-bootstrap";
 import {Box, CircularProgress, Grid, Typography} from "@material-ui/core";
 import {AuthContext} from "../../util/Auth";
 import TextViewer from "../text-editor/TextViewer";
+import {getPreviousTasks} from "../../util/Util";
 
 type RouterParams = { id: string, campaignId: string }
 type dataForStoragePathParams = { campaignId: number, chainId: number, stageId: number, userId: string, taskId: number }
@@ -33,12 +34,7 @@ const Task = () => {
     };
 
     useEffect(() => {
-        const getTask = (stageId?: string | number, caseId?: string | number) => {
-            if (stageId && caseId) {
-                return axios
-                    .get(`${tasksUrl}?stage__chain__campaign=${campaignId}&stage=${stageId}&case=${caseId}`)
-                    .then((res: any) => res.data)
-            }
+        const getTask = () => {
             return axios.get(tasksUrl + id + '/').then((res: any) => res.data)
         }
         const setData = async () => {
@@ -59,31 +55,14 @@ const Task = () => {
 
             let parsed_schema = JSON.parse(stage.json_schema) ?? {}
             let parsed_ui = JSON.parse(stage.ui_schema) ?? {}
-            let caseId = task.case
-            let prevStages = stage.displayed_prev_stages
-            console.log(prevStages)
-            let inTasksPromise = prevStages.map((stageId: number | string) => getTask(stageId, caseId))
-            let inTasks = await Promise.all(inTasksPromise)
-                .then(res => {
-                    console.log(res)
-                    return res.map((t: any) => {
-                        return t.results.map((tt: any) => {
-                            let brokenUi = JSON.parse(tt.stage.ui_schema)
-                            let {file, ...r} = brokenUi
-                            if (file && file["ui:widget"] !== "customfile") {
-                                file = {"ui:widget": "customfile"}
-                            }
-                            let fixedUi = {file, ...r}
-                            return {
-                                responses: tt.responses,
-                                json_schema: JSON.parse(tt.stage.json_schema),
-                                ui_schema: fixedUi
-                            }
-                        })
-                    }).flat()
-                })
 
-            setPrevTasks(inTasks)
+            const previousTasks = await getPreviousTasks(id).then(res => res.map((task: any) => ({
+                responses: task.responses,
+                json_schema: JSON.parse(task.stage.json_schema),
+                ui_schema: JSON.parse(task.stage.ui_schema)
+            })))
+
+            setPrevTasks(previousTasks)
             setFormResponses(task.responses)
             setSchema(parsed_schema)
             setUiSchema(parsed_ui)
@@ -115,7 +94,7 @@ const Task = () => {
     return (
         <div style={{width: '70%', minWidth: '400px', margin: '0 auto', display: 'block', padding: 10}}>
             {editorData !== "" && <div style={{paddingBottom: 20}}>
-                <TextViewer data={editorData} />
+                <TextViewer data={editorData}/>
             </div>}
 
             {prevTasks.length > 0 &&

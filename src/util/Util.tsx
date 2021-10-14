@@ -68,3 +68,10 @@ export const getCreatableTasks = (campaignId: string | number) => {
     return axios.get(`${taskstagesUrl}user_relevant/?chain__campaign=${campaignId}`)
         .then(res => res.data)
 };
+
+
+// Task Functions
+export const getPreviousTasks = (id: string | number) => {
+    return axios.get(`${tasksUrl + id}/list_displayed_previous/`)
+        .then(res => res.data)
+}

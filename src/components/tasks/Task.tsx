@@ -120,7 +120,6 @@ const Task = () => {
 
             {prevTasks.length > 0 &&
             <Grid>
-                <Typography variant={"h4"} align="center" style={{padding: 10}}>Previous Tasks</Typography>
                 {prevTasks.map((task: any, i: number) =>
                     <Form
                         key={`prev_task_${i}`}
@@ -135,8 +134,6 @@ const Task = () => {
             </Grid>
             }
             <Grid>
-                {prevTasks.length > 0 &&
-                <Typography variant={"h4"} align="center" style={{padding: 10}}>Current Task</Typography>}
                 <Form
                     schema={schema}
                     uiSchema={uiSchema}

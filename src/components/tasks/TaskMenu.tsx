@@ -4,16 +4,8 @@ import SimpleTabs from "../Tabs/Tabs";
 import TaskList from "./TaskList";
 import {AuthContext} from "../../util/Auth";
 import {Grid} from "@material-ui/core";
-import axios from "../../util/Axios";
-import {taskstagesUrl, tasksUrl} from "../../config/Urls";
 import {useParams} from "react-router-dom";
-import {
-    getCompleteTasks,
-    getCreatableTasks,
-    getOpenTasks,
-    getSelectableTasks,
-    requestTaskAssignment
-} from "../../util/Util";
+import {getCompleteTasks, getCreatableTasks, getOpenTasks, getSelectableTasks} from "../../util/Util";
 
 
 type RouterParams = { campaignId: string }

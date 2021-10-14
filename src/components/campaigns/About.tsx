@@ -4,6 +4,7 @@ import axios from "../../util/Axios";
 import {campaignsUrl} from "../../config/Urls";
 import TextViewer from "../text-editor/TextViewer";
 import {Button, Grid, Typography} from "@material-ui/core";
+import {requestCampaignJoin} from "../../util/Util";
 
 
 const About = () => {
@@ -33,7 +34,7 @@ const About = () => {
     }, [id])
 
     const joinCampaign = () => {
-        axios.post(campaignsUrl + id + '/join_campaign/').then(() => history.push(`/campaign/${id}/tasks`))
+        requestCampaignJoin(id).then(() => history.push(`/campaign/${id}/tasks`))
     }
 
     return (
@@ -42,9 +43,8 @@ const About = () => {
             <Typography variant={"h6"} align={"center"}>{description}</Typography>
             {richText && <TextViewer data={richText}/>}
             <Grid container justifyContent={"center"} style={{padding: 20}}>
-                <Button variant={"contained"} color={"primary"} onClick={joinCampaign}>Join</Button>
+                <Button variant={"contained"} color={"primary"} onClick={joinCampaign}>Присоединиться / Кошулуу</Button>
             </Grid>
-
         </div>
     )
 }

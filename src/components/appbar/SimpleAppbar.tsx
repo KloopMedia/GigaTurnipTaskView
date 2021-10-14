@@ -103,11 +103,11 @@ const Appbar = (props: AppbarProps) => {
                     <Typography>{currentUser?.email}</Typography>
                     {currentUser ?
                         <Button onClick={signOut} color={"inherit"}>
-                            Log out
+                            Выйти
                         </Button>
                         :
                         <Button onClick={signInWithGoogle} color={"inherit"}>
-                            Login
+                            Войти
                         </Button>
                     }
                 </Toolbar>

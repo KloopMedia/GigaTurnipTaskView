@@ -207,11 +207,11 @@ const Appbar = (props: AppbarProps) => {
                     </FormControl>
                     {currentUser ?
                         <Button onClick={signOut} color={"inherit"}>
-                            Log out
+                            Выйти
                         </Button>
                         :
                         <Button onClick={signInWithGoogle} color={"inherit"}>
-                            Login
+                            Войти
                         </Button>
                     }
                 </Toolbar>

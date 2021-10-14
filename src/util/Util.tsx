@@ -32,6 +32,10 @@ export const getSelectableCampaigns = () => {
         })
 }
 
+export const requestCampaignJoin = (id: string | number) => {
+    return axios.post(campaignsUrl + id + '/join_campaign/')
+}
+
 
 // TaskCard Functions
 export const requestTaskCreation = (id: string | number) => {

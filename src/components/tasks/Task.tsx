@@ -98,7 +98,6 @@ const Task = () => {
         setLoader(true)
         let data = {responses: formResponses, complete: true}
         axios.patch(tasksUrl + id + '/', data)
-            .then(() => alert("Saved"))
             .then(() => setLoader(false))
             .then(() => history.push(path))
     }

@@ -7,7 +7,7 @@ import {Dialog} from "@material-ui/core";
 
 
 const CustomFileWidget = (props: any) => {
-    const {schema, uiSchema, disabled, name, formContext, value} = props;
+    const {schema, uiSchema, disabled, required, formContext, value} = props;
     const {campaignId, chainId, stageId, userId, taskId} = formContext;
     const [uploadedFiles, setUploadedFiles] = useState<any>({})
     const [fileLinks, setFileLinks] = useState<any>({})
@@ -18,6 +18,8 @@ const CustomFileWidget = (props: any) => {
 
     const privateUpload = uiSchema["ui:options"] && uiSchema["ui:options"].private ? uiSchema["ui:options"].private : false
     const multipleSelect = uiSchema["ui:options"] && uiSchema["ui:options"].multiple ? uiSchema["ui:options"].multiple : false
+    const hasUploadedFiles = Object.keys(uploadedFiles).length > 0
+    const isInputRequired = required && !hasUploadedFiles
 
     let pathToFolder: any = undefined
     if (campaignId && chainId && stageId && userId && taskId) {
@@ -57,6 +59,7 @@ const CustomFileWidget = (props: any) => {
     const handleChange = async (event: any) => {
         console.log("Files selected: ", [...event.target.files,])
         upload([...event.target.files], pathToFolder, setUploadedFiles, setFileLinks, multipleSelect)
+        event.target.value = null;
     };
 
     const getDownloadUrl = (path: string) => {
@@ -102,6 +105,7 @@ const CustomFileWidget = (props: any) => {
             delete uploaded[filename]
             setUploadedFiles(uploaded)
         }
+        console.log("DELETE LOG", uploaded)
     };
 
     const handleFileClick = async (filename: string) => {
@@ -159,7 +163,7 @@ const CustomFileWidget = (props: any) => {
 
             <label className={"form-label"}>{schema?.title}</label>
             <br/>
-            <input disabled={disabled} multiple={multipleSelect} type="file" onChange={handleChange}/>
+            <input disabled={disabled} required={isInputRequired} multiple={multipleSelect} type="file" onChange={handleChange}/>
 
             {Object.keys(uploadedFiles).map((filename, i) =>
                 <div key={filename}>

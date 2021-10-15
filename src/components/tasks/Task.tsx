@@ -118,6 +118,8 @@ const Task = () => {
                     uiSchema={uiSchema}
                     formData={formResponses}
                     formContext={dataForStoragePath}
+                    liveOmit={true}
+                    omitExtraData={true}
                     widgets={widgets}
                     disabled={complete}
                     onChange={handleChange}

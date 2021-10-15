@@ -15,6 +15,7 @@ const CustomFileWidget = (props: any) => {
     const [isImageOpen, setIsImageOpen] = useState(false);
     const [isVideoOpen, setIsVideoOpen] = useState(false);
     const [fileType, setFileType] = useState("")
+    const [parsedValue, setParsedValue] = useState<any>({})
 
     const privateUpload = uiSchema["ui:options"] && uiSchema["ui:options"].private ? uiSchema["ui:options"].private : false
     const multipleSelect = uiSchema["ui:options"] && uiSchema["ui:options"].multiple ? uiSchema["ui:options"].multiple : false
@@ -38,21 +39,17 @@ const CustomFileWidget = (props: any) => {
 
 
     useEffect(() => {
-        console.log("value", value)
-        console.log("uiSchema", uiSchema)
-        if (value) {
-            try {
-                const parsed = JSON.parse(value)
-                Object.keys(parsed).forEach(filename => {
-                    getDownloadUrl(parsed[filename])
-                        .then(url => setUploadedFiles((prevState: any) => ({
-                            ...prevState,
-                            [filename]: {url: url, status: "complete"}
-                        })))
-                })
-            } catch (error) {
-                // setFileBeingUploaded({})
-            }
+        if (value && Object.keys(value).length > 0) {
+            console.log("value", value)
+            const parsed = JSON.parse(value)
+            setParsedValue(parsed)
+            Object.keys(parsed).forEach(filename => {
+                getDownloadUrl(parsed[filename])
+                    .then(url => setUploadedFiles((prevState: any) => ({
+                        ...prevState,
+                        [filename]: {url: url, status: "complete"}
+                    })))
+            })
         }
     }, [value])
 
@@ -67,7 +64,7 @@ const CustomFileWidget = (props: any) => {
     }
 
     useEffect(() => {
-        if (fileLinks) {
+        if (fileLinks && Object.keys(fileLinks).length > 0) {
             console.log("fileLinks", fileLinks)
             try {
                 let stringify = "";
@@ -81,13 +78,14 @@ const CustomFileWidget = (props: any) => {
                 props.onChange(stringify);
             } catch (error) {
                 const stringify = JSON.stringify(fileLinks)
+                console.error(error)
                 props.onChange(stringify)
             }
         }
     }, [fileLinks])
 
     const deleteFile = (filename: string) => {
-        const parsed = JSON.parse(value)
+        const parsed = parsedValue
         if (filename in parsed) {
             delete parsed[filename]
             const stringify = JSON.stringify(parsed)
@@ -109,26 +107,29 @@ const CustomFileWidget = (props: any) => {
     };
 
     const handleFileClick = async (filename: string) => {
-        const parsed = JSON.parse(value);
-        const path = parsed[filename];
-        console.log(path)
-        const metadata = await firebase.storage().ref().child(path).getMetadata()
-        const type = metadata.contentType.split("/")[0]
-        console.log("FILE TYPE", type)
-        switch (type) {
-            case "image":
-                setCurrentFile(uploadedFiles[filename].url);
-                setFileType(metadata.contentType);
-                setIsImageOpen(true);
-                break;
-            case "video":
-                setCurrentFile(uploadedFiles[filename].url);
-                setFileType(metadata.contentType);
-                setIsVideoOpen(true);
-                break;
-            default:
-                // window.open(uploadedFiles[filename].url, '_blank');
-                alert("Файл не является фото или видео")
+        const parsed = parsedValue;
+        console.log("FILE CLICK VALUE", parsed)
+        if (filename in parsed) {
+            const path = parsed[filename];
+            console.log(path)
+            const metadata = await firebase.storage().ref().child(path).getMetadata()
+            const type = metadata.contentType.split("/")[0]
+            console.log("FILE TYPE", type)
+            switch (type) {
+                case "image":
+                    setCurrentFile(uploadedFiles[filename].url);
+                    setFileType(metadata.contentType);
+                    setIsImageOpen(true);
+                    break;
+                case "video":
+                    setCurrentFile(uploadedFiles[filename].url);
+                    setFileType(metadata.contentType);
+                    setIsVideoOpen(true);
+                    break;
+                default:
+                    // window.open(uploadedFiles[filename].url, '_blank');
+                    alert("Файл не является фото или видео")
+            }
         }
     }
 
@@ -155,15 +156,16 @@ const CustomFileWidget = (props: any) => {
                 onClose={closeViewer}
                 fullWidth={true}
             >
-                    <video height="360px" controls>
-                        <source src={currentFile} type={fileType}/>
-                        Your browser does not support the video tag.
-                    </video>
+                <video height="360px" controls>
+                    <source src={currentFile} type={fileType}/>
+                    Your browser does not support the video tag.
+                </video>
             </Dialog>
 
             <label className={"form-label"}>{schema?.title}</label>
             <br/>
-            <input disabled={disabled} required={isInputRequired} multiple={multipleSelect} type="file" onChange={handleChange}/>
+            <input disabled={disabled} required={isInputRequired} multiple={multipleSelect} type="file"
+                   onChange={handleChange}/>
 
             {Object.keys(uploadedFiles).map((filename, i) =>
                 <div key={filename}>

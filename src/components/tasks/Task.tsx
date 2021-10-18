@@ -104,7 +104,7 @@ const Task = () => {
                         key={`prev_task_${i}`}
                         schema={task.json_schema ?? {}}
                         uiSchema={task.ui_schema ?? {}}
-                        formData={task.responses}
+                        formData={task.responses ?? {}}
                         widgets={widgets}
                         disabled={true}
                         children={" "}
@@ -116,7 +116,7 @@ const Task = () => {
                 <Form
                     schema={schema ?? {}}
                     uiSchema={uiSchema ?? {}}
-                    formData={formResponses}
+                    formData={formResponses ?? {}}
                     formContext={dataForStoragePath}
                     liveOmit={true}
                     omitExtraData={true}

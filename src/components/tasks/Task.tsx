@@ -102,8 +102,8 @@ const Task = () => {
                 {prevTasks.map((task: any, i: number) =>
                     <Form
                         key={`prev_task_${i}`}
-                        schema={task.json_schema}
-                        uiSchema={task.ui_schema}
+                        schema={task.json_schema ?? {}}
+                        uiSchema={task.ui_schema ?? {}}
                         formData={task.responses}
                         widgets={widgets}
                         disabled={true}
@@ -114,8 +114,8 @@ const Task = () => {
             }
             <Grid>
                 <Form
-                    schema={schema}
-                    uiSchema={uiSchema}
+                    schema={schema ?? {}}
+                    uiSchema={uiSchema ?? {}}
                     formData={formResponses}
                     formContext={dataForStoragePath}
                     liveOmit={true}

@@ -1,7 +1,5 @@
-import React, {useState} from 'react'
-import LinearProgress from '@material-ui/core/LinearProgress'
-import Box from '@material-ui/core/Box'
-import Typography from '@material-ui/core/Typography'
+import React from 'react'
+import {Box, LinearProgress, Typography} from "@mui/material"
 
 const LinearProgressWithLabel = (props: any) => {
     return (

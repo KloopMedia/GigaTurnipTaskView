@@ -6,7 +6,7 @@ import {tasksUrl} from '../../config/Urls'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import CustomFileWidget from "../custom-widgets/file-widget/CustomFileWidget";
 import {Button} from "react-bootstrap";
-import {Box, CircularProgress, Grid, Typography} from "@material-ui/core";
+import {Box, CircularProgress, Grid, Typography} from "@mui/material";
 import {AuthContext} from "../../util/Auth";
 import TextViewer from "../text-editor/TextViewer";
 import {getPreviousTasks} from "../../util/Util";

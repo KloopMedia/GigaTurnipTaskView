@@ -1,8 +1,5 @@
 import React from 'react';
-import {makeStyles, Theme} from '@material-ui/core/styles';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import {Grid} from "@material-ui/core";
+import {Box, Grid, Tab, Tabs} from "@mui/material";
 
 function a11yProps(index: any) {
     return {
@@ -10,13 +7,6 @@ function a11yProps(index: any) {
         'aria-controls': `simple-tabpanel-${index}`,
     };
 }
-
-const useStyles = makeStyles((theme: Theme) => ({
-    root: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.background.paper,
-    },
-}));
 
 type SimpleTabsProps = {
     value: number | string,
@@ -26,21 +16,17 @@ type SimpleTabsProps = {
 }
 
 const SimpleTabs = (props: SimpleTabsProps) => {
-    const classes = useStyles();
     const {value, handleChange} = props;
 
     return (
-        <Grid>
-            <div className={classes.root}>
-                <Tabs value={value} onChange={handleChange} variant="fullWidth" centered
-                      aria-label="simple tabs example">
-                    <Tab label="Невыполненные" {...a11yProps(0)} />
-                    <Tab label="Выполненные" {...a11yProps(1)} />
-                    {props.showSelectable && <Tab label="Доступные" {...a11yProps(2)} />}
-                </Tabs>
-            </div>
+        <Box sx={{width: '100%', bgcolor: 'background.paper'}}>
+            <Tabs value={value} onChange={handleChange} centered variant={"fullWidth"}>
+                <Tab label="Невыполненные" {...a11yProps(0)} />
+                <Tab label="Выполненные" {...a11yProps(1)} />
+                {props.showSelectable && <Tab label="Доступные" {...a11yProps(2)} />}
+            </Tabs>
             {props.children}
-        </Grid>
+        </Box>
     );
 }
 

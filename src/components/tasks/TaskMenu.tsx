@@ -3,7 +3,7 @@ import TabPanel from "../Tabs/TabPanel";
 import SimpleTabs from "../Tabs/Tabs";
 import TaskList from "./TaskList";
 import {AuthContext} from "../../util/Auth";
-import {Grid} from "@material-ui/core";
+import {Grid} from "@mui/material";
 import {useParams} from "react-router-dom";
 import {getCompleteTasks, getCreatableTasks, getOpenTasks, getSelectableTasks} from "../../util/Util";
 

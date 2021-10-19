@@ -3,7 +3,7 @@ import {useHistory, useParams} from "react-router-dom";
 import axios from "../../util/Axios";
 import {campaignsUrl} from "../../config/Urls";
 import TextViewer from "../text-editor/TextViewer";
-import {Button, Grid, Typography} from "@material-ui/core";
+import {Button, Grid, Typography} from "@mui/material";
 import {requestCampaignJoin} from "../../util/Util";
 
 

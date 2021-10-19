@@ -1,22 +1,11 @@
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import {useHistory} from "react-router-dom";
 import {requestTaskAssignment, requestTaskCreation} from "../../util/Util";
-
-const useStyles = makeStyles({
-    root: {
-        width: 300,
-        // height: 200
-    },
-    extra: {
-        marginBottom: 15
-    }
-});
 
 type CardProps = {
     id: number,
@@ -28,7 +17,6 @@ type CardProps = {
 }
 
 const TaskCard = (props: CardProps) => {
-    const classes = useStyles();
     const {id, complete, name, description, creatable, selectable} = props;
     const history = useHistory()
 
@@ -59,7 +47,7 @@ const TaskCard = (props: CardProps) => {
     }
 
     return (
-        <Card className={classes.root}>
+        <Card sx={{minWidth: 300}}>
             <CardContent>
                 <Typography variant="h5" component="span" gutterBottom={true}>
                     {name}

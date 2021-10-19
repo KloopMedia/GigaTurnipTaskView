@@ -3,7 +3,7 @@ import firebase from '../../../util/Firebase'
 import upload from "./Upload";
 import LinearProgressWithLabel from "./LinearProgressWithLabel";
 import ImageViewer from 'react-simple-image-viewer';
-import {Dialog} from "@material-ui/core";
+import {Dialog} from "@mui/material";
 
 
 const CustomFileWidget = (props: any) => {

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Grid, Typography} from "@material-ui/core";
+import {Grid, Typography} from "@mui/material";
 import Card from "./CampaignCard";
 import {CampaignParams} from "../../util/Types";
 import {useHistory} from "react-router-dom";

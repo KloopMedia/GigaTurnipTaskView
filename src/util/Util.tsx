@@ -1,8 +1,34 @@
 import axios from "./Axios";
 import {campaignsUrl, taskstagesUrl, tasksUrl} from "../config/Urls";
+import {PaginationHandlerProps} from "./Types";
 
-const IS_PAGINATION_ON = false
+export const IS_PAGINATION_ON = false
 
+export const paginatedDataHandler = ({
+                                      data,
+                                      setDataFunction,
+                                      setCountFunction,
+                                      setNextFunction,
+                                      setPrevFunction
+                                  }: PaginationHandlerProps) => {
+    if (IS_PAGINATION_ON) {
+        const {results, next, previous, count} = data;
+        const numOfPages = Math.ceil(count / 10)
+        console.log(numOfPages)
+        setDataFunction(results)
+        if (setCountFunction) {
+            setCountFunction(count < 10 ? 0 : numOfPages)
+        }
+        if (setNextFunction) {
+            setNextFunction(next)
+        }
+        if (setPrevFunction) {
+            setPrevFunction(previous)
+        }
+    } else {
+        setDataFunction(data)
+    }
+}
 
 // Campaigns Functions
 export const getCampaigns = () => {
@@ -34,6 +60,11 @@ export const getSelectableCampaigns = () => {
 
 export const requestCampaignJoin = (id: string | number) => {
     return axios.post(campaignsUrl + id + '/join_campaign/')
+}
+
+export const requestCampaignInfo = (id: string | number) => {
+    return axios.get(campaignsUrl + id + '/')
+        .then(res => res.data)
 }
 
 

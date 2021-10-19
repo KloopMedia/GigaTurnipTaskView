@@ -27,7 +27,7 @@ const Builder = () => {
 
     return (
         <Grid>
-            <Grid>
+            {userCampaigns && userCampaigns.length > 0 && <Grid>
                 <Typography align={"center"} variant={"h4"}>Мои кампании</Typography>
                 <Grid container justifyContent={"center"}>
                     {userCampaigns.map(campaign => (
@@ -40,9 +40,9 @@ const Builder = () => {
                         </Grid>
                     ))}
                 </Grid>
-            </Grid>
+            </Grid>}
 
-            <Grid>
+            {selectableCampaigns && selectableCampaigns.length > 0 && <Grid>
                 <Typography align={"center"} variant={"h4"}>Доступные кампании</Typography>
                 <Grid container justifyContent={"center"}>
                     {selectableCampaigns.map(campaign => (
@@ -55,7 +55,7 @@ const Builder = () => {
                         </Grid>
                     ))}
                 </Grid>
-            </Grid>
+            </Grid>}
         </Grid>
     )
 }

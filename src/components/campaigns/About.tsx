@@ -1,10 +1,9 @@
 import React, {useEffect, useState} from "react";
 import {useHistory, useParams} from "react-router-dom";
-import axios from "../../util/Axios";
 import {campaignsUrl} from "../../config/Urls";
 import TextViewer from "../text-editor/TextViewer";
 import {Button, Grid, Typography} from "@mui/material";
-import {requestCampaignJoin} from "../../util/Util";
+import {requestCampaignInfo, requestCampaignJoin} from "../../util/Util";
 
 
 const About = () => {
@@ -17,8 +16,7 @@ const About = () => {
 
     useEffect(() => {
         console.log(campaignsUrl, id)
-        axios.get(campaignsUrl + id + '/')
-            .then(res => res.data)
+        requestCampaignInfo(id)
             .then(res => {
                 const {richText, name, description} = res;
                 if (name) {

@@ -37,3 +37,11 @@ export type CardParams = {
 }
 
 export type NodeParams = { data: { label: string }, style?: object }
+
+export type PaginationHandlerProps = {
+    data: any,
+    setDataFunction: (res: string) => void,
+    setCountFunction?: (count: number) => void,
+    setNextFunction?: (next: string | null) => void,
+    setPrevFunction?: (prev: string | null) => void
+}

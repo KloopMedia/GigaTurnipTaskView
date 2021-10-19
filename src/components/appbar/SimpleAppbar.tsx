@@ -1,11 +1,9 @@
 import React, {useContext} from 'react';
-import clsx from 'clsx';
-import {AppBar, Button, Toolbar, Typography, Box, IconButton} from "@mui/material";
+import {AppBar, Box, Button, Toolbar, Typography} from "@mui/material";
 import {signInWithGoogle, signOut} from '../../util/Firebase';
 import {AuthContext} from "../../util/Auth";
-import {useHistory, useParams} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {projectName} from "../../config/Config";
-import MenuIcon from '@mui/icons-material/Menu';
 import {styled} from "@mui/material/styles";
 
 
@@ -29,15 +27,6 @@ export default (props: AppbarProps) => {
         <Box sx={{flexGrow: 1}}>
             <AppBar position="static">
                 <Toolbar>
-                    {/*<IconButton*/}
-                    {/*    size="large"*/}
-                    {/*    edge="start"*/}
-                    {/*    color="inherit"*/}
-                    {/*    aria-label="menu"*/}
-                    {/*    sx={{mr: 2}}*/}
-                    {/*>*/}
-                    {/*    <MenuIcon/>*/}
-                    {/*</IconButton>*/}
                     <Typography variant="h6" noWrap component="div" sx={{flexGrow: 1}}>
                         {projectName}
                     </Typography>

@@ -47,7 +47,7 @@ const TaskCard = (props: CardProps) => {
     }
 
     return (
-        <Card sx={{minWidth: 300}}>
+        <Card sx={{width: 300}}>
             <CardContent>
                 <Typography variant="h5" component="span" gutterBottom={true}>
                     {name}

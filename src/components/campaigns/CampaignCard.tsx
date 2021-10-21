@@ -21,7 +21,7 @@ const ParentCard = (props: CardParams) => {
     }
 
     return (
-        <Card sx={{ minWidth: 300 }}>
+        <Card sx={{ width: 300 }}>
             <CardContent>
                 <Typography variant="h5" component="h2" gutterBottom={true}>
                     {name}

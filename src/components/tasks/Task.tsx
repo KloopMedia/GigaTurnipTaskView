@@ -89,6 +89,8 @@ const Task = () => {
 
     const handleChange = (e: any) => {
         setFormResponses(e.formData)
+        let data = {responses: e.formData}
+        axios.patch(tasksUrl + id + '/', data)
     }
 
     return (

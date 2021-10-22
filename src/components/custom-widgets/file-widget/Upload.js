@@ -19,9 +19,10 @@ const upload = async (files, storageRef, setFileBeingUploaded, setFileLinks, mul
             setFileLinks({})
         }
         await Promise.all(files.map(async file => {
-            const snap = storageRef.child(file.name).put(file)
+            const filename = file.name.replaceAll('.', '_').replaceAll(' ', '_').replaceAll('/', '_')
+            const snap = storageRef.child(filename).put(file)
             setFileBeingUploaded(prevState => {
-                const update = {[file.name]: {status: "loading", progress: 0}}
+                const update = {[filename]: {status: "loading", progress: 0}}
                 return prevState ? {...prevState, ...update} : update
             })
 
@@ -31,7 +32,7 @@ const upload = async (files, storageRef, setFileBeingUploaded, setFileLinks, mul
                     // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                     setFileBeingUploaded(prevState => {
-                        const update = {[file.name]: {status: "loading", progress: progress}}
+                        const update = {[filename]: {status: "loading", progress: progress}}
                         return prevState ? {...prevState, ...update} : update
                     })
                 },
@@ -45,11 +46,11 @@ const upload = async (files, storageRef, setFileBeingUploaded, setFileLinks, mul
                         const filePath = snap.snapshot.ref.fullPath
                         const fileLink = downloadURL
                         setFileBeingUploaded(prevState => {
-                            const update = {[file.name]: {status: "complete", progress: 100, url: fileLink}}
+                            const update = {[filename]: {status: "complete", progress: 100, url: fileLink}}
                             return returnNewState(prevState, update, multiple)
                         })
                         setFileLinks(prevState => {
-                            const update = {[file.name]: filePath}
+                            const update = {[filename]: filePath}
                             return returnNewState(prevState, update, multiple)
                         })
                     });

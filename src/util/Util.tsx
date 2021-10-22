@@ -1,33 +1,19 @@
 import axios from "./Axios";
 import {campaignsUrl, taskstagesUrl, tasksUrl} from "../config/Urls";
-import {PaginationHandlerProps} from "./Types";
 
 export const IS_PAGINATION_ON = false
 
-export const paginatedDataHandler = ({
-                                         data,
-                                         setDataFunction,
-                                         setCountFunction,
-                                         setNextFunction,
-                                         setPrevFunction
-                                     }: PaginationHandlerProps) => {
-    if (IS_PAGINATION_ON) {
-        const {results, next, previous, count} = data;
-        const numOfPages = Math.ceil(count / 10)
-        console.log(numOfPages)
-        setDataFunction(results)
-        if (setCountFunction) {
-            setCountFunction(count < 10 ? 0 : numOfPages)
-        }
-        if (setNextFunction) {
-            setNextFunction(next)
-        }
-        if (setPrevFunction) {
-            setPrevFunction(previous)
-        }
-    } else {
-        setDataFunction(data)
-    }
+export const paginatedDataHandler = (
+    data: any,
+    setDataFunction: (res: any) => void,
+    setCountFunction: (count: number) => void,
+) => {
+    const {results, count} = data;
+    const numOfPages = Math.ceil(count / 10)
+    console.log("numOfPages", numOfPages)
+    console.log("results", results)
+    setDataFunction(results)
+    setCountFunction(numOfPages)
 }
 
 // Campaigns Functions
@@ -80,12 +66,17 @@ export const requestTaskAssignment = (id: string | number) => {
 
 
 // TaskMenu Functions
-export const getSelectableTasks = (campaignId: string | number) => {
+export const getSelectableTasks = (campaignId: string | number, page?: number) => {
+    console.log(page)
+    if (page && page > 0) {
+        return axios.get(`${tasksUrl}user_selectable/?stage__chain__campaign=${campaignId}&limit=10&offset=${(page - 1) * 10}`)
+            .then(res => res.data)
+    }
     return axios.get(`${tasksUrl}user_selectable/?stage__chain__campaign=${campaignId}`)
         .then(res => res.data)
         .then(res => {
             console.log("getSelectableTasks", res)
-            return (res)
+            return res
         })
 };
 

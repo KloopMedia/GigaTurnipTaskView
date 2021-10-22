@@ -17,7 +17,6 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
     const {id, taskData, isAssigned, refreshTasks} = props;
     let {campaignId} = useParams<RouterParams>();
 
-    const history = useHistory()
     const {currentUser} = useContext(AuthContext)
 
     const [schema, setSchema] = useState({})
@@ -26,7 +25,6 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
     const [complete, setComplete] = useState(false)
     const [prevTasks, setPrevTasks] = useState<any>([])
     const [dataForStoragePath, setDataForStoragePath] = useState<dataForStoragePathParams | {}>({})
-    const [editorData, setEditorData] = useState("")
     const [loader, setLoader] = useState(false)
 
     const widgets = {
@@ -37,10 +35,6 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
         const setData = async () => {
             const task = taskData
             const stage = task.stage
-
-            if (stage && stage.rich_text) {
-                setEditorData(stage.rich_text)
-            }
 
             setDataForStoragePath({
                 campaignId: campaignId.toString(),
@@ -97,11 +91,6 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
 
     return (
         <Grid container>
-            {editorData &&
-            <Grid container item sx={{display: 'block'}}>
-                <TextViewer data={editorData}/>
-            </Grid>
-            }
             <Grid direction='row' container spacing={1}>
                 {prevTasks.length > 0 &&
                 <Grid container item sm={6} xs={12} sx={{display: 'block'}}>

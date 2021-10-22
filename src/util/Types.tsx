@@ -36,6 +36,21 @@ export type CardParams = {
     selectable?: boolean
 }
 
+export type CardProps = {
+    id: string,
+    complete?: boolean,
+    name: string,
+    description?: string,
+    creatable?: boolean,
+    selectable?: boolean
+}
+
+export type QuickTaskProps = {
+    task: any,
+    expand: boolean,
+    refreshTasks?: () => void
+} & CardProps
+
 export type NodeParams = { data: { label: string }, style?: object }
 
 export type PaginationHandlerProps = {

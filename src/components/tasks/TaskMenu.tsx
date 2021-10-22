@@ -31,6 +31,13 @@ const TaskMenu = (props: any) => {
         getCreatableTasks(campaignId).then(res => setCreatableTasks(res))
     }, [campaignId])
 
+    const refreshTasks = () => {
+        getSelectableTasks(campaignId).then(res => setSelectableTasks(res))
+        getCompleteTasks(campaignId).then(res => setCompleteTasks(res))
+        getOpenTasks(campaignId).then(res => setOpenTasks(res))
+        getCreatableTasks(campaignId).then(res => setCreatableTasks(res))
+    }
+
     return (
         currentUser && currentUser.uid &&
         <Grid>
@@ -44,7 +51,7 @@ const TaskMenu = (props: any) => {
                 </TabPanel>
                 {selectableTasks.length > 0 &&
                 <TabPanel value={value} index={2}>
-                    <TaskList selectable={true} tasks={selectableTasks}/>
+                    <TaskList selectable={true} tasks={selectableTasks} refreshTasks={refreshTasks}/>
                 </TabPanel>}
             </SimpleTabs>
         </Grid>

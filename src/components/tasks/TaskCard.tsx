@@ -6,15 +6,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import {useHistory} from "react-router-dom";
 import {requestTaskAssignment, requestTaskCreation} from "../../util/Util";
-
-type CardProps = {
-    id: number,
-    complete?: boolean,
-    name: string,
-    description?: string,
-    creatable?: boolean,
-    selectable?: boolean
-}
+import {CardProps} from "../../util/Types";
 
 const TaskCard = (props: CardProps) => {
     const {id, complete, name, description, creatable, selectable} = props;

@@ -5,12 +5,12 @@ import {PaginationHandlerProps} from "./Types";
 export const IS_PAGINATION_ON = false
 
 export const paginatedDataHandler = ({
-                                      data,
-                                      setDataFunction,
-                                      setCountFunction,
-                                      setNextFunction,
-                                      setPrevFunction
-                                  }: PaginationHandlerProps) => {
+                                         data,
+                                         setDataFunction,
+                                         setCountFunction,
+                                         setNextFunction,
+                                         setPrevFunction
+                                     }: PaginationHandlerProps) => {
     if (IS_PAGINATION_ON) {
         const {results, next, previous, count} = data;
         const numOfPages = Math.ceil(count / 10)
@@ -83,16 +83,28 @@ export const requestTaskAssignment = (id: string | number) => {
 export const getSelectableTasks = (campaignId: string | number) => {
     return axios.get(`${tasksUrl}user_selectable/?stage__chain__campaign=${campaignId}`)
         .then(res => res.data)
+        .then(res => {
+            console.log("getSelectableTasks", res)
+            return (res)
+        })
 };
 
 export const getCompleteTasks = (campaignId: string | number) => {
     return axios.get(`${tasksUrl}user_relevant/?complete=${true}&stage__chain__campaign=${campaignId}`)
         .then(res => res.data)
+        .then(res => {
+            console.log("getCompleteTasks", res)
+            return (res)
+        })
 };
 
 export const getOpenTasks = (campaignId: string | number) => {
     return axios.get(`${tasksUrl}user_relevant/?complete=${false}&stage__chain__campaign=${campaignId}`)
         .then(res => res.data)
+        .then(res => {
+            console.log("getOpenTasks", res)
+            return (res)
+        })
 };
 
 export const getCreatableTasks = (campaignId: string | number) => {

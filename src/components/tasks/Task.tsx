@@ -10,6 +10,7 @@ import {Box, CircularProgress, Grid} from "@mui/material";
 import {AuthContext} from "../../util/Auth";
 import TextViewer from "../text-editor/TextViewer";
 import {getPreviousTasks} from "../../util/Util";
+import AutoCompleteWidget from "../custom-widgets/autocomplete/AutoCompleteWidget";
 
 type RouterParams = { id: string, campaignId: string }
 type dataForStoragePathParams = { campaignId: number, chainId: number, stageId: number, userId: string, taskId: number }
@@ -33,7 +34,8 @@ const Task = (props: {id?: string}) => {
     const [loader, setLoader] = useState(false)
 
     const widgets = {
-        customfile: CustomFileWidget
+        customfile: CustomFileWidget,
+        autocomplete: AutoCompleteWidget
     };
 
     useEffect(() => {

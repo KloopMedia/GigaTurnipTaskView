@@ -19,7 +19,14 @@ const upload = async (files, storageRef, setFileBeingUploaded, setFileLinks, mul
             setFileLinks({})
         }
         await Promise.all(files.map(async file => {
-            const filename = file.name.replaceAll('.', '_').replaceAll(' ', '_').replaceAll('/', '_')
+            let filename;
+            try {
+                filename = file.name.replaceAll('.', '_').replaceAll(' ', '_').replaceAll('/', '_')
+            } catch (e) {
+                console.log("ERROR: ", e)
+                filename = file.name
+            }
+            console.log(filename)
             const snap = storageRef.child(filename).put(file)
             setFileBeingUploaded(prevState => {
                 const update = {[filename]: {status: "loading", progress: 0}}

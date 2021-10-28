@@ -19,13 +19,7 @@ const upload = async (files, storageRef, setFileBeingUploaded, setFileLinks, mul
             setFileLinks({})
         }
         await Promise.all(files.map(async file => {
-            let filename;
-            try {
-                filename = file.name.replaceAll('.', '_').replaceAll(' ', '_').replaceAll('/', '_')
-            } catch (e) {
-                console.log("ERROR: ", e)
-                filename = file.name
-            }
+            const filename = file.name.replace(/\./g, '_').replace(/ /g, '_');
             console.log(filename)
             const snap = storageRef.child(filename).put(file)
             setFileBeingUploaded(prevState => {

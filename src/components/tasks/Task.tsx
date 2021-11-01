@@ -32,6 +32,7 @@ const Task = (props: {id?: string}) => {
     const [dataForStoragePath, setDataForStoragePath] = useState<dataForStoragePathParams | {}>({})
     const [editorData, setEditorData] = useState("")
     const [loader, setLoader] = useState(false)
+    const [ready, setReady] = useState(false)
 
     const widgets = {
         customfile: CustomFileWidget,
@@ -72,6 +73,7 @@ const Task = (props: {id?: string}) => {
             setSchema(parsed_schema)
             setUiSchema(parsed_ui)
             setComplete(task.complete)
+            setReady(true)
         }
         if (id && currentUser) {
             setData()
@@ -121,9 +123,9 @@ const Task = (props: {id?: string}) => {
             }
             <Grid>
                 <Form
-                    schema={schema ?? {}}
-                    uiSchema={uiSchema ?? {}}
-                    formData={formResponses ?? {}}
+                    schema={schema}
+                    uiSchema={uiSchema}
+                    formData={formResponses}
                     formContext={dataForStoragePath}
                     liveOmit={true}
                     omitExtraData={true}
@@ -133,7 +135,7 @@ const Task = (props: {id?: string}) => {
                     onSubmit={handleSubmit}
                 >
                     <Box display={"flex"}>
-                        <Button type="submit" disabled={complete}>Submit</Button>
+                        <Button type="submit" disabled={complete || !ready}>Submit</Button>
                         {loader && <Box paddingLeft={2}><CircularProgress/></Box>}
                     </Box>
                     {/*<Button variant="danger" disabled={complete} style={{marginLeft: 7}} onClick={handleRelease}>Release</Button>*/}

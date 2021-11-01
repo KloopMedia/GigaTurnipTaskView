@@ -59,8 +59,8 @@ const Task = (props: {id?: string}) => {
                 taskId: task.id.toString()
             })
 
-            let parsed_schema = JSON.parse(stage.json_schema) ?? {}
-            let parsed_ui = JSON.parse(stage.ui_schema) ?? {}
+            let parsed_schema = stage.json_schema ? JSON.parse(stage.json_schema) : {}
+            let parsed_ui = stage.ui_schema ? JSON.parse(stage.ui_schema) : {}
 
             const previousTasks = await getPreviousTasks(id).then(res => res.map((task: any) => ({
                 responses: task.responses,

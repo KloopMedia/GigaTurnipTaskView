@@ -11,6 +11,7 @@ import {AuthContext} from "../../util/Auth";
 import TextViewer from "../text-editor/TextViewer";
 import {getPreviousTasks} from "../../util/Util";
 import AutoCompleteWidget from "../custom-widgets/autocomplete/AutoCompleteWidget";
+import FixedRadioWidget from "../custom-widgets/fixed-radio-widget/FixedRadioWidget";
 
 type RouterParams = { id: string, campaignId: string }
 type dataForStoragePathParams = { campaignId: number, chainId: number, stageId: number, userId: string, taskId: number }
@@ -36,7 +37,8 @@ const Task = (props: {id?: string}) => {
 
     const widgets = {
         customfile: CustomFileWidget,
-        autocomplete: AutoCompleteWidget
+        autocomplete: AutoCompleteWidget,
+        RadioWidget: FixedRadioWidget
     };
 
     useEffect(() => {

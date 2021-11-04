@@ -9,6 +9,8 @@ import {Button} from "react-bootstrap";
 import {Box, CircularProgress, Grid} from "@mui/material";
 import {AuthContext} from "../../util/Auth";
 import TextViewer from "../text-editor/TextViewer";
+import AutoCompleteWidget from "../custom-widgets/autocomplete/AutoCompleteWidget";
+import FixedRadioWidget from "../custom-widgets/fixed-radio-widget/FixedRadioWidget";
 
 type RouterParams = { id: string, campaignId: string }
 type dataForStoragePathParams = { campaignId: number, chainId: number, stageId: number, userId: string, taskId: number }
@@ -28,7 +30,9 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
     const [loader, setLoader] = useState(false)
 
     const widgets = {
-        customfile: CustomFileWidget
+        customfile: CustomFileWidget,
+        autocomplete: AutoCompleteWidget,
+        RadioWidget: FixedRadioWidget
     };
 
     useEffect(() => {

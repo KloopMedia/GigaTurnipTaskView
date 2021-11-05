@@ -137,7 +137,7 @@ const Task = (props: {id?: string}) => {
                     onSubmit={handleSubmit}
                 >
                     <Box display={"flex"}>
-                        <Button type="submit" disabled={complete || !ready}>Submit</Button>
+                        <Button type="submit" disabled={complete || loader || !ready}>Submit</Button>
                         {loader && <Box paddingLeft={2}><CircularProgress/></Box>}
                     </Box>
                     {/*<Button variant="danger" disabled={complete} style={{marginLeft: 7}} onClick={handleRelease}>Release</Button>*/}

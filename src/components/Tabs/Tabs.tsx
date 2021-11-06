@@ -1,12 +1,6 @@
 import React from 'react';
 import {Box, Grid, Tab, Tabs} from "@mui/material";
-
-function a11yProps(index: any) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    };
-}
+import {a11yProps} from "../../util/Util";
 
 type SimpleTabsProps = {
     value: number | string,

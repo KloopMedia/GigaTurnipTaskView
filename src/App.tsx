@@ -8,6 +8,8 @@ import Campaigns from "./components/campaigns/Campaigns";
 import TaskMenu from "./components/tasks/TaskMenu";
 import About from "./components/campaigns/About";
 import {AuthContext} from "./util/Auth";
+import Notifications from "./components/notifications/Notifications";
+import NotificationContent from "./components/notifications/NotificationContent";
 
 const App = () => {
     const {currentUser} = useContext(AuthContext)
@@ -39,6 +41,12 @@ const App = () => {
                             </Route>
                             <Route exact path="/campaign/:campaignId/tasks/:id">
                                 <Task/>
+                            </Route>
+                            <Route exact path={"/campaign/:campaignId/notifications"}>
+                                <Notifications/>
+                            </Route>
+                            <Route exact path={"/campaign/:campaignId/notifications/:id"}>
+                                <NotificationContent/>
                             </Route>
                         </Appbar>
                     </Route>

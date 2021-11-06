@@ -15,7 +15,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import MailIcon from '@mui/icons-material/Mail';
 import {projectName} from "../../config/Config";
 import {signInWithGoogle, signOut} from "../../util/Firebase";
@@ -25,7 +26,7 @@ import {AuthContext} from "../../util/Auth";
 import {getUserCampaigns} from "../../util/Util";
 import {Button} from "@mui/material";
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 
 const openedMixin = (theme: Theme): CSSObject => ({
     width: drawerWidth,
@@ -44,7 +45,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
     overflowX: 'hidden',
     width: `calc(${theme.spacing(7)} + 1px)`,
     [theme.breakpoints.up('sm')]: {
-        width: `calc(${theme.spacing(9)} + 1px)`,
+        width: `calc(${theme.spacing(7)} + 1px)`,
     },
 });
 
@@ -115,29 +116,40 @@ export default (props: AppbarProps) => {
         setOpen(false);
     };
 
-    const redirectToMain = () => {
-        history.push('/')
+    const redirect = (page?: string) => {
+        if (page) {
+            history.push(`/campaign/${campaignId}/${page}`)
+        } else {
+            history.push('/')
+        }
+
     }
+
+    const DrawerItems = [
+        {page: "tasks", title: "Задания", icon: <AssignmentIcon/>},
+        {page: "notifications", title: "Уведомления", icon: <NotificationsIcon/>}
+    ]
+
 
     return (
         <Box sx={{display: 'flex'}}>
             <CssBaseline/>
             <AppBar position="fixed" open={open}>
                 <Toolbar>
-                    {/*<IconButton*/}
-                    {/*    color="inherit"*/}
-                    {/*    aria-label="open drawer"*/}
-                    {/*    onClick={handleDrawerOpen}*/}
-                    {/*    edge="start"*/}
-                    {/*    sx={{*/}
-                    {/*        marginRight: '36px',*/}
-                    {/*        ...(open && {display: 'none'}),*/}
-                    {/*    }}*/}
-                    {/*>*/}
-                    {/*    <MenuIcon/>*/}
-                    {/*</IconButton>*/}
-                    <Typography variant="h6" noWrap component="div" sx={{cursor: "pointer", flexGrow: 1 }}
-                                onClick={redirectToMain}>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        onClick={handleDrawerOpen}
+                        edge="start"
+                        sx={{
+                            marginRight: '36px',
+                            ...(open && {display: 'none'}),
+                        }}
+                    >
+                        <MenuIcon/>
+                    </IconButton>
+                    <Typography variant="h6" noWrap component="div" sx={{cursor: "pointer", flexGrow: 1}}
+                                onClick={() => redirect()}>
                         {projectName}
                     </Typography>
                     <Typography>{currentUser?.email}</Typography>
@@ -152,14 +164,24 @@ export default (props: AppbarProps) => {
                     }
                 </Toolbar>
             </AppBar>
-            {/*<Drawer variant="permanent" open={open}>*/}
-            {/*    <DrawerHeader>*/}
-            {/*        <IconButton onClick={handleDrawerClose}>*/}
-            {/*            {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}*/}
-            {/*        </IconButton>*/}
-            {/*    </DrawerHeader>*/}
-            {/*    <Divider/>*/}
-            {/*</Drawer>*/}
+            <Drawer variant="permanent" open={open}>
+                <DrawerHeader>
+                    <IconButton onClick={handleDrawerClose}>
+                        {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
+                    </IconButton>
+                </DrawerHeader>
+                <Divider/>
+                <List>
+                    {DrawerItems.map(item => (
+                        <ListItem button key={item.page} onClick={() => redirect(item.page)}>
+                            <ListItemIcon>
+                                {item.icon}
+                            </ListItemIcon>
+                            <ListItemText primary={item.title}/>
+                        </ListItem>
+                    ))}
+                </List>
+            </Drawer>
             <Box component="main" sx={{flexGrow: 1, p: 0}}>
                 <DrawerHeader/>
                 {children}

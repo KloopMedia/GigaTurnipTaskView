@@ -7,6 +7,7 @@ const webhookstagesUrl = "api/v1/webhookstages/"
 const conditionalstagesUrl = "api/v1/conditionalstages/"
 const casesUrl = "api/v1/cases/"
 const tasksUrl = "api/v1/tasks/"
+const notificationsUrl = "/api/v1/notifications/"
 
 export {
     baseUrl,
@@ -16,5 +17,6 @@ export {
     webhookstagesUrl,
     conditionalstagesUrl,
     casesUrl,
-    tasksUrl
+    tasksUrl,
+    notificationsUrl
 }

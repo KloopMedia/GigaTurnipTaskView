@@ -1,8 +1,11 @@
 import axios from "./Axios";
-import {campaignsUrl, taskstagesUrl, tasksUrl} from "../config/Urls";
+import {campaignsUrl, notificationsUrl, taskstagesUrl, tasksUrl} from "../config/Urls";
+import Axios from "./Axios";
 
 export const IS_PAGINATION_ON = false
 
+
+// Pagination Functions
 export const paginatedDataHandler = (
     data: any,
     setDataFunction: (res: any) => void,
@@ -15,6 +18,36 @@ export const paginatedDataHandler = (
     setDataFunction(results)
     setCountFunction(numOfPages)
 }
+
+const createPaginationURL = (request: string, page?: number) => {
+    if (page && page > 0) {
+        return `${request}&limit=10&offset=${(page - 1) * 10}`
+    } else {
+        return request
+    }
+}
+
+// Date Functions
+export const formatDateString = (date: string) => {
+    const d = new Date(date)
+    const year = d.getFullYear()
+    const month = addZeroesToDate(d.getMonth() + 1)
+    const day = addZeroesToDate(d.getDate())
+    const hours = addZeroesToDate(d.getHours())
+    const minutes = addZeroesToDate(d.getMinutes())
+    const seconds = addZeroesToDate(d.getSeconds())
+    return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`
+}
+
+const addZeroesToDate = (date: number) => {
+    return date < 10 ? '0' + date : date
+}
+
+// Tab function
+export const a11yProps = (index: any) => ({
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+});
 
 // Campaigns Functions
 export const getCampaigns = () => {
@@ -68,16 +101,8 @@ export const requestTaskAssignment = (id: string | number) => {
 // TaskMenu Functions
 export const getSelectableTasks = (campaignId: string | number, page?: number) => {
     console.log(page)
-    if (page && page > 0) {
-        return axios.get(`${tasksUrl}user_selectable/?stage__chain__campaign=${campaignId}&limit=10&offset=${(page - 1) * 10}`)
-            .then(res => res.data)
-    }
-    return axios.get(`${tasksUrl}user_selectable/?stage__chain__campaign=${campaignId}`)
-        .then(res => res.data)
-        .then(res => {
-            console.log("getSelectableTasks", res)
-            return res
-        })
+    const url = createPaginationURL(`${tasksUrl}user_selectable/?stage__chain__campaign=${campaignId}`, page)
+    return axios.get(url).then(res => res.data)
 };
 
 export const getCompleteTasks = (campaignId: string | number) => {
@@ -108,4 +133,22 @@ export const getCreatableTasks = (campaignId: string | number) => {
 export const getPreviousTasks = (id: string | number) => {
     return axios.get(`${tasksUrl + id}/list_displayed_previous/`)
         .then(res => res.data)
+}
+
+// Notifications Functions
+export const getUserNotifications = (campaignId: string | number, viewed: boolean, importance?: number, page?: number) => {
+    console.log(page)
+    const url = createPaginationURL(`${notificationsUrl}list_user_notifications/?campaign=${campaignId}&viewed=${viewed}`, page)
+    console.log("IMPORTANCE", importance)
+    if (importance === 0) {
+        return axios.get(`${url}&importance=${importance}`)
+            .then(res => res.data)
+    } else {
+        return axios.get(url)
+            .then(res => res.data)
+    }
+}
+
+export const getNotificationContent = (id: string | number) => {
+    return axios.get(`${notificationsUrl + id}/`).then(res => res.data)
 }

@@ -12,6 +12,7 @@ import {
     getSelectableTasks,
     paginatedDataHandler
 } from "../../util/Util";
+import Notifications from "../notifications/Notifications";
 
 
 type RouterParams = { campaignId: string }
@@ -60,6 +61,7 @@ const TaskMenu = (props: any) => {
     return (
         currentUser && currentUser.uid &&
         <Grid>
+            <Notifications importance={0} onlyNew={true}/>
             <TaskList creatable={true} tasks={creatableTasks}/>
             <SimpleTabs value={tab} handleChange={handleTabChange} showSelectable={selectableTasks.length > 0}>
                 <TabPanel value={tab} index={0}>

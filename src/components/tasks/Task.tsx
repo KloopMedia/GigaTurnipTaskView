@@ -88,6 +88,10 @@ const Task = (props: {id?: string}) => {
         axios.patch(tasksUrl + id + '/', data)
             .then(() => setLoader(false))
             .then(() => history.push(path))
+            .catch((err) => {
+                setLoader(false)
+                history.push(path)
+            })
     }
 
     const handleRelease = () => {

@@ -16,7 +16,7 @@ import FixedRadioWidget from "../custom-widgets/fixed-radio-widget/FixedRadioWid
 type RouterParams = { id: string, campaignId: string }
 type dataForStoragePathParams = { campaignId: number, chainId: number, stageId: number, userId: string, taskId: number }
 
-const Task = (props: {id?: string}) => {
+const Task = (props: { id?: string }) => {
     let {id, campaignId} = useParams<RouterParams>();
     if (!id && props.id) {
         id = props.id
@@ -34,6 +34,7 @@ const Task = (props: {id?: string}) => {
     const [editorData, setEditorData] = useState("")
     const [loader, setLoader] = useState(false)
     const [ready, setReady] = useState(false)
+    const [changeCount, setChangeCount] = useState(0)
 
     const widgets = {
         customfile: CustomFileWidget,
@@ -102,11 +103,23 @@ const Task = (props: {id?: string}) => {
 
     const handleChange = (e: any) => {
         setFormResponses(e.formData)
-        let data = {responses: e.formData}
-        axios.patch(tasksUrl + id + '/', data).catch((err) => {
-            alert("Изменения не доступны.")
-            history.push(path)
-        })
+        const data = {responses: e.formData}
+        if (changeCount === 5) {
+            axios.patch(tasksUrl + id + '/', data).catch((err) => {
+                alert("Изменения не доступны.")
+                history.push(path)
+            })
+            setChangeCount(0)
+            console.log("SEND CHANGE")
+        } else {
+            setChangeCount(changeCount + 1)
+        }
+    }
+
+    const handleBlur = () => {
+        const data = {responses: formResponses}
+        console.log("Saving data", data)
+        axios.patch(tasksUrl + id + '/', data)
     }
 
     return (
@@ -140,6 +153,7 @@ const Task = (props: {id?: string}) => {
                     omitExtraData={true}
                     widgets={widgets}
                     disabled={complete}
+                    onBlur={handleBlur}
                     onChange={handleChange}
                     onSubmit={handleSubmit}
                 >

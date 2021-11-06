@@ -57,8 +57,7 @@ const upload = async (files, storageRef, setFileBeingUploaded, setFileLinks, mul
                     });
                 });
         }))
-    }
-    ;
+    };
 }
 
 export default upload

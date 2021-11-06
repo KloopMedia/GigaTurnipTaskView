@@ -7,7 +7,7 @@ import {Dialog} from "@mui/material";
 
 
 const CustomFileWidget = (props: any) => {
-    const {schema, uiSchema, disabled, required, formContext, value} = props;
+    const {schema, uiSchema, disabled, required, formContext, value, id} = props;
     const {campaignId, chainId, stageId, userId, taskId} = formContext;
     const [uploadedFiles, setUploadedFiles] = useState<any>({})
     const [fileLinks, setFileLinks] = useState<any>({})
@@ -55,17 +55,19 @@ const CustomFileWidget = (props: any) => {
 
     const handleChange = async (event: any) => {
         console.log("Files selected: ", [...event.target.files,])
-        upload([...event.target.files], pathToFolder, setUploadedFiles, setFileLinks, multipleSelect)
+        await upload([...event.target.files], pathToFolder, setUploadedFiles, setFileLinks, multipleSelect)
         event.target.value = null;
     };
+
+    const _onBlur = () => props.onBlur(id, uploadedFiles);
+    const _onFocus = () => props.onFocus(id, uploadedFiles);
 
     const getDownloadUrl = (path: string) => {
         return firebase.storage().ref(path).getDownloadURL()
     }
 
     useEffect(() => {
-        if (fileLinks && Object.keys(fileLinks).length > 0) {
-            console.log("fileLinks", fileLinks)
+        const updateFormResponses = async () => {
             try {
                 let stringify = "";
                 if (multipleSelect) {
@@ -75,21 +77,27 @@ const CustomFileWidget = (props: any) => {
                 } else {
                     stringify = JSON.stringify(fileLinks);
                 }
-                props.onChange(stringify);
+                await props.onChange(stringify);
             } catch (error) {
                 const stringify = JSON.stringify(fileLinks)
                 console.error(error)
-                props.onChange(stringify)
+                await props.onChange(stringify)
             }
+        }
+
+        if (fileLinks && Object.keys(fileLinks).length > 0) {
+            console.log("fileLinks", fileLinks)
+            updateFormResponses().then(() => _onBlur())
         }
     }, [fileLinks])
 
-    const deleteFile = (filename: string) => {
+    const deleteFile = async (filename: string) => {
         const parsed = parsedValue
         if (filename in parsed) {
             delete parsed[filename]
             const stringify = JSON.stringify(parsed)
-            props.onChange(stringify)
+            await props.onChange(stringify)
+            _onBlur()
         }
 
         const links = {...fileLinks}
@@ -109,6 +117,7 @@ const CustomFileWidget = (props: any) => {
     const handleFileClick = async (filename: string) => {
         const parsed = parsedValue;
         console.log("FILE CLICK VALUE", parsed)
+        _onBlur()
         if (filename in parsed) {
             const path = parsed[filename];
             console.log(path)
@@ -165,7 +174,7 @@ const CustomFileWidget = (props: any) => {
             <label className={"form-label"}>{schema?.title}</label>
             <br/>
             <input disabled={disabled} required={isInputRequired} multiple={multipleSelect} type="file"
-                   onChange={handleChange}/>
+                   onChange={handleChange} onBlur={_onBlur} onFocus={_onFocus}/>
 
             {Object.keys(uploadedFiles).map((filename, i) =>
                 <div key={filename}>

@@ -103,7 +103,10 @@ const Task = (props: {id?: string}) => {
     const handleChange = (e: any) => {
         setFormResponses(e.formData)
         let data = {responses: e.formData}
-        axios.patch(tasksUrl + id + '/', data)
+        axios.patch(tasksUrl + id + '/', data).catch((err) => {
+            alert("Изменения не доступны.")
+            history.push(path)
+        })
     }
 
     return (

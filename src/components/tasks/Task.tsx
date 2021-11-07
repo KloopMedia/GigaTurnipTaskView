@@ -103,17 +103,17 @@ const Task = (props: { id?: string }) => {
 
     const handleChange = (e: any) => {
         setFormResponses(e.formData)
-        const data = {responses: e.formData}
-        if (changeCount === 5) {
-            axios.patch(tasksUrl + id + '/', data).catch((err) => {
-                alert("Изменения не доступны.")
-                history.push(path)
-            })
-            setChangeCount(0)
-            console.log("SEND CHANGE")
-        } else {
-            setChangeCount(changeCount + 1)
-        }
+        // const data = {responses: e.formData}
+        // if (changeCount === 5) {
+        //     axios.patch(tasksUrl + id + '/', data).catch((err) => {
+        //         alert("Изменения не доступны.")
+        //         history.push(path)
+        //     })
+        //     setChangeCount(0)
+        //     console.log("SEND CHANGE")
+        // } else {
+        //     setChangeCount(changeCount + 1)
+        // }
     }
 
     const handleBlur = () => {

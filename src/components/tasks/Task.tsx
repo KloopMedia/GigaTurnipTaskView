@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
 import Form from "@rjsf/bootstrap-4";
-import {useHistory, useParams} from "react-router-dom";
+import {Prompt, useHistory, useParams} from "react-router-dom";
 import axios from "../../util/Axios";
 import {tasksUrl} from '../../config/Urls'
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -128,6 +128,15 @@ const Task = (props: { id?: string }) => {
 
     return (
         <div style={{width: '70%', minWidth: '400px', margin: '0 auto', display: 'block', padding: 10}}>
+            <Prompt
+                message={(location, action) => {
+                    console.log("Backing up...")
+                    const data = {responses: formResponses}
+                    axios.patch(tasksUrl + id + '/', data).then(() => console.log("Data Saved"))
+                    return true
+                }}
+            />
+
             {editorData !== "" && <div style={{paddingBottom: 20}}>
                 <TextViewer data={editorData}/>
             </div>}

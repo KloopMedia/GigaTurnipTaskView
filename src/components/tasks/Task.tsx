@@ -120,6 +120,10 @@ const Task = (props: { id?: string }) => {
         const data = {responses: formResponses}
         console.log("Saving data", data)
         axios.patch(tasksUrl + id + '/', data)
+            .catch((err) => {
+                alert("Изменения не доступны.")
+                history.push(path)
+            })
     }
 
     return (

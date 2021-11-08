@@ -20,7 +20,7 @@ const AutoCompleteWidget = (props: WidgetProps) => {
         schema,
         rawErrors = []
     } = props;
-    console.log("options",options)
+
     const searchField = options.searchField ?? 'search'
     const responseField = options.responseField ?? 'text'
     const params = options?.params ?? ''
@@ -71,8 +71,8 @@ const AutoCompleteWidget = (props: WidgetProps) => {
             {examples ? (
                 <datalist id={`examples_${id}`}>
                     {(examples as string[])
-                        .map((example: any) => {
-                            return <option key={example[responseField as string]} value={example[responseField as string]}/>;
+                        .map((example: any, index) => {
+                            return <option key={`${example[responseField as string]}_${index}`} value={example[responseField as string]}/>;
                         })}
                 </datalist>
             ) : null}

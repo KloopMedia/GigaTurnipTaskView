@@ -29,8 +29,8 @@ const AutoCompleteWidget = (props: WidgetProps) => {
 
     const updateExamples = () => {
         if (options.webhook) {
-            const url = `${options.webhook}?${searchField}=${value + params}`
-            axios.get(url).then(res => res.data).then(res => setExamples(res))
+            const url = `${options.webhook}?${searchField}=${value + params}?limit=100`
+            axios.get(url).then(res => res.data).then(res => setExamples(res.results)).catch(err => console.log(err))
         }
     }
 
@@ -68,7 +68,7 @@ const AutoCompleteWidget = (props: WidgetProps) => {
                 onBlur={_onBlur}
                 onFocus={_onFocus}
             />
-            {examples ? (
+            {examples && examples.length > 0 ? (
                 <datalist id={`examples_${id}`}>
                     {(examples as string[])
                         .map((example: any, index) => {

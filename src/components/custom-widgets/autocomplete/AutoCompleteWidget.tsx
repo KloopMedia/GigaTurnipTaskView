@@ -29,7 +29,7 @@ const AutoCompleteWidget = (props: WidgetProps) => {
 
     const updateExamples = () => {
         if (options.webhook) {
-            const url = `${options.webhook}?${searchField}=${value + params}?limit=100`
+            const url = `${options.webhook}?${searchField}=${value + params}`
             axios.get(url).then(res => res.data).then(res => setExamples(res.results)).catch(err => console.log(err))
         }
     }

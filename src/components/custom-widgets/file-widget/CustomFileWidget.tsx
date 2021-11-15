@@ -136,8 +136,7 @@ const CustomFileWidget = (props: any) => {
                     setIsVideoOpen(true);
                     break;
                 default:
-                    // window.open(uploadedFiles[filename].url, '_blank');
-                    alert("Файл не является фото или видео")
+                    window.open(uploadedFiles[filename].url, '_blank');
             }
         }
     }

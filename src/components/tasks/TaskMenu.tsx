@@ -13,6 +13,7 @@ import {
     paginatedDataHandler
 } from "../../util/Util";
 import Notifications from "../notifications/Notifications";
+import TaskFilter from "./TaskFilter";
 
 
 type RouterParams = { campaignId: string }
@@ -72,6 +73,11 @@ const TaskMenu = (props: any) => {
                 </TabPanel>
                 {selectableTasks.length > 0 &&
                 <TabPanel value={tab} index={2}>
+                    <Box pb={2}>
+                        <TaskFilter
+                            campaign={campaignId}
+                        />
+                    </Box>
                     <TaskList selectable={true} tasks={selectableTasks} refreshTasks={refreshTasks}/>
                     <Box pb={2} display={"flex"} justifyContent={"center"}>
                         <Pagination count={totalPages} page={page} onChange={handlePageChange} showFirstButton

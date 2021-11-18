@@ -13,6 +13,7 @@ const TaskFilter = (props: { campaign: string }) => {
 
     const [chainId, setChainId] = useState("")
     const [stageId, setStageId] = useState("")
+    const [formStageId, setFormStageId] = useState("")
     const [chains, setChains] = useState([])
     const [stages, setStages] = useState([])
     const [jsonSchema, setJsonSchema] = useState({})
@@ -52,15 +53,18 @@ const TaskFilter = (props: { campaign: string }) => {
 
     useEffect(() => {
         if (chainId && chains.length > 0) {
-            localStorage.setItem("selectable_filter_chain", chainId);
             Axios.get(`${taskstagesUrl}?chain=${chainId}&chain__campaign=${campaign}`)
                 .then(res => res.data)
                 .then(res => setStages(res.results))
                 .then(() => {
-                    if (!stageId) {
+                    if (!formStageId) {
                         const savedStage = localStorage.getItem("selectable_filter_stage");
+                        const savedFormStage = localStorage.getItem("selectable_filter_form_stage");
                         if (savedStage) {
                             setStageId(savedStage)
+                        }
+                        if (savedFormStage) {
+                            setFormStageId(savedFormStage)
                         }
                     }
                 })
@@ -68,10 +72,9 @@ const TaskFilter = (props: { campaign: string }) => {
     }, [chainId])
 
     useEffect(() => {
-        console.log(stageId)
-        if (stageId && stages.length > 0) {
-            localStorage.setItem("selectable_filter_stage", stageId);
-            const stage = stages.filter((item: any) => item.id == stageId)[0] as any
+        console.log(formStageId)
+        if (formStageId && stages.length > 0) {
+            const stage = stages.filter((item: any) => item.id == formStageId)[0] as any
             console.log(stage)
             if (stage) {
                 const schema = stage.json_schema ? JSON.parse(stage.json_schema) : {}
@@ -84,16 +87,31 @@ const TaskFilter = (props: { campaign: string }) => {
                 }
             }
         }
-    }, [stageId])
+    }, [formStageId])
 
 
     const handleChainChange = (event: SelectChangeEvent) => {
         setChainId(event.target.value);
+        setStageId("")
+        setFormStageId("");
+        setFormResponses({})
+        setJsonSchema({})
+        setUiSchema({})
+        localStorage.setItem("selectable_filter_chain", event.target.value);
+        localStorage.setItem("selectable_filter_stage", "");
+        localStorage.setItem("selectable_filter_form_stage", "");
+        localStorage.setItem("selectable_filter_responses", JSON.stringify({}));
     };
 
     const handleStageChange = (event: SelectChangeEvent) => {
-        setStageId(event.target.value);
+        setStageId(event.target.value)
+        localStorage.setItem("selectable_filter_stage", event.target.value);
+    }
+
+    const handleFormStageChange = (event: SelectChangeEvent) => {
+        setFormStageId(event.target.value);
         setFormResponses({})
+        localStorage.setItem("selectable_filter_form_stage", event.target.value);
         localStorage.setItem("selectable_filter_responses", JSON.stringify({}));
     };
 
@@ -108,13 +126,13 @@ const TaskFilter = (props: { campaign: string }) => {
 
     return (
         <FormGroup>
-            <FormControl required sx={{m: 1, minWidth: 120}}>
-                <InputLabel id="demo-simple-select-required-label">Chain</InputLabel>
+            <FormControl sx={{m: 1, minWidth: 120}}>
+                <InputLabel id="select-chain-filter">Chain</InputLabel>
                 <Select
                     labelId="select-chain-label"
                     id="select-chain"
                     value={chainId}
-                    label="Chain *"
+                    label="Chain"
                     onChange={handleChainChange}
                 >
                     <MenuItem value="">
@@ -124,19 +142,35 @@ const TaskFilter = (props: { campaign: string }) => {
                                                          value={item.id}>{item.name}</MenuItem>)}
                 </Select>
             </FormControl>
-            <FormControl disabled={chainId === ""} required sx={{m: 1, minWidth: 120}}>
-                <InputLabel id="demo-simple-select-required-label">Stage</InputLabel>
+            <FormControl disabled={chainId === ""} sx={{m: 1, minWidth: 120}}>
+                <InputLabel id="select-stage-filter">Stage</InputLabel>
                 <Select
                     labelId="select-stage-label"
                     id="select-stage"
                     value={stageId}
-                    label="Stage *"
+                    label="Stage"
                     onChange={handleStageChange}
                 >
                     <MenuItem value="">
                         <em>None</em>
                     </MenuItem>
                     {stages.map((item: any) => <MenuItem key={`filter_stage_${item.id}`}
+                                                         value={item.id}>{item.name}</MenuItem>)}
+                </Select>
+            </FormControl>
+            <FormControl disabled={chainId === ""} sx={{m: 1, minWidth: 120}}>
+                <InputLabel id="select-form-stage-filter">Form Stage</InputLabel>
+                <Select
+                    labelId="select-stage-label"
+                    id="select-stage"
+                    value={formStageId}
+                    label="Form Stage"
+                    onChange={handleFormStageChange}
+                >
+                    <MenuItem value="">
+                        <em>None</em>
+                    </MenuItem>
+                    {stages.map((item: any) => <MenuItem key={`filter_form_stage_${item.id}`}
                                                          value={item.id}>{item.name}</MenuItem>)}
                 </Select>
             </FormControl>

@@ -9,18 +9,16 @@ import {Button} from "react-bootstrap";
 import {Box, CircularProgress, Grid} from "@mui/material";
 import {AuthContext} from "../../util/Auth";
 import TextViewer from "../text-editor/TextViewer";
-import {getPreviousTasks} from "../../util/Util";
+import {getPreviousTasks, getTask} from "../../util/Util";
 import AutoCompleteWidget from "../custom-widgets/autocomplete/AutoCompleteWidget";
 import FixedRadioWidget from "../custom-widgets/fixed-radio-widget/FixedRadioWidget";
 
 type RouterParams = { id: string, campaignId: string }
 type dataForStoragePathParams = { campaignId: number, chainId: number, stageId: number, userId: string, taskId: number }
 
-const Task = (props: { id?: string }) => {
-    let {id, campaignId} = useParams<RouterParams>();
-    if (!id && props.id) {
-        id = props.id
-    }
+const Task = () => {
+    const {id, campaignId} = useParams<RouterParams>();
+
     const history = useHistory()
     const {currentUser} = useContext(AuthContext)
     const path = `/campaign/${campaignId}/tasks`
@@ -43,12 +41,11 @@ const Task = (props: { id?: string }) => {
     };
 
     useEffect(() => {
-        const getTask = () => {
-            return axios.get(tasksUrl + id + '/').then((res: any) => res.data)
-        }
         const setData = async () => {
-            let task = await getTask()
+            let task = await getTask(id)
             let stage = task.stage
+
+            console.log(task)
 
             if (stage && stage.rich_text) {
                 setEditorData(stage.rich_text)
@@ -132,7 +129,9 @@ const Task = (props: { id?: string }) => {
                 message={(location, action) => {
                     console.log("Backing up...")
                     const data = {responses: formResponses}
-                    axios.patch(tasksUrl + id + '/', data).then(() => console.log("Data Saved"))
+                    if (!complete) {
+                        axios.patch(tasksUrl + id + '/', data).then(() => console.log("Data Saved"))
+                    }
                     return true
                 }}
             />

@@ -45,6 +45,7 @@ const TaskMenu = (props: any) => {
 
     const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
         setTab(newValue);
+        refreshTasks();
     };
 
     const refreshTasks = () => {

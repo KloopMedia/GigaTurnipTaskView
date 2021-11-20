@@ -9,11 +9,15 @@ import {requestTaskAssignment, requestTaskCreation} from "../../util/Util";
 import {CardProps} from "../../util/Types";
 
 const TaskCard = (props: CardProps) => {
-    const {id, complete, name, description, creatable, selectable} = props;
+    const {id, complete, name, description, creatable, selectable, integrated} = props;
     const history = useHistory()
 
     const handleOpen = () => {
-        history.push(`${history.location.pathname}/${id}`)
+        if (integrated) {
+            history.push(`${history.location.pathname}/${id}/integrated`)
+        } else {
+            history.push(`${history.location.pathname}/${id}`)
+        }
     }
 
     const handleCreate = () => {

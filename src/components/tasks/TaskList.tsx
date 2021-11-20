@@ -33,6 +33,7 @@ const TaskList = (props: TaskListProps) => {
                                 complete={complete}
                                 selectable={selectable}
                                 creatable={creatable}
+                                integrated={false}
                             />
                         </Grid>
                     )
@@ -40,22 +41,40 @@ const TaskList = (props: TaskListProps) => {
                     const id = task.id.toString()
                     const name = task.stage.name
                     const description = task.stage.description
+                    const integrated = !!task.integrator_group
+
                     if (selectable) {
-                        return (
-                            <Grid item key={task.id} sx={{p: 1, width: "100%"}}>
-                                <QuickTask
-                                    id={id}
-                                    name={name}
-                                    description={description}
-                                    complete={complete}
-                                    selectable={selectable}
-                                    creatable={creatable}
-                                    task={task}
-                                    expand={expandAll}
-                                    refreshTasks={refreshTasks}
-                                />
-                            </Grid>
-                        )
+                        if (integrated) {
+                            return (
+                                <Grid item key={task.id} style={{padding: 10}}>
+                                    <TaskCard
+                                        id={id}
+                                        name={name}
+                                        description={description}
+                                        complete={complete}
+                                        selectable={selectable}
+                                        creatable={creatable}
+                                        integrated={integrated}
+                                    />
+                                </Grid>
+                            )
+                        } else {
+                            return (
+                                <Grid item key={task.id} sx={{p: 1, width: "100%"}}>
+                                    <QuickTask
+                                        id={id}
+                                        name={name}
+                                        description={description}
+                                        complete={complete}
+                                        selectable={selectable}
+                                        creatable={creatable}
+                                        task={task}
+                                        expand={expandAll}
+                                        refreshTasks={refreshTasks}
+                                    />
+                                </Grid>
+                            )
+                        }
                     } else {
                         return (
                             <Grid item key={task.id} style={{padding: 10}}>
@@ -66,6 +85,7 @@ const TaskList = (props: TaskListProps) => {
                                     complete={complete}
                                     selectable={selectable}
                                     creatable={creatable}
+                                    integrated={integrated}
                                 />
                             </Grid>
                         )

@@ -15,8 +15,8 @@ import FixedRadioWidget from "../custom-widgets/fixed-radio-widget/FixedRadioWid
 type RouterParams = { id: string, campaignId: string }
 type dataForStoragePathParams = { campaignId: number, chainId: number, stageId: number, userId: string, taskId: number }
 
-const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolean, refreshTasks?: () => void }) => {
-    const {id, taskData, isAssigned, refreshTasks} = props;
+const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolean, integrated?: boolean, refreshTasks?: () => void }) => {
+    const {id, taskData, isAssigned, integrated, refreshTasks} = props;
     let {campaignId} = useParams<RouterParams>();
 
     const {currentUser} = useContext(AuthContext)
@@ -40,6 +40,8 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
             const task = taskData
             const stage = task.stage
 
+            console.log(task)
+
             setDataForStoragePath({
                 campaignId: campaignId.toString(),
                 chainId: stage.chain.id.toString(),
@@ -51,7 +53,7 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
             let parsed_schema = JSON.parse(stage.json_schema) ?? {}
             let parsed_ui = JSON.parse(stage.ui_schema) ?? {}
 
-            const previousTasks = task.displayed_prev_tasks.map((task: any) => ({
+            const previousTasks = task.displayed_prev_tasks?.map((task: any) => ({
                 responses: task.responses,
                 json_schema: JSON.parse(task.stage.json_schema),
                 ui_schema: JSON.parse(task.stage.ui_schema)
@@ -96,7 +98,7 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
     return (
         <Grid container>
             <Grid direction='row' container spacing={1}>
-                {prevTasks.length > 0 &&
+                {prevTasks?.length > 0 &&
                 <Grid container item sm={6} xs={12} sx={{display: 'block'}}>
                     {prevTasks.map((task: any, i: number) =>
                         <Form
@@ -111,7 +113,7 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
                     )}
                 </Grid>
                 }
-                <Grid container item sm={prevTasks.length > 0 ? 6 : 12} xs={12} sx={{display: 'block'}}>
+                <Grid container item sm={prevTasks?.length > 0 ? 6 : 12} xs={12} sx={{display: 'block'}}>
                     <Form
                         schema={schema ?? {}}
                         uiSchema={uiSchema ?? {}}
@@ -124,10 +126,11 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
                         onChange={handleChange}
                         onSubmit={handleSubmit}
                     >
-                        <Box display={"flex"}>
-                            <Button type="submit" disabled={complete || !isAssigned}>Submit</Button>
-                            {loader && <Box paddingLeft={2}><CircularProgress/></Box>}
-                        </Box>
+                        {integrated ? " " :
+                            <Box display={"flex"}>
+                                <Button type="submit" disabled={complete || !isAssigned}>Submit</Button>
+                                {loader && <Box paddingLeft={2}><CircularProgress/></Box>}
+                            </Box>}
                         {/*<Button variant="danger" disabled={complete} style={{marginLeft: 7}} onClick={handleRelease}>Release</Button>*/}
                     </Form>
                 </Grid>

@@ -28,9 +28,19 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 const QuickTask = (props: QuickTaskProps) => {
-    const {id, complete, name, description, creatable, selectable, task, expand, refreshTasks} = props;
+    const {
+        id,
+        name,
+        creatable,
+        task,
+        expand,
+        refreshTasks,
+        integrated,
+        handleAction,
+        excluded
+    } = props;
     const [expanded, setExpanded] = useState(false);
-    const [isAssigned, setAssigned] = useState(false);
+    const [isAssigned, setAssigned] = useState(integrated ?? false);
 
     useEffect(() => {
         setExpanded(expand)
@@ -51,15 +61,47 @@ const QuickTask = (props: QuickTaskProps) => {
             })
     }
 
+    const isDisabled = () => {
+        if (integrated) {
+            if (excluded) {
+                return false
+            } else {
+                return true
+            }
+        } else {
+            return isAssigned
+        }
+    }
+
+    const handleActionClick = () => {
+        if (id && handleAction && excluded !== undefined) {
+            handleAction(parseInt(id), excluded)
+        }
+    }
+
+    const returnButton = () => {
+        if (integrated) {
+            // return <Button size={"small"} variant={"outlined"}
+            //                sx={{borderRadius: "5em"}}
+            //                hidden={!expanded}
+            //                onClick={handleActionClick}>
+            //     {excluded ? "Include" : "Exclude"}
+            // </Button>
+        } else {
+            return <Button size={"small"} variant={isAssigned ? "text" : "outlined"} disabled={isAssigned}
+                           sx={{borderRadius: "5em"}}
+                           onClick={handleSelectable}>
+                {isAssigned ? <DoneIcon color={"primary"}/> : "Get"}
+            </Button>
+        }
+    }
+
     return (
         <Card>
             <CardHeader
                 action={
                     <Stack direction="row" spacing={1}>
-                        <Button size={"small"} variant={isAssigned ? "text" : "outlined"} disabled={isAssigned} sx={{borderRadius: "5em"}}
-                                onClick={handleSelectable}>
-                            {isAssigned ?  <DoneIcon color={"primary"}/> : "Get"}
-                        </Button>
+                        {returnButton()}
                         <ExpandMore
                             expand={expanded}
                             onClick={handleExpandClick}
@@ -71,7 +113,7 @@ const QuickTask = (props: QuickTaskProps) => {
                         </ExpandMore>
                     </Stack>
                 }
-                sx={{py: 1, px: 2}}
+                sx={{py: 1, px: 2, background: excluded ? "lightgrey" : ""}}
                 title={name}
                 subheader={`ID: ${id}`}
                 titleTypographyProps={{variant: "h6"}}
@@ -79,7 +121,7 @@ const QuickTask = (props: QuickTaskProps) => {
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
-                    <QuickTaskContent id={id} taskData={task} isAssigned={isAssigned} refreshTasks={refreshTasks}/>
+                    <QuickTaskContent id={id} taskData={task} integrated={integrated} isAssigned={isDisabled()} refreshTasks={refreshTasks}/>
                 </CardContent>
             </Collapse>
         </Card>

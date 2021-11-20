@@ -1,5 +1,7 @@
 
 // Base Types
+import React from "react";
+
 type ID = { id: number }
 type CAMPAIGN = { campaign: number }
 type NameAndDescription = { name: string, description?: string }
@@ -42,12 +44,18 @@ export type CardProps = {
     name: string,
     description?: string,
     creatable?: boolean,
-    selectable?: boolean
+    selectable?: boolean,
+    integrated? : boolean
 }
 
 export type QuickTaskProps = {
     task: any,
     expand: boolean,
+    excluded?: boolean,
+    integrated?: boolean,
+    handleAction?: (index: number, excluded: boolean) => void,
+    handleExclude?: (index: number) => void,
+    handleInclude?: (index: number) => void,
     refreshTasks?: () => void
 } & CardProps
 

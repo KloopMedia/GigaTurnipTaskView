@@ -102,7 +102,10 @@ export const requestTaskAssignment = (id: string | number) => {
 export const getSelectableTasks = (campaignId: string | number, page?: number) => {
     console.log(page)
     const url = createPaginationURL(`${tasksUrl}user_selectable/?stage__chain__campaign=${campaignId}`, page)
-    return axios.get(url).then(res => res.data)
+    return axios.get(url).then(res => {
+        console.log("getSelectableTasks", res.data)
+        return res.data;
+    })
 };
 
 export const getCompleteTasks = (campaignId: string | number) => {
@@ -134,6 +137,11 @@ export const getPreviousTasks = (id: string | number) => {
     return axios.get(`${tasksUrl + id}/list_displayed_previous/`)
         .then(res => res.data)
 }
+
+export const getTask = (id: string | number) => {
+    return axios.get(`${tasksUrl + id}/`).then((res: any) => res.data)
+}
+
 
 // Notifications Functions
 export const getUserNotifications = (campaignId: string | number, viewed: boolean, importance?: number, page?: number) => {

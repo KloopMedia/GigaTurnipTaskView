@@ -1,19 +1,15 @@
 import React, {useContext, useEffect, useState} from "react";
 import axios from "../../util/Axios";
+import Axios from "../../util/Axios";
 import QuickTask from "./QuickTask";
 import {Box, Chip, CircularProgress, Divider, Grid} from "@mui/material";
 import {Button} from "react-bootstrap";
 import Form from "@rjsf/bootstrap-4";
 import {useHistory, useParams} from "react-router-dom";
 import {AuthContext} from "../../util/Auth";
-import CustomFileWidget from "../custom-widgets/file-widget/CustomFileWidget";
-import AutoCompleteWidget from "../custom-widgets/autocomplete/AutoCompleteWidget";
 import {tasksUrl} from "../../config/Urls";
 import {RouterParams} from "../../util/Types";
-import {getOpenTasks, getTask, WIDGETS} from "../../util/Util";
-import FixedRadioWidget from "../custom-widgets/fixed-radio-widget/FixedRadioWidget";
-import IntegratedTaskDialog from "./IntegratedTaskDialog";
-import Axios from "../../util/Axios";
+import {getTask, WIDGETS} from "../../util/Util";
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 
 

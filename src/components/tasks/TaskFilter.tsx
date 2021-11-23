@@ -1,11 +1,8 @@
 import React, {useEffect, useState} from "react";
 import Axios from "../../util/Axios";
 import {chainsUrl, taskstagesUrl} from "../../config/Urls";
-import {Box, Button, FormControl, FormGroup, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
+import {Box, FormControl, FormGroup, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
 import {Form} from "@rjsf/bootstrap-4";
-import CustomFileWidget from "../custom-widgets/file-widget/CustomFileWidget";
-import AutoCompleteWidget from "../custom-widgets/autocomplete/AutoCompleteWidget";
-import FixedRadioWidget from "../custom-widgets/fixed-radio-widget/FixedRadioWidget";
 import {WIDGETS} from "../../util/Util";
 
 const TaskFilter = (props: { campaign: string }) => {

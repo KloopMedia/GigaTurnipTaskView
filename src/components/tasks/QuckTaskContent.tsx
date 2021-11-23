@@ -1,16 +1,12 @@
 import React, {useContext, useEffect, useState} from "react";
 import Form from "@rjsf/bootstrap-4";
-import {useHistory, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import axios from "../../util/Axios";
 import {tasksUrl} from '../../config/Urls'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import CustomFileWidget from "../custom-widgets/file-widget/CustomFileWidget";
 import {Button} from "react-bootstrap";
 import {Box, CircularProgress, Grid} from "@mui/material";
 import {AuthContext} from "../../util/Auth";
-import TextViewer from "../text-editor/TextViewer";
-import AutoCompleteWidget from "../custom-widgets/autocomplete/AutoCompleteWidget";
-import FixedRadioWidget from "../custom-widgets/fixed-radio-widget/FixedRadioWidget";
 import {WIDGETS} from "../../util/Util";
 
 type RouterParams = { id: string, campaignId: string }

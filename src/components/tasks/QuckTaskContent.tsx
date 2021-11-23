@@ -11,6 +11,7 @@ import {AuthContext} from "../../util/Auth";
 import TextViewer from "../text-editor/TextViewer";
 import AutoCompleteWidget from "../custom-widgets/autocomplete/AutoCompleteWidget";
 import FixedRadioWidget from "../custom-widgets/fixed-radio-widget/FixedRadioWidget";
+import {WIDGETS} from "../../util/Util";
 
 type RouterParams = { id: string, campaignId: string }
 type dataForStoragePathParams = { campaignId: number, chainId: number, stageId: number, userId: string, taskId: number }
@@ -29,11 +30,7 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
     const [dataForStoragePath, setDataForStoragePath] = useState<dataForStoragePathParams | {}>({})
     const [loader, setLoader] = useState(false)
 
-    const widgets = {
-        customfile: CustomFileWidget,
-        autocomplete: AutoCompleteWidget,
-        RadioWidget: FixedRadioWidget
-    };
+    const widgets = WIDGETS
 
     useEffect(() => {
         const setData = async () => {

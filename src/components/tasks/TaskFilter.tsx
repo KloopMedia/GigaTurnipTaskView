@@ -6,6 +6,7 @@ import {Form} from "@rjsf/bootstrap-4";
 import CustomFileWidget from "../custom-widgets/file-widget/CustomFileWidget";
 import AutoCompleteWidget from "../custom-widgets/autocomplete/AutoCompleteWidget";
 import FixedRadioWidget from "../custom-widgets/fixed-radio-widget/FixedRadioWidget";
+import {WIDGETS} from "../../util/Util";
 
 const TaskFilter = (props: { campaign: string }) => {
 
@@ -20,11 +21,7 @@ const TaskFilter = (props: { campaign: string }) => {
     const [uiSchema, setUiSchema] = useState({})
     const [formResponses, setFormResponses] = useState({})
 
-    const widgets = {
-        customfile: CustomFileWidget,
-        autocomplete: AutoCompleteWidget,
-        RadioWidget: FixedRadioWidget
-    };
+    const widgets = WIDGETS
 
     // useEffect(() => {
     //     const savedChain = localStorage.getItem("selectable_filter_chain");

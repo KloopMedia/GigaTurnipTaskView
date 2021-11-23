@@ -10,7 +10,7 @@ import CustomFileWidget from "../custom-widgets/file-widget/CustomFileWidget";
 import AutoCompleteWidget from "../custom-widgets/autocomplete/AutoCompleteWidget";
 import {tasksUrl} from "../../config/Urls";
 import {RouterParams} from "../../util/Types";
-import {getOpenTasks, getTask} from "../../util/Util";
+import {getOpenTasks, getTask, WIDGETS} from "../../util/Util";
 import FixedRadioWidget from "../custom-widgets/fixed-radio-widget/FixedRadioWidget";
 import IntegratedTaskDialog from "./IntegratedTaskDialog";
 import Axios from "../../util/Axios";
@@ -46,11 +46,7 @@ const IntegratedTask = () => {
         setTaskActionId(null)
     };
 
-    const widgets = {
-        customfile: CustomFileWidget,
-        autocomplete: AutoCompleteWidget,
-        RadioWidget: FixedRadioWidget
-    };
+    const widgets = WIDGETS
 
     useEffect(() => {
         const setData = async () => {

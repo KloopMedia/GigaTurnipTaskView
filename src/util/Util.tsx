@@ -1,9 +1,17 @@
 import axios from "./Axios";
 import {campaignsUrl, notificationsUrl, taskstagesUrl, tasksUrl} from "../config/Urls";
-import Axios from "./Axios";
+import CustomFileWidget from "../components/custom-widgets/file-widget/CustomFileWidget";
+import AutoCompleteWidget from "../components/custom-widgets/autocomplete/AutoCompleteWidget";
+import FixedRadioWidget from "../components/custom-widgets/fixed-radio-widget/FixedRadioWidget";
+import CustomLinkWidget from "../components/custom-widgets/link-widget/CustomLinkWidget";
 
 export const IS_PAGINATION_ON = false
-
+export const WIDGETS = {
+    customfile: CustomFileWidget,
+    autocomplete: AutoCompleteWidget,
+    RadioWidget: FixedRadioWidget,
+    customlink: CustomLinkWidget
+};
 
 // Pagination Functions
 export const paginatedDataHandler = (

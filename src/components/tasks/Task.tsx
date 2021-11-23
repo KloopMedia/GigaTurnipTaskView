@@ -4,14 +4,11 @@ import {Prompt, useHistory, useParams} from "react-router-dom";
 import axios from "../../util/Axios";
 import {tasksUrl} from '../../config/Urls'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import CustomFileWidget from "../custom-widgets/file-widget/CustomFileWidget";
 import {Button} from "react-bootstrap";
 import {Box, CircularProgress, Grid} from "@mui/material";
 import {AuthContext} from "../../util/Auth";
 import TextViewer from "../text-editor/TextViewer";
-import {getPreviousTasks, getTask} from "../../util/Util";
-import AutoCompleteWidget from "../custom-widgets/autocomplete/AutoCompleteWidget";
-import FixedRadioWidget from "../custom-widgets/fixed-radio-widget/FixedRadioWidget";
+import {getPreviousTasks, getTask, WIDGETS} from "../../util/Util";
 
 type RouterParams = { id: string, campaignId: string }
 type dataForStoragePathParams = { campaignId: number, chainId: number, stageId: number, userId: string, taskId: number }
@@ -34,11 +31,7 @@ const Task = () => {
     const [ready, setReady] = useState(false)
     const [changeCount, setChangeCount] = useState(0)
 
-    const widgets = {
-        customfile: CustomFileWidget,
-        autocomplete: AutoCompleteWidget,
-        RadioWidget: FixedRadioWidget
-    };
+    const widgets = WIDGETS
 
     useEffect(() => {
         const setData = async () => {

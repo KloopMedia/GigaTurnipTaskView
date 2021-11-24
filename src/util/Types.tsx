@@ -45,7 +45,8 @@ export type CardProps = {
     description?: string,
     creatable?: boolean,
     selectable?: boolean,
-    integrated? : boolean
+    integrated? : boolean,
+    reopened?: boolean
 }
 
 export type QuickTaskProps = {

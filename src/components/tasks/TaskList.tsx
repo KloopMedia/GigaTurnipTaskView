@@ -42,7 +42,7 @@ const TaskList = (props: TaskListProps) => {
                     const name = task.stage.name
                     const description = task.stage.description
                     const integrated = !!task.integrator_group
-
+                    const reopened = task.reopened
                     if (selectable) {
                         if (integrated) {
                             return (
@@ -86,6 +86,7 @@ const TaskList = (props: TaskListProps) => {
                                     selectable={selectable}
                                     creatable={creatable}
                                     integrated={integrated}
+                                    reopened={reopened}
                                 />
                             </Grid>
                         )

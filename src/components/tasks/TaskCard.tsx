@@ -7,9 +7,10 @@ import Typography from '@mui/material/Typography';
 import {useHistory} from "react-router-dom";
 import {requestTaskAssignment, requestTaskCreation} from "../../util/Util";
 import {CardProps} from "../../util/Types";
+import {Box, Grid} from "@mui/material";
 
 const TaskCard = (props: CardProps) => {
-    const {id, complete, name, description, creatable, selectable, integrated} = props;
+    const {id, reopened, name, description, creatable, selectable, integrated} = props;
     const history = useHistory()
 
     const handleOpen = () => {
@@ -38,7 +39,12 @@ const TaskCard = (props: CardProps) => {
         } else if (creatable) {
             return <Button size="small" onClick={handleCreate}>Создать</Button>
         } else {
-            return <Button size="small" onClick={handleOpen}>Открыть</Button>
+            return <Grid container>
+                <Box flex={1}>
+                    <Button size="small" onClick={handleOpen}>Открыть</Button>
+                </Box>
+                {reopened && <Typography variant={"subtitle1"} color={"red"}>Возвращено</Typography>}
+            </Grid>
         }
     }
 

@@ -5,7 +5,7 @@ import axios from "../../util/Axios";
 import {tasksUrl} from '../../config/Urls'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Button} from "react-bootstrap";
-import {Box, CircularProgress, Grid} from "@mui/material";
+import {Box, CircularProgress, Grid, Typography} from "@mui/material";
 import {AuthContext} from "../../util/Auth";
 import TextViewer from "../text-editor/TextViewer";
 import {getPreviousTasks, getTask, WIDGETS} from "../../util/Util";
@@ -29,7 +29,7 @@ const Task = () => {
     const [editorData, setEditorData] = useState("")
     const [loader, setLoader] = useState(false)
     const [ready, setReady] = useState(false)
-    const [changeCount, setChangeCount] = useState(0)
+    const [reopened, setReopened] = useState(false)
 
     const widgets = WIDGETS
 
@@ -66,6 +66,7 @@ const Task = () => {
             setSchema(parsed_schema)
             setUiSchema(parsed_ui)
             setComplete(task.complete)
+            setReopened(task.reopened)
             setReady(true)
         }
         if (id && currentUser) {
@@ -93,17 +94,6 @@ const Task = () => {
 
     const handleChange = (e: any) => {
         setFormResponses(e.formData)
-        // const data = {responses: e.formData}
-        // if (changeCount === 5) {
-        //     axios.patch(tasksUrl + id + '/', data).catch((err) => {
-        //         alert("Изменения не доступны.")
-        //         history.push(path)
-        //     })
-        //     setChangeCount(0)
-        //     console.log("SEND CHANGE")
-        // } else {
-        //     setChangeCount(changeCount + 1)
-        // }
     }
 
     const handleBlur = () => {
@@ -128,6 +118,8 @@ const Task = () => {
                     return true
                 }}
             />
+
+            {reopened && <Typography variant={"h6"} color={"red"}>Это задание было возвращено</Typography>}
 
             {editorData !== "" && <div style={{paddingBottom: 20}}>
                 <TextViewer data={editorData}/>

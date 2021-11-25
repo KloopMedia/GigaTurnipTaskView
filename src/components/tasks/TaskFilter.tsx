@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from "react";
 import Axios from "../../util/Axios";
 import {chainsUrl, taskstagesUrl} from "../../config/Urls";
-import {Box, FormControl, FormGroup, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
+import {Box, Button, FormControl, FormGroup, InputLabel, MenuItem, Select, SelectChangeEvent} from "@mui/material";
 import {Form} from "@rjsf/bootstrap-4";
 import {WIDGETS} from "../../util/Util";
 
-const TaskFilter = (props: { campaign: string }) => {
+const TaskFilter = (props: { campaign: string, onFilter: (filter: string, stage: string) => void }) => {
 
-    const {campaign} = props;
+    const {campaign, onFilter} = props;
 
     const [chainId, setChainId] = useState("")
     const [stageId, setStageId] = useState("")
@@ -19,17 +19,6 @@ const TaskFilter = (props: { campaign: string }) => {
     const [formResponses, setFormResponses] = useState({})
 
     const widgets = WIDGETS
-
-    // useEffect(() => {
-    //     const savedChain = localStorage.getItem("selectable_filter_chain");
-    //     const savedStage = localStorage.getItem("selectable_filter_stage");
-    //     if (savedChain) {
-    //         setChainId(savedChain)
-    //     }
-    //     if (savedStage) {
-    //         setStageId(savedStage)
-    //     }
-    // }, [])
 
     useEffect(() => {
         Axios.get(`${chainsUrl}?campaign=${campaign}`)
@@ -115,7 +104,12 @@ const TaskFilter = (props: { campaign: string }) => {
     }
 
     const handleFormSubmit = () => {
-
+        const query = formStageId ? JSON.stringify({stage: formStageId, responses: formResponses}) : ""
+        // const url = `${tasksUrl}?task_responses=${query}`
+        // console.log(query)
+        // console.log(url)
+        onFilter(query, stageId)
+        // Axios.get(url).then(res => console.log(res.data))
     };
 
     return (
@@ -174,10 +168,12 @@ const TaskFilter = (props: { campaign: string }) => {
                     uiSchema={uiSchema}
                     widgets={widgets}
                     formData={formResponses}
+                    children={" "}
                     onChange={handleFormChange}
                     onSubmit={handleFormSubmit}
                 />
             </Box>
+            <Button sx={{mx:1, mb: 2}} variant={"contained"} onClick={handleFormSubmit}>Search</Button>
         </FormGroup>
     );
 };

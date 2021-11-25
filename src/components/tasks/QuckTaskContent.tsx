@@ -43,8 +43,8 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
                 taskId: task.id.toString()
             })
 
-            let parsed_schema = JSON.parse(stage.json_schema) ?? {}
-            let parsed_ui = JSON.parse(stage.ui_schema) ?? {}
+            let parsed_schema = stage.json_schema ? JSON.parse(stage.json_schema) : {}
+            let parsed_ui = stage.ui_schema ? JSON.parse(stage.ui_schema) : {}
 
             const previousTasks = task.displayed_prev_tasks?.map((task: any) => ({
                 responses: task.responses,

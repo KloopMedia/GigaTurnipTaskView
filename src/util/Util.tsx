@@ -107,9 +107,19 @@ export const requestTaskAssignment = (id: string | number) => {
 
 
 // TaskMenu Functions
-export const getSelectableTasks = (campaignId: string | number, page?: number) => {
+export const getSelectableTasks = (campaignId: string | number, page?: number, filter?: {query?: string, stage?: string} | null) => {
     console.log(page)
-    const url = createPaginationURL(`${tasksUrl}user_selectable/?stage__chain__campaign=${campaignId}`, page)
+    let url = createPaginationURL(`${tasksUrl}user_selectable/?stage__chain__campaign=${campaignId}`, page)
+    if (filter) {
+        if (filter.query) {
+            url += `&task_responses=${filter.query}`
+        }
+        if (filter.stage) {
+            url += `&stage=${filter.stage}`
+        }
+        // url = `${tasksUrl}?task_responses=${filter.query}`
+    }
+    console.log("SELECTABLE URL", url)
     return axios.get(url).then(res => {
         console.log("getSelectableTasks", res.data)
         return res.data;

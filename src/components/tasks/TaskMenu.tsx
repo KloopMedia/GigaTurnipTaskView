@@ -29,6 +29,7 @@ const TaskMenu = (props: any) => {
     const [creatableTasks, setCreatableTasks] = useState([])
     const [totalPages, setTotalPages] = useState(0)
     const [page, setPage] = React.useState(1);
+    const [filterData, setFilterData] = useState<object | null>(null)
 
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
@@ -38,22 +39,31 @@ const TaskMenu = (props: any) => {
             } else if (tab === 1) {
                 getCompleteTasks(campaignId).then(res => setCompleteTasks(res))
             } else if (tab === 2) {
-                getSelectableTasks(campaignId, value).then(res => paginatedDataHandler(res, setSelectableTasks, setTotalPages))
+                getSelectableTasks(campaignId, value, filterData).then(res => paginatedDataHandler(res, setSelectableTasks, setTotalPages))
             }
         }
     };
 
     const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
         setTab(newValue);
+        setFilterData(null);
         refreshTasks();
     };
 
     const refreshTasks = () => {
-        getSelectableTasks(campaignId).then(res => paginatedDataHandler(res, setSelectableTasks, setTotalPages))
+        getSelectableTasks(campaignId, 1, filterData).then(res => paginatedDataHandler(res, setSelectableTasks, setTotalPages))
         getCompleteTasks(campaignId).then(res => setCompleteTasks(res))
         getOpenTasks(campaignId).then(res => setOpenTasks(res))
         getCreatableTasks(campaignId).then(res => setCreatableTasks(res))
     };
+
+    const getFilter = (query?: string, stage?: string) => {
+        console.log(query, stage)
+        const filter = query || stage ? {query: query, stage: stage} : null
+        setFilterData(filter)
+        setPage(1)
+        getSelectableTasks(campaignId, 1, filter).then(res => paginatedDataHandler(res, setSelectableTasks, setTotalPages))
+    }
 
     useEffect(() => {
         refreshTasks()
@@ -75,9 +85,7 @@ const TaskMenu = (props: any) => {
                 {selectableTasks.length > 0 &&
                 <TabPanel value={tab} index={2}>
                     <Box pb={2}>
-                        <TaskFilter
-                            campaign={campaignId}
-                        />
+                        <TaskFilter campaign={campaignId} onFilter={getFilter}/>
                     </Box>
                     <TaskList selectable={true} tasks={selectableTasks} refreshTasks={refreshTasks}/>
                     <Box pb={2} display={"flex"} justifyContent={"center"}>

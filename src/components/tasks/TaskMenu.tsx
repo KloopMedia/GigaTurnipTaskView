@@ -60,9 +60,16 @@ const TaskMenu = (props: any) => {
     const getFilter = (query?: string, stage?: string) => {
         console.log(query, stage)
         const filter = query || stage ? {query: query, stage: stage} : null
-        setFilterData(filter)
-        setPage(1)
-        getSelectableTasks(campaignId, 1, filter).then(res => paginatedDataHandler(res, setSelectableTasks, setTotalPages))
+        getSelectableTasks(campaignId, 1, filter).then(res => {
+            if (res.count > 0) {
+                setFilterData(filter)
+                setPage(1)
+                paginatedDataHandler(res, setSelectableTasks, setTotalPages)
+            } else {
+                setFilterData(null)
+                alert("Нет похожих тасков")
+            }
+        })
     }
 
     useEffect(() => {

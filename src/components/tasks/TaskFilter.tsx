@@ -21,7 +21,7 @@ const TaskFilter = (props: { campaign: string, onFilter: (filter: string, stage:
     const widgets = WIDGETS
 
     useEffect(() => {
-        Axios.get(`${chainsUrl}?campaign=${campaign}`)
+        Axios.get(`${chainsUrl}?campaign=${campaign}&limit=100`)
             .then(res => res.data)
             .then(res => setChains(res.results))
             .then(() => {
@@ -36,7 +36,7 @@ const TaskFilter = (props: { campaign: string, onFilter: (filter: string, stage:
 
     useEffect(() => {
         if (chainId && chains.length > 0) {
-            Axios.get(`${taskstagesUrl}?chain=${chainId}&chain__campaign=${campaign}`)
+            Axios.get(`${taskstagesUrl}?chain=${chainId}&chain__campaign=${campaign}&limit=100`)
                 .then(res => res.data)
                 .then(res => setStages(res.results))
                 .then(() => {

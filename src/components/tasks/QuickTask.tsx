@@ -8,9 +8,10 @@ import IconButton, {IconButtonProps} from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {QuickTaskProps} from "../../util/Types";
 import QuickTaskContent from "./QuickTaskContent";
-import {Button, Stack} from "@mui/material";
+import {Box, Button, Stack} from "@mui/material";
 import {requestTaskAssignment} from "../../util/Util";
 import DoneIcon from '@mui/icons-material/Done';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 interface ExpandMoreProps extends IconButtonProps {
     expand: boolean;
@@ -87,6 +88,9 @@ const QuickTask = (props: QuickTaskProps) => {
             //                onClick={handleActionClick}>
             //     {excluded ? "Include" : "Exclude"}
             // </Button>
+            if (task.complete) {
+                return <Box m={1}><CheckCircleOutlineIcon color={"primary"}/></Box>
+            }
         } else {
             return <Button size={"small"} variant={isAssigned ? "text" : "outlined"} disabled={isAssigned}
                            sx={{borderRadius: "5em"}}
@@ -113,7 +117,7 @@ const QuickTask = (props: QuickTaskProps) => {
                         </ExpandMore>
                     </Stack>
                 }
-                sx={{py: 1, px: 2, background: excluded ? "lightgrey" : ""}}
+                sx={{py: 1, px: 2, background: task.complete ? "lightgrey" : ""}}
                 title={name}
                 subheader={`ID: ${id}`}
                 titleTypographyProps={{variant: "h6"}}

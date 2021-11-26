@@ -28,6 +28,7 @@ const IntegratedTask = () => {
     const [taskList, setTaskList] = useState<any>([])
     const [taskActionId, setTaskActionId] = useState<number | null>(null)
     const [listOfExcludedTasks, setListOfExcludedTasks] = useState<number[]>([])
+    const [ready, setReady] = useState(false)
 
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const [removalReason, setRemovalReason] = useState("")
@@ -56,12 +57,14 @@ const IntegratedTask = () => {
         setSchema(parsed_schema)
         setUiSchema(parsed_ui)
         setComplete(task.complete)
+        setReady(true)
+    }
+
+    const getIntegratedData = () => {
+        Axios.get(`${tasksUrl + id}/get_integrated_tasks/`).then(res => setTaskList(res.data))
     }
 
     useEffect(() => {
-        const getIntegratedData = () => {
-            Axios.get(`${tasksUrl + id}/get_integrated_tasks/`).then(res => setTaskList(res.data))
-        }
         if (id && currentUser) {
             getIntegratedData()
             getTaskData()
@@ -150,6 +153,7 @@ const IntegratedTask = () => {
                         id={task.id}
                         name={task.name}
                         handleAction={handleActionClick}
+                        refreshTasks={getIntegratedData}
                     />
                 </Grid>
             )}
@@ -170,7 +174,7 @@ const IntegratedTask = () => {
                     onSubmit={handleSubmit}
                 >
                     <Box display={"flex"}>
-                        <Button type="submit" disabled={complete}>Submit</Button>
+                        <Button type="submit" disabled={complete || loader || !ready}>Submit</Button>
                         {loader && <Box paddingLeft={2}><CircularProgress/></Box>}
                     </Box>
                 </Form>

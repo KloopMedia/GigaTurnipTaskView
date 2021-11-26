@@ -25,6 +25,7 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
     const [prevTasks, setPrevTasks] = useState<any>([])
     const [dataForStoragePath, setDataForStoragePath] = useState<dataForStoragePathParams | {}>({})
     const [loader, setLoader] = useState(false)
+    const [ready, setReady] = useState(false)
 
     const widgets = WIDGETS
 
@@ -54,13 +55,14 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
                 ui_schema: task.stage.ui_schema ? JSON.parse(task.stage.ui_schema) : {}
             }))
 
-            console.log("previousTasks",previousTasks)
+            console.log("previousTasks", previousTasks)
 
             setPrevTasks(previousTasks)
             setFormResponses(task.responses)
             setSchema(parsed_schema)
             setUiSchema(parsed_ui)
             setComplete(task.complete)
+            setReady(true)
         }
         if (taskData && currentUser) {
             setData()
@@ -84,6 +86,10 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
             .then(() => alert("Released"))
             .then(() => window.location.reload())
             .catch(error => alert(error))
+    }
+
+    const handleUnsubmit = () => {
+        axios.get(tasksUrl + id + '/uncomplete/').then(res => refreshTasks && refreshTasks())
     }
 
     const handleChange = (e: any) => {
@@ -123,9 +129,17 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
                         onChange={handleChange}
                         onSubmit={handleSubmit}
                     >
-                        {integrated ? " " :
+                        {integrated ?
                             <Box display={"flex"}>
-                                <Button type="submit" disabled={complete || !isAssigned}>Submit</Button>
+                                {complete ?
+                                    <Button onClick={handleUnsubmit} disabled={!complete || !isAssigned}>Return</Button>
+                                    :
+                                    <Button type="submit" disabled={complete || !ready || !isAssigned}>Submit</Button>
+                                }
+                            </Box>
+                            :
+                            <Box display={"flex"}>
+                                <Button type="submit" disabled={complete || !isAssigned || !ready}>Submit</Button>
                                 {loader && <Box paddingLeft={2}><CircularProgress/></Box>}
                             </Box>}
                         {/*<Button variant="danger" disabled={complete} style={{marginLeft: 7}} onClick={handleRelease}>Release</Button>*/}

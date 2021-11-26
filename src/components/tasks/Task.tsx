@@ -30,6 +30,7 @@ const Task = () => {
     const [loader, setLoader] = useState(false)
     const [ready, setReady] = useState(false)
     const [reopened, setReopened] = useState(false)
+    const [allowGoBack, setAllowGoBack] = useState(false)
 
     const widgets = WIDGETS
 
@@ -67,19 +68,32 @@ const Task = () => {
             setUiSchema(parsed_ui)
             setComplete(task.complete)
             setReopened(task.reopened)
+            setAllowGoBack(stage.allow_go_back)
             setReady(true)
         }
         if (id && currentUser) {
+            console.log("SET DATA")
             setData()
         }
     }, [id, currentUser])
 
     const handleSubmit = () => {
+        console.log("submit")
         setLoader(true)
         let data = {responses: formResponses, complete: true}
         axios.patch(tasksUrl + id + '/', data)
-            .then(() => setLoader(false))
-            .then(() => history.push(path))
+            .then((res) => {
+                console.log(res)
+                setLoader(false)
+                if (res.data.next_direct_id) {
+                    setSchema({})
+                    setUiSchema({})
+                    setFormResponses({})
+                    history.push(`${path}/${res.data.next_direct_id}`)
+                } else {
+                    history.push(path)
+                }
+            })
             .catch((err) => {
                 setLoader(false)
                 history.push(path)
@@ -105,6 +119,16 @@ const Task = () => {
                 history.push(path)
             })
     }
+
+    const handleOpenPrevious = () => {
+        axios.get(tasksUrl + id + '/open_previous/')
+            .then(res => {
+                setSchema({})
+                setUiSchema({})
+                setFormResponses({})
+                history.push(`${path}/${res.data.id}`)
+            })
+    };
 
     return (
         <div style={{width: '70%', minWidth: '400px', margin: '0 auto', display: 'block', padding: 10}}>
@@ -155,8 +179,9 @@ const Task = () => {
                     onSubmit={handleSubmit}
                 >
                     <Box display={"flex"}>
-                        <Button type="submit" disabled={complete || loader || !ready}>Submit</Button>
+                        <Button type="submit" disabled={complete || loader || !ready}>Отправить</Button>
                         {loader && <Box paddingLeft={2}><CircularProgress/></Box>}
+                        {allowGoBack && <Button style={{margin: "0 16px"}} onClick={handleOpenPrevious}>К предыдущему таску</Button>}
                     </Box>
                     {/*<Button variant="danger" disabled={complete} style={{marginLeft: 7}} onClick={handleRelease}>Release</Button>*/}
                 </Form>

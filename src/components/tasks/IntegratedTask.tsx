@@ -29,6 +29,7 @@ const IntegratedTask = () => {
     const [taskActionId, setTaskActionId] = useState<number | null>(null)
     const [listOfExcludedTasks, setListOfExcludedTasks] = useState<number[]>([])
     const [ready, setReady] = useState(false)
+    const [allowGoBack, setAllowGoBack] = useState(false)
 
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const [removalReason, setRemovalReason] = useState("")
@@ -52,11 +53,13 @@ const IntegratedTask = () => {
 
         const parsed_schema = stage.json_schema ? JSON.parse(stage.json_schema) : {}
         const parsed_ui = stage.ui_schema ? JSON.parse(stage.ui_schema) : {}
+        // const goBack = stage.
 
         setFormResponses(task.responses)
         setSchema(parsed_schema)
         setUiSchema(parsed_ui)
         setComplete(task.complete)
+        setAllowGoBack(stage.allow_go_back)
         setReady(true)
     }
 
@@ -77,8 +80,18 @@ const IntegratedTask = () => {
         setLoader(true)
         let data = {responses: formResponses, complete: true}
         axios.patch(tasksUrl + id + '/', data)
-            .then(() => setLoader(false))
-            .then(() => history.push(path))
+            .then((res) => {
+                console.log(res)
+                setLoader(false)
+                if (res.data.next_direct_id) {
+                    setSchema({})
+                    setUiSchema({})
+                    setFormResponses({})
+                    history.push(`${path}/${res.data.next_direct_id}`)
+                } else {
+                    history.push(path)
+                }
+            })
     }
 
     const handleRelease = () => {
@@ -134,6 +147,16 @@ const IntegratedTask = () => {
             .then(res => getTaskData())
     }
 
+    const handleOpenPrevious = () => {
+        axios.get(tasksUrl + id + '/open_previous/')
+            .then(res => {
+                setSchema({})
+                setUiSchema({})
+                setFormResponses({})
+                history.push(`${path}/${res.data.id}`)
+            })
+    };
+
     return (
         <Grid m={2}>
             {/*<IntegratedTaskDialog*/}
@@ -174,8 +197,9 @@ const IntegratedTask = () => {
                     onSubmit={handleSubmit}
                 >
                     <Box display={"flex"}>
-                        <Button type="submit" disabled={complete || loader || !ready}>Submit</Button>
+                        <Button type="submit" disabled={complete || loader || !ready}>Отправить</Button>
                         {loader && <Box paddingLeft={2}><CircularProgress/></Box>}
+                        {allowGoBack && <Button style={{margin: "0 16px"}} onClick={handleOpenPrevious}>К предыдущему таску</Button>}
                     </Box>
                 </Form>
             </Grid>

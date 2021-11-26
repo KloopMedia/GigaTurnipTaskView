@@ -57,8 +57,8 @@ const Task = () => {
 
             const previousTasks = await getPreviousTasks(id).then(res => res.map((task: any) => ({
                 responses: task.responses,
-                json_schema: JSON.parse(task.stage.json_schema),
-                ui_schema: JSON.parse(task.stage.ui_schema)
+                json_schema: task.stage.json_schema ? JSON.parse(task.stage.json_schema) : {},
+                ui_schema: task.stage.ui_schema ? JSON.parse(task.stage.ui_schema) : {}
             })))
 
             setPrevTasks(previousTasks)

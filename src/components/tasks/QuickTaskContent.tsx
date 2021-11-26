@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Button} from "react-bootstrap";
 import {Box, CircularProgress, Grid} from "@mui/material";
 import {AuthContext} from "../../util/Auth";
-import {WIDGETS} from "../../util/Util";
+import {getPreviousTasks, WIDGETS} from "../../util/Util";
 
 type RouterParams = { id: string, campaignId: string }
 type dataForStoragePathParams = { campaignId: number, chainId: number, stageId: number, userId: string, taskId: number }
@@ -46,11 +46,15 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
             let parsed_schema = stage.json_schema ? JSON.parse(stage.json_schema) : {}
             let parsed_ui = stage.ui_schema ? JSON.parse(stage.ui_schema) : {}
 
-            const previousTasks = task.displayed_prev_tasks?.map((task: any) => ({
+            const prev = task.displayed_prev_tasks ? task.displayed_prev_tasks : await getPreviousTasks(id)
+
+            const previousTasks = prev.map((task: any) => ({
                 responses: task.responses,
-                json_schema: JSON.parse(task.stage.json_schema),
-                ui_schema: JSON.parse(task.stage.ui_schema)
+                json_schema: task.stage.json_schema ? JSON.parse(task.stage.json_schema) : {},
+                ui_schema: task.stage.ui_schema ? JSON.parse(task.stage.ui_schema) : {}
             }))
+
+            console.log("previousTasks",previousTasks)
 
             setPrevTasks(previousTasks)
             setFormResponses(task.responses)

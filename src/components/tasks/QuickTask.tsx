@@ -7,7 +7,7 @@ import Collapse from '@mui/material/Collapse';
 import IconButton, {IconButtonProps} from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {QuickTaskProps} from "../../util/Types";
-import QuickTaskContent from "./QuckTaskContent";
+import QuickTaskContent from "./QuickTaskContent";
 import {Button, Stack} from "@mui/material";
 import {requestTaskAssignment} from "../../util/Util";
 import DoneIcon from '@mui/icons-material/Done';

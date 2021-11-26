@@ -94,6 +94,8 @@ const TaskFilter = (props: { campaign: string, onFilter: (filter: string, stage:
     const handleFormStageChange = (event: SelectChangeEvent) => {
         setFormStageId(event.target.value);
         setFormResponses({})
+        setJsonSchema({})
+        setUiSchema({})
         localStorage.setItem("selectable_filter_form_stage", event.target.value);
         localStorage.setItem("selectable_filter_responses", JSON.stringify({}));
     };
@@ -105,11 +107,7 @@ const TaskFilter = (props: { campaign: string, onFilter: (filter: string, stage:
 
     const handleFormSubmit = () => {
         const query = formStageId ? JSON.stringify({stage: formStageId, responses: formResponses}) : ""
-        // const url = `${tasksUrl}?task_responses=${query}`
-        // console.log(query)
-        // console.log(url)
         onFilter(query, stageId)
-        // Axios.get(url).then(res => console.log(res.data))
     };
 
     return (

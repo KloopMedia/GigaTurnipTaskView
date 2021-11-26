@@ -44,26 +44,27 @@ const IntegratedTask = () => {
 
     const widgets = WIDGETS
 
+    const getTaskData = async () => {
+        const task = await getTask(id)
+        const stage = task.stage
+        console.log("TASK", task)
+
+        const parsed_schema = stage.json_schema ? JSON.parse(stage.json_schema) : {}
+        const parsed_ui = stage.ui_schema ? JSON.parse(stage.ui_schema) : {}
+
+        setFormResponses(task.responses)
+        setSchema(parsed_schema)
+        setUiSchema(parsed_ui)
+        setComplete(task.complete)
+    }
+
     useEffect(() => {
-        const setData = async () => {
-            let task = await getTask(id)
-            let stage = task.stage
-            console.log("TASK", task)
-
-            let parsed_schema = JSON.parse(stage.json_schema) ?? {}
-            let parsed_ui = JSON.parse(stage.ui_schema) ?? {}
-
-            setFormResponses(task.responses)
-            setSchema(parsed_schema)
-            setUiSchema(parsed_ui)
-            setComplete(task.complete)
-        }
         const getIntegratedData = () => {
             Axios.get(`${tasksUrl + id}/get_integrated_tasks/`).then(res => setTaskList(res.data))
         }
         if (id && currentUser) {
             getIntegratedData()
-            setData()
+            getTaskData()
         }
     }, [id, currentUser])
 
@@ -126,7 +127,8 @@ const IntegratedTask = () => {
     }
 
     const triggerWebhook = () => {
-        Axios.get(`${tasksUrl + id}/trigger_webhook/`).then(res => console.log(res))
+        Axios.get(`${tasksUrl + id}/trigger_webhook/`)
+            .then(res => getTaskData())
     }
 
     return (
@@ -152,7 +154,7 @@ const IntegratedTask = () => {
                 </Grid>
             )}
             <Divider sx={{py: 1}}>
-                <Chip icon={<ArrowCircleDownIcon />} label="Обобщающая форма" />
+                <Chip icon={<ArrowCircleDownIcon/>} label="Обобщающая форма"/>
             </Divider>
             <Button onClick={triggerWebhook}>Сгенерировать форму</Button>
             <Grid py={1}>

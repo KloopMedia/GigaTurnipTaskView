@@ -11,9 +11,10 @@ import {getPreviousTasks, WIDGETS} from "../../util/Util";
 
 type RouterParams = { id: string, campaignId: string }
 type dataForStoragePathParams = { campaignId: number, chainId: number, stageId: number, userId: string, taskId: number }
+type QuickTaskContentParams = { id: string, taskData: any, isAssigned: boolean, handleAssignment: (value: boolean) => void, integrated?: boolean, refreshTasks?: () => void }
 
-const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolean, integrated?: boolean, refreshTasks?: () => void }) => {
-    const {id, taskData, isAssigned, integrated, refreshTasks} = props;
+const QuickTaskContent = (props: QuickTaskContentParams) => {
+    const {id, taskData, isAssigned, integrated, refreshTasks, handleAssignment} = props;
     let {campaignId} = useParams<RouterParams>();
 
     const {currentUser} = useContext(AuthContext)
@@ -26,6 +27,7 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
     const [dataForStoragePath, setDataForStoragePath] = useState<dataForStoragePathParams | {}>({})
     const [loader, setLoader] = useState(false)
     const [ready, setReady] = useState(false)
+    const [allowRelease, setAllowRelease] = useState(false)
 
     const widgets = WIDGETS
 
@@ -62,6 +64,7 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
             setSchema(parsed_schema)
             setUiSchema(parsed_ui)
             setComplete(task.complete)
+            setAllowRelease(stage.allow_release)
             setReady(true)
         }
         if (taskData && currentUser) {
@@ -83,8 +86,8 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
 
     const handleRelease = () => {
         axios.post(tasksUrl + id + '/release_assignment/')
-            .then(() => alert("Released"))
-            .then(() => window.location.reload())
+            .then(() => handleAssignment(false))
+            .then(() => refreshTasks && refreshTasks())
             .catch(error => alert(error))
     }
 
@@ -139,10 +142,11 @@ const QuickTaskContent = (props: { id: string, taskData: any, isAssigned: boolea
                             </Box>
                             :
                             <Box display={"flex"}>
-                                <Button type="submit" disabled={complete || !isAssigned || !ready}>Submit</Button>
+                                <Button type="submit" style={{marginRight: "8px"}} disabled={complete || !isAssigned || !ready}>Submit</Button>
+                                {allowRelease && <Button variant="danger" disabled={complete || !isAssigned || !ready}
+                                         style={{margin: "0 8px"}} onClick={handleRelease}>Release</Button>}
                                 {loader && <Box paddingLeft={2}><CircularProgress/></Box>}
                             </Box>}
-                        {/*<Button variant="danger" disabled={complete} style={{marginLeft: 7}} onClick={handleRelease}>Release</Button>*/}
                     </Form>
                 </Grid>
             </Grid>

@@ -31,6 +31,7 @@ const Task = () => {
     const [ready, setReady] = useState(false)
     const [reopened, setReopened] = useState(false)
     const [allowGoBack, setAllowGoBack] = useState(false)
+    const [allowRelease, setAllowRelease] = useState(false)
 
     const widgets = WIDGETS
 
@@ -69,6 +70,7 @@ const Task = () => {
             setComplete(task.complete)
             setReopened(task.reopened)
             setAllowGoBack(stage.allow_go_back)
+            setAllowRelease(stage.allow_release)
             setReady(true)
         }
         if (id && currentUser) {
@@ -102,7 +104,6 @@ const Task = () => {
 
     const handleRelease = () => {
         axios.post(tasksUrl + id + '/release_assignment/')
-            .then(() => alert("Released"))
             .then(() => history.push(path))
     }
 
@@ -179,11 +180,12 @@ const Task = () => {
                     onSubmit={handleSubmit}
                 >
                     <Box display={"flex"}>
-                        <Button type="submit" disabled={complete || loader || !ready}>Отправить</Button>
+                        <Button type="submit" style={{marginRight: "8px"}} disabled={complete || loader || !ready}>Отправить</Button>
+                        {allowGoBack && <Button style={{margin: "0 8px"}} disabled={complete || loader || !ready} onClick={handleOpenPrevious}>К предыдущему таску</Button>}
+                        {allowRelease && <Button variant="danger" disabled={complete || loader || !ready} style={{margin: "0 8px"}}
+                                 onClick={handleRelease}>Освободить</Button>}
                         {loader && <Box paddingLeft={2}><CircularProgress/></Box>}
-                        {allowGoBack && <Button style={{margin: "0 16px"}} onClick={handleOpenPrevious}>К предыдущему таску</Button>}
                     </Box>
-                    {/*<Button variant="danger" disabled={complete} style={{marginLeft: 7}} onClick={handleRelease}>Release</Button>*/}
                 </Form>
             </Grid>
         </div>

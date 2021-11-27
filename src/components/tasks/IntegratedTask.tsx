@@ -30,6 +30,7 @@ const IntegratedTask = () => {
     const [listOfExcludedTasks, setListOfExcludedTasks] = useState<number[]>([])
     const [ready, setReady] = useState(false)
     const [allowGoBack, setAllowGoBack] = useState(false)
+    const [allowRelease, setAllowRelease] = useState(false)
 
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const [removalReason, setRemovalReason] = useState("")
@@ -60,6 +61,7 @@ const IntegratedTask = () => {
         setUiSchema(parsed_ui)
         setComplete(task.complete)
         setAllowGoBack(stage.allow_go_back)
+        setAllowRelease(stage.allow_release)
         setReady(true)
     }
 
@@ -96,7 +98,6 @@ const IntegratedTask = () => {
 
     const handleRelease = () => {
         axios.post(tasksUrl + id + '/release_assignment/')
-            .then(() => alert("Released"))
             .then(() => history.push(path))
     }
 
@@ -198,8 +199,10 @@ const IntegratedTask = () => {
                 >
                     <Box display={"flex"}>
                         <Button type="submit" disabled={complete || loader || !ready}>Отправить</Button>
-                        {loader && <Box paddingLeft={2}><CircularProgress/></Box>}
                         {allowGoBack && <Button style={{margin: "0 16px"}} onClick={handleOpenPrevious}>К предыдущему таску</Button>}
+                        {allowRelease && <Button variant="danger" disabled={complete || loader || !ready} style={{margin: "0 8px"}}
+                                 onClick={handleRelease}>Освободить</Button>}
+                        {loader && <Box paddingLeft={2}><CircularProgress/></Box>}
                     </Box>
                 </Form>
             </Grid>

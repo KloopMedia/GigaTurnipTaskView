@@ -62,6 +62,10 @@ const QuickTask = (props: QuickTaskProps) => {
             })
     }
 
+    const handleAssignment = (value: boolean) => {
+        setAssigned(value)
+    }
+
     const isDisabled = () => {
         if (integrated) {
             if (excluded) {
@@ -125,7 +129,13 @@ const QuickTask = (props: QuickTaskProps) => {
             />
             <Collapse in={expanded} timeout="auto" unmountOnExit>
                 <CardContent>
-                    <QuickTaskContent id={id} taskData={task} integrated={integrated} isAssigned={isDisabled()} refreshTasks={refreshTasks}/>
+                    <QuickTaskContent
+                        id={id}
+                        taskData={task}
+                        integrated={integrated}
+                        handleAssignment={handleAssignment}
+                        isAssigned={isDisabled()}
+                        refreshTasks={refreshTasks}/>
                 </CardContent>
             </Collapse>
         </Card>

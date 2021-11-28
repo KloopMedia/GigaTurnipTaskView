@@ -19,7 +19,11 @@ const upload = async (files, storageRef, setFileBeingUploaded, setFileLinks, mul
             setFileLinks({})
         }
         await Promise.all(files.map(async file => {
-            const filename = file.name.replace(/\./g, '_').replace(/ /g, '_');
+            const period = file.name.lastIndexOf('.');
+            const name = file.name.substring(0, period);
+            const ext = file.name.substring(period);
+            console.log("NAME EXT", name, ext)
+            const filename = name.replace(/\./g, '_').replace(/ /g, '_') + ext;
             console.log(filename)
             const snap = storageRef.child(filename).put(file)
             setFileBeingUploaded(prevState => {
@@ -57,7 +61,8 @@ const upload = async (files, storageRef, setFileBeingUploaded, setFileLinks, mul
                     });
                 });
         }))
-    };
+    }
+    ;
 }
 
 export default upload

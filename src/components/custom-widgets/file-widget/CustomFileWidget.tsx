@@ -123,6 +123,7 @@ const CustomFileWidget = (props: any) => {
             console.log(path)
             const metadata = await firebase.storage().ref().child(path).getMetadata()
             const type = metadata.contentType.split("/")[0]
+            const ext = metadata.contentType.split("/")[1]
             console.log("FILE TYPE", type)
             switch (type) {
                 case "image":
@@ -132,7 +133,11 @@ const CustomFileWidget = (props: any) => {
                     break;
                 case "video":
                     setCurrentFile(uploadedFiles[filename].url);
-                    setFileType(metadata.contentType);
+                    if (ext === 'quicktime') {
+                        setFileType('video/mp4');
+                    } else {
+                        setFileType(metadata.contentType);
+                    }
                     setIsVideoOpen(true);
                     break;
                 default:

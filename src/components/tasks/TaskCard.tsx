@@ -10,7 +10,7 @@ import {CardProps} from "../../util/Types";
 import {Box, Grid} from "@mui/material";
 
 const TaskCard = (props: CardProps) => {
-    const {id, reopened, name, description, creatable, selectable, integrated} = props;
+    const {id, complete, reopened, name, description, creatable, selectable, integrated} = props;
     const history = useHistory()
 
     const handleOpen = () => {
@@ -43,7 +43,7 @@ const TaskCard = (props: CardProps) => {
                 <Box flex={1}>
                     <Button size="small" onClick={handleOpen}>Открыть</Button>
                 </Box>
-                {reopened && <Typography variant={"subtitle1"} color={"red"}>Возвращено</Typography>}
+                {!complete && reopened && <Typography variant={"subtitle1"} color={"red"}>Возвращено</Typography>}
             </Grid>
         }
     }

@@ -117,7 +117,6 @@ const CustomFileWidget = (props: any) => {
     const handleFileClick = async (filename: string) => {
         const parsed = parsedValue;
         console.log("FILE CLICK VALUE", parsed)
-        _onBlur()
         if (filename in parsed) {
             const path = parsed[filename];
             console.log(path)

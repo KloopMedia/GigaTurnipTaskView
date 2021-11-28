@@ -112,7 +112,8 @@ export const getSelectableTasks = (campaignId: string | number, page?: number, f
     let url = createPaginationURL(`${tasksUrl}user_selectable/?stage__chain__campaign=${campaignId}`, page)
     if (filter) {
         if (filter.query) {
-            url += `&task_responses=${filter.query}`
+            // url += `&task_responses=${filter.query}`
+            url += `&search=${filter.query}`
         }
         if (filter.stage) {
             url += `&stage=${filter.stage}`

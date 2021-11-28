@@ -135,7 +135,15 @@ const TaskFilter = (props: { campaign: string, onFilter: (filter: string, stage:
 
     return (
         <FormGroup>
-            <FormControl sx={{m: 1, minWidth: 120}}>
+            <Box sx={{m: 1, minWidth: 120}}>
+                <TextField
+                    id="outlined-basic"
+                    label="Search Field"
+                    variant="outlined"
+                    fullWidth
+                    onChange={handleSearchValueChange}/>
+            </Box>
+            {chains.length > 0 && <FormControl sx={{m: 1, minWidth: 120}}>
                 <InputLabel id="select-chain-filter">Chain</InputLabel>
                 <Select
                     labelId="select-chain-label"
@@ -150,8 +158,8 @@ const TaskFilter = (props: { campaign: string, onFilter: (filter: string, stage:
                     {chains.map((item: any) => <MenuItem key={`filter_chain_${item.id}`}
                                                          value={item.id}>{item.name}</MenuItem>)}
                 </Select>
-            </FormControl>
-            <FormControl disabled={chainId === ""} sx={{m: 1, minWidth: 120}}>
+            </FormControl>}
+            {chainId && <FormControl disabled={chainId === ""} sx={{m: 1, minWidth: 120}}>
                 <InputLabel id="select-stage-filter">Stage</InputLabel>
                 <Select
                     labelId="select-stage-label"
@@ -166,7 +174,7 @@ const TaskFilter = (props: { campaign: string, onFilter: (filter: string, stage:
                     {stages.map((item: any) => <MenuItem key={`filter_stage_${item.id}`}
                                                          value={item.id}>{item.name}</MenuItem>)}
                 </Select>
-            </FormControl>
+            </FormControl>}
             {/*<FormControl disabled={chainId === ""} sx={{m: 1, minWidth: 120}}>*/}
             {/*    <InputLabel id="select-form-stage-filter">Form Stage</InputLabel>*/}
             {/*    <Select*/}
@@ -184,12 +192,6 @@ const TaskFilter = (props: { campaign: string, onFilter: (filter: string, stage:
             {/*    </Select>*/}
             {/*</FormControl>*/}
             <Box sx={{m: 1, minWidth: 120}}>
-                <TextField
-                    id="outlined-basic"
-                    label="Search Field"
-                    variant="outlined"
-                    fullWidth
-                    onChange={handleSearchValueChange} />
                 {/*<Form*/}
                 {/*    schema={jsonSchema}*/}
                 {/*    uiSchema={uiSchema}*/}
@@ -200,7 +202,7 @@ const TaskFilter = (props: { campaign: string, onFilter: (filter: string, stage:
                 {/*    onSubmit={handleFormSubmit}*/}
                 {/*/>*/}
             </Box>
-            <Button sx={{mx:1, mb: 2}} variant={"contained"} onClick={handleFormSubmit}>Search</Button>
+            <Button sx={{mx: 1, mb: 2}} variant={"contained"} onClick={handleFormSubmit}>Search</Button>
         </FormGroup>
     );
 };

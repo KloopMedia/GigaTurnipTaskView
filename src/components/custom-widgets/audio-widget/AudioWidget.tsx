@@ -11,8 +11,6 @@ import styled from "@emotion/styled";
 
 const AudioWidget = ({
                          id,
-                         schema,
-                         uiSchema,
                          options,
                          value,
                          required,
@@ -85,14 +83,14 @@ const AudioWidget = ({
         switch (status) {
             case "recording":
                 return (
-                    <IconButton onClick={stopRecording}>
+                    <IconButton onClick={stopRecording} disabled={disabled || readonly}>
                         <StopCircleIcon/>
                     </IconButton>
                 );
             default:
                 return (
-                    <IconButton onClick={startRecording}>
-                        <RadioButtonCheckedIcon sx={{fill: "red"}}/>
+                    <IconButton onClick={startRecording} disabled={disabled || readonly}>
+                        <RadioButtonCheckedIcon sx={{fill: disabled || readonly ? "grey" : "red"}}/>
                     </IconButton>
                 );
         }
@@ -101,7 +99,7 @@ const AudioWidget = ({
 
     return (
         <Box>
-            <label className={"form-label"}>{schema?.title}{required && "*"}</label>
+            <label className={"form-label"}>{label}{required && "*"}</label>
             <Grid container alignItems={"center"}>
                 {renderButton(status)}
                 {status === "recording" && <Indicator/>}

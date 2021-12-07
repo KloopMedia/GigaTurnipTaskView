@@ -4,13 +4,15 @@ import CustomFileWidget from "../components/custom-widgets/file-widget/CustomFil
 import AutoCompleteWidget from "../components/custom-widgets/autocomplete/AutoCompleteWidget";
 import FixedRadioWidget from "../components/custom-widgets/fixed-radio-widget/FixedRadioWidget";
 import CustomLinkWidget from "../components/custom-widgets/link-widget/CustomLinkWidget";
+import AudioWidget from "../components/custom-widgets/audio-widget/AudioWidget";
 
 export const IS_PAGINATION_ON = false
 export const WIDGETS = {
     customfile: CustomFileWidget,
     autocomplete: AutoCompleteWidget,
     RadioWidget: FixedRadioWidget,
-    customlink: CustomLinkWidget
+    customlink: CustomLinkWidget,
+    audio: AudioWidget
 };
 
 // Pagination Functions

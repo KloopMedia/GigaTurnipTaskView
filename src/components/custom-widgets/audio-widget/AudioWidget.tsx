@@ -28,7 +28,7 @@ const AudioWidget = ({
 
     const {campaignId, chainId, stageId, userId, taskId} = formContext;
     const privateUpload = options.private ? options.private : false
-    const defaultRecord = !!schema.default
+    const defaultRecord = options.default ? options.default : false
 
     let storageRef: any = undefined
     if (campaignId && chainId && stageId && userId && taskId) {
@@ -46,12 +46,10 @@ const AudioWidget = ({
     }
 
     useEffect(() => {
-        if (schema.default) {
-            setRecord(schema.default)
+        if (defaultRecord) {
+            setRecord(options.default)
         } else if (value) {
-            console.log(value)
             firebase.storage().ref(value).getDownloadURL().then(url => {
-                console.log(url)
                 setRecord(url)
             })
         }

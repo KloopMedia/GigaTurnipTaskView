@@ -110,7 +110,9 @@ const AudioWidget = ({
                 {status === "recording" && <Indicator/>}
                 {loader && <CircularProgress size={25}/>}
             </Grid>}
-            {record && <audio controls src={record}/>}
+            {record && <Grid container>
+                <audio controls src={record}/>
+            </Grid>}
         </Box>
     );
 };

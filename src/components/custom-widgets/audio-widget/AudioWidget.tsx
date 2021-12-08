@@ -10,6 +10,7 @@ import {keyframes} from "@emotion/react";
 import styled from "@emotion/styled";
 
 const AudioWidget = ({
+                         schema,
                          id,
                          options,
                          value,
@@ -19,14 +20,16 @@ const AudioWidget = ({
                          label,
                          formContext,
                          onChange,
-                         onBlur,
-                         onFocus,
+                         onBlur
                      }: WidgetProps) => {
 
     const [record, setRecord] = useState<any>(null)
     const [loader, setLoader] = useState(false)
+
     const {campaignId, chainId, stageId, userId, taskId} = formContext;
     const privateUpload = options.private ? options.private : false
+    const defaultRecord = !!schema.default
+
     let storageRef: any = undefined
     if (campaignId && chainId && stageId && userId && taskId) {
         storageRef = firebase.storage()
@@ -43,7 +46,9 @@ const AudioWidget = ({
     }
 
     useEffect(() => {
-        if (value) {
+        if (schema.default) {
+            setRecord(schema.default)
+        } else if (value) {
             console.log(value)
             firebase.storage().ref(value).getDownloadURL().then(url => {
                 console.log(url)
@@ -100,11 +105,11 @@ const AudioWidget = ({
     return (
         <Box>
             <label className={"form-label"}>{label}{required && "*"}</label>
-            <Grid container alignItems={"center"}>
+            {!defaultRecord && <Grid container alignItems={"center"}>
                 {renderButton(status)}
                 {status === "recording" && <Indicator/>}
-                {loader && <CircularProgress size={25} />}
-            </Grid>
+                {loader && <CircularProgress size={25}/>}
+            </Grid>}
             {record && <audio controls src={record}/>}
         </Box>
     );

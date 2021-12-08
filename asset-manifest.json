@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "/GigaTurnipTaskView/static/css/main.2ae47eeb.chunk.css",
-    "main.js": "/GigaTurnipTaskView/static/js/main.a3116233.chunk.js",
-    "main.js.map": "/GigaTurnipTaskView/static/js/main.a3116233.chunk.js.map",
-    "runtime-main.js": "/GigaTurnipTaskView/static/js/runtime-main.6b6539e4.js",
-    "runtime-main.js.map": "/GigaTurnipTaskView/static/js/runtime-main.6b6539e4.js.map",
+    "main.js": "/GigaTurnipTaskView/static/js/main.884f88f0.chunk.js",
+    "main.js.map": "/GigaTurnipTaskView/static/js/main.884f88f0.chunk.js.map",
+    "runtime-main.js": "/GigaTurnipTaskView/static/js/runtime-main.12a89197.js",
+    "runtime-main.js.map": "/GigaTurnipTaskView/static/js/runtime-main.12a89197.js.map",
     "static/css/2.081f420c.chunk.css": "/GigaTurnipTaskView/static/css/2.081f420c.chunk.css",
-    "static/js/2.cd9772e8.chunk.js": "/GigaTurnipTaskView/static/js/2.cd9772e8.chunk.js",
-    "static/js/2.cd9772e8.chunk.js.map": "/GigaTurnipTaskView/static/js/2.cd9772e8.chunk.js.map",
-    "static/js/3.df6b540b.chunk.js": "/GigaTurnipTaskView/static/js/3.df6b540b.chunk.js",
-    "static/js/3.df6b540b.chunk.js.map": "/GigaTurnipTaskView/static/js/3.df6b540b.chunk.js.map",
+    "static/js/2.a8a3da89.chunk.js": "/GigaTurnipTaskView/static/js/2.a8a3da89.chunk.js",
+    "static/js/2.a8a3da89.chunk.js.map": "/GigaTurnipTaskView/static/js/2.a8a3da89.chunk.js.map",
+    "static/js/3.b7383549.chunk.js": "/GigaTurnipTaskView/static/js/3.b7383549.chunk.js",
+    "static/js/3.b7383549.chunk.js.map": "/GigaTurnipTaskView/static/js/3.b7383549.chunk.js.map",
     "index.html": "/GigaTurnipTaskView/index.html",
     "static/css/2.081f420c.chunk.css.map": "/GigaTurnipTaskView/static/css/2.081f420c.chunk.css.map",
     "static/css/main.2ae47eeb.chunk.css.map": "/GigaTurnipTaskView/static/css/main.2ae47eeb.chunk.css.map",
-    "static/js/2.cd9772e8.chunk.js.LICENSE.txt": "/GigaTurnipTaskView/static/js/2.cd9772e8.chunk.js.LICENSE.txt"
+    "static/js/2.a8a3da89.chunk.js.LICENSE.txt": "/GigaTurnipTaskView/static/js/2.a8a3da89.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.6b6539e4.js",
+    "static/js/runtime-main.12a89197.js",
     "static/css/2.081f420c.chunk.css",
-    "static/js/2.cd9772e8.chunk.js",
+    "static/js/2.a8a3da89.chunk.js",
     "static/css/main.2ae47eeb.chunk.css",
-    "static/js/main.a3116233.chunk.js"
+    "static/js/main.884f88f0.chunk.js"
   ]
 }

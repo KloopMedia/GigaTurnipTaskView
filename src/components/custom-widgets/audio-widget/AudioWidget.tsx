@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 
 import {WidgetProps} from "@rjsf/core";
 import {useReactMediaRecorder} from "react-media-recorder";
-import {Box, CircularProgress, Grid, IconButton, Typography} from "@mui/material";
+import {Box, Button, CircularProgress, Grid} from "@mui/material";
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import firebase from "../../../util/Firebase";
@@ -58,7 +58,7 @@ const AudioWidget = ({
     const Indicator = styled.div`
       width: 10px;
       height: 10px;
-      margin-right: 0.5rem;
+      margin-left: 8px;
       border-radius: 50%;
       background-color: red;
       animation: ${keyframes`50% {opacity: 0;}`} 1s linear infinite;
@@ -86,15 +86,27 @@ const AudioWidget = ({
         switch (status) {
             case "recording":
                 return (
-                    <IconButton onClick={stopRecording} disabled={disabled || readonly}>
-                        <StopCircleIcon/>
-                    </IconButton>
+                    <Button
+                        variant={"contained"}
+                        onClick={stopRecording}
+                        sx={{marginBottom: 1}}
+                        disabled={disabled || readonly}
+                        endIcon={<StopCircleIcon/>}
+                    >
+                        Остановить
+                    </Button>
                 );
             default:
                 return (
-                    <IconButton onClick={startRecording} disabled={disabled || readonly}>
-                        <RadioButtonCheckedIcon sx={{fill: disabled || readonly ? "grey" : "red"}}/>
-                    </IconButton>
+                    <Button
+                        variant={"contained"}
+                        onClick={startRecording}
+                        sx={{marginBottom: 1}}
+                        disabled={disabled || readonly}
+                        endIcon={<RadioButtonCheckedIcon sx={{fill: disabled || readonly ? "grey" : "red"}}/>}
+                    >
+                        Запись
+                    </Button>
                 );
         }
     }
@@ -104,9 +116,9 @@ const AudioWidget = ({
         <Box>
             <label className={"form-label"}>{label}{required && "*"}</label>
             {!defaultRecord && <Grid container alignItems={"center"}>
-                {renderButton(status)}
-                {status === "recording" && <Indicator/>}
-                {loader && <CircularProgress size={25}/>}
+                <Grid item>{renderButton(status)}</Grid>
+                <Grid item>{status === "recording" && <Indicator/>}</Grid>
+                <Grid item>{loader && <CircularProgress sx={{marginLeft: 1}} size={30}/>}</Grid>
             </Grid>}
             {record && <Grid container>
                 <audio controls src={record}/>

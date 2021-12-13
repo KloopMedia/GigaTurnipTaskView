@@ -44,8 +44,8 @@ const closedMixin = (theme: Theme): CSSObject => ({
     }),
     overflowX: 'hidden',
     width: `calc(${theme.spacing(7)} + 1px)`,
-    [theme.breakpoints.up('sm')]: {
-        width: `calc(${theme.spacing(7)} + 1px)`,
+    [theme.breakpoints.down('sm')]: {
+        width: 0,
     },
 });
 
@@ -182,7 +182,7 @@ export default (props: AppbarProps) => {
                     ))}
                 </List>
             </Drawer>
-            <Box component="main" sx={{flexGrow: 1, p: 0}}>
+            <Box sx={{flexGrow: 1, p: 0, width: "100%"}}>
                 <DrawerHeader/>
                 {children}
             </Box>

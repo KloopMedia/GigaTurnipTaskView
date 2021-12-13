@@ -11,6 +11,7 @@ import {AuthContext} from "./util/Auth";
 import Notifications from "./components/notifications/Notifications";
 import NotificationContent from "./components/notifications/NotificationContent";
 import IntegratedTask from "./components/tasks/IntegratedTask";
+import {Box} from "@mui/material";
 
 const App = () => {
     const {currentUser} = useContext(AuthContext)
@@ -29,7 +30,7 @@ const App = () => {
         })
     }
     return (
-        <div>
+        <Box>
             <Router>
                 <Switch>
                     <Route exact path={"/campaign/about/:id"}>
@@ -62,7 +63,7 @@ const App = () => {
                 </Switch>
             </Router>
 
-        </div>
+        </Box>
     );
 }
 

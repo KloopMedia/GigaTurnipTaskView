@@ -133,7 +133,7 @@ const Task = () => {
     };
 
     return (
-        <div style={{width: '70%', minWidth: '400px', margin: '0 auto', display: 'block', padding: 10}}>
+        <Box p={2}>
             <Prompt
                 message={(location, action) => {
                     console.log("Backing up...")
@@ -189,7 +189,7 @@ const Task = () => {
                     </Box>
                 </Form>
             </Grid>
-        </div>
+        </Box>
     )
 }
 

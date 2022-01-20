@@ -35,8 +35,7 @@ const Task = () => {
 
     const widgets = WIDGETS
 
-    useEffect(() => {
-        const setData = async () => {
+    const setData = async () => {
             let task = await getTask(id)
             let stage = task.stage
 
@@ -73,8 +72,9 @@ const Task = () => {
             setAllowRelease(stage.allow_release)
             setReady(true)
         }
+
+    useEffect(() => {
         if (id && currentUser) {
-            console.log("SET DATA")
             setData()
         }
     }, [id, currentUser])
@@ -91,6 +91,9 @@ const Task = () => {
                     setSchema({})
                     setUiSchema({})
                     setFormResponses({})
+                    if (res.data.next_direct_id === parseInt(id)) {
+                        setData()
+                    }
                     history.push(`${path}/${res.data.next_direct_id}`)
                 } else {
                     history.push(path)

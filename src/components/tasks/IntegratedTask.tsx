@@ -89,6 +89,10 @@ const IntegratedTask = () => {
                     setSchema({})
                     setUiSchema({})
                     setFormResponses({})
+                    if (res.data.next_direct_id === parseInt(id)) {
+                        getTaskData()
+                        getIntegratedData()
+                    }
                     history.push(`${path}/${res.data.next_direct_id}`)
                 } else {
                     history.push(path)

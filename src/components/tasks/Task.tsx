@@ -36,42 +36,42 @@ const Task = () => {
     const widgets = WIDGETS
 
     const setData = async () => {
-            let task = await getTask(id)
-            let stage = task.stage
+        let task = await getTask(id)
+        let stage = task.stage
 
-            console.log(task)
-
-            if (stage && stage.rich_text) {
-                setEditorData(stage.rich_text)
-            }
-
-            setDataForStoragePath({
-                campaignId: campaignId.toString(),
-                chainId: stage.chain.id.toString(),
-                stageId: stage.id.toString(),
-                userId: currentUser.uid,
-                taskId: task.id.toString()
-            })
-
-            let parsed_schema = stage.json_schema ? JSON.parse(stage.json_schema) : {}
-            let parsed_ui = stage.ui_schema ? JSON.parse(stage.ui_schema) : {}
-
-            const previousTasks = await getPreviousTasks(id).then(res => res.map((task: any) => ({
-                responses: task.responses,
-                json_schema: task.stage.json_schema ? JSON.parse(task.stage.json_schema) : {},
-                ui_schema: task.stage.ui_schema ? JSON.parse(task.stage.ui_schema) : {}
-            })))
-
-            setPrevTasks(previousTasks)
-            setFormResponses(task.responses)
-            setSchema(parsed_schema)
-            setUiSchema(parsed_ui)
-            setComplete(task.complete)
-            setReopened(task.reopened)
-            setAllowGoBack(stage.allow_go_back)
-            setAllowRelease(stage.allow_release)
-            setReady(true)
+        if (stage && stage.rich_text) {
+            setEditorData(stage.rich_text)
+        } else {
+            setEditorData("")
         }
+
+        setDataForStoragePath({
+            campaignId: campaignId.toString(),
+            chainId: stage.chain.id.toString(),
+            stageId: stage.id.toString(),
+            userId: currentUser.uid,
+            taskId: task.id.toString()
+        })
+
+        let parsed_schema = stage.json_schema ? JSON.parse(stage.json_schema) : {}
+        let parsed_ui = stage.ui_schema ? JSON.parse(stage.ui_schema) : {}
+
+        const previousTasks = await getPreviousTasks(id).then(res => res.map((task: any) => ({
+            responses: task.responses,
+            json_schema: task.stage.json_schema ? JSON.parse(task.stage.json_schema) : {},
+            ui_schema: task.stage.ui_schema ? JSON.parse(task.stage.ui_schema) : {}
+        })))
+
+        setPrevTasks(previousTasks)
+        setFormResponses(task.responses)
+        setSchema(parsed_schema)
+        setUiSchema(parsed_ui)
+        setComplete(task.complete)
+        setReopened(task.reopened)
+        setAllowGoBack(stage.allow_go_back)
+        setAllowRelease(stage.allow_release)
+        setReady(true)
+    }
 
     useEffect(() => {
         if (id && currentUser) {
@@ -155,19 +155,19 @@ const Task = () => {
             </div>}
 
             {prevTasks.length > 0 &&
-            <Grid>
-                {prevTasks.map((task: any, i: number) =>
-                    <Form
-                        key={`prev_task_${i}`}
-                        schema={task.json_schema ?? {}}
-                        uiSchema={task.ui_schema ?? {}}
-                        formData={task.responses ?? {}}
-                        widgets={widgets}
-                        disabled={true}
-                        children={" "}
-                    />
-                )}
-            </Grid>
+                <Grid>
+                    {prevTasks.map((task: any, i: number) =>
+                        <Form
+                            key={`prev_task_${i}`}
+                            schema={task.json_schema ?? {}}
+                            uiSchema={task.ui_schema ?? {}}
+                            formData={task.responses ?? {}}
+                            widgets={widgets}
+                            disabled={true}
+                            children={" "}
+                        />
+                    )}
+                </Grid>
             }
             <Grid>
                 <Form
@@ -184,10 +184,13 @@ const Task = () => {
                     onSubmit={handleSubmit}
                 >
                     <Box display={"flex"}>
-                        <Button type="submit" style={{marginRight: "8px"}} disabled={complete || loader || !ready}>Отправить</Button>
-                        {allowGoBack && <Button style={{margin: "0 8px"}} disabled={complete || loader || !ready} onClick={handleOpenPrevious}>К предыдущему таску</Button>}
-                        {allowRelease && <Button variant="danger" disabled={complete || loader || !ready} style={{margin: "0 8px"}}
-                                 onClick={handleRelease}>Освободить</Button>}
+                        <Button type="submit" style={{marginRight: "8px"}}
+                                disabled={complete || loader || !ready}>Отправить</Button>
+                        {allowGoBack && <Button style={{margin: "0 8px"}} disabled={complete || loader || !ready}
+                                                onClick={handleOpenPrevious}>К предыдущему таску</Button>}
+                        {allowRelease &&
+                            <Button variant="danger" disabled={complete || loader || !ready} style={{margin: "0 8px"}}
+                                    onClick={handleRelease}>Освободить</Button>}
                         {loader && <Box paddingLeft={2}><CircularProgress/></Box>}
                     </Box>
                 </Form>

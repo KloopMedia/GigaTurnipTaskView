@@ -3,7 +3,7 @@ import {a11yProps, formatDateString, getUserNotifications, paginatedDataHandler}
 import {Box, Card, CardContent, Grid, Pagination, Tab, Tabs, Typography, useMediaQuery} from "@mui/material";
 import {useHistory, useParams} from "react-router-dom";
 import {RouterParams} from "../../util/Types";
-import TabPanel from "../Tabs/TabPanel";
+import TabPanel from "../tabs/TabPanel";
 
 
 const Notifications = ({importance, onlyNew}: { importance?: number, onlyNew?: boolean }) => {

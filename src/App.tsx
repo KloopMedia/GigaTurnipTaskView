@@ -11,7 +11,8 @@ import {AuthContext} from "./util/Auth";
 import Notifications from "./components/notifications/Notifications";
 import NotificationContent from "./components/notifications/NotificationContent";
 import IntegratedTask from "./components/tasks/IntegratedTask";
-import {Box} from "@mui/material";
+import {Box, Button, Grid, Typography} from "@mui/material";
+import {signInWithGoogle} from "./util/Firebase";
 
 const App = () => {
     const {currentUser} = useContext(AuthContext)
@@ -29,6 +30,19 @@ const App = () => {
             }
         })
     }
+
+    if (!currentUser) {
+        return (
+            <Grid container direction="column" py={5} px={1} justifyContent="center">
+                <Typography align="center" variant="h4">Регистрация</Typography>
+                <Typography variant="body1" align="center">Нажмите на кнопку (Вход или Регистрация).</Typography>
+                <Typography variant="body1" align="center">Если у вас нет аккаунта Google, то создайте его.</Typography>
+                <br/>
+                <Button size="large" color="primary" variant="contained" onClick={signInWithGoogle}>Регистрация</Button>
+            </Grid>
+        )
+    }
+
     return (
         <Box>
             <Router>

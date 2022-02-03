@@ -7,6 +7,7 @@ import Layout from "./components/layout/Layout";
 import Login from "./pages/login/Login";
 import Tasks from "./pages/tasks/Tasks";
 import Campaigns from "./pages/campaigns/Campaigns";
+import About from "./pages/campaigns/about/About";
 
 const App = () => (
     <AuthProvider>
@@ -16,6 +17,7 @@ const App = () => (
                     <Route path="/" element={<RequireAuth><Layout/></RequireAuth>}>
                         <Route path={"campaign"}>
                             <Route path=":campaignId">
+                                <Route path={"about"} element={<About/>}/>
                                 <Route path={"tasks"}>
                                     <Route index element={<Tasks/>}/>
                                 </Route>

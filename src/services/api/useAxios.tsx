@@ -1,5 +1,4 @@
-import {baseUrl, campaignsUrl, chainsUrl, conditionalstagesUrl, taskstagesUrl} from "./Urls";
-import React from "react";
+import {baseUrl, campaignsUrl, chainsUrl, conditionalstagesUrl, taskstagesUrl, tasksUrl} from "./Urls";
 import defaultAxios from "axios";
 import {useAuth} from "../../context/authentication/hooks/useAuth";
 import {useToast} from "../../context/toast/hooks/useToast";
@@ -28,8 +27,26 @@ const useAxios = () => {
     const getCampaigns = () => {
         return axios.get(`${campaignsUrl}?limit=1000`)
             .then(res => res.data)
-            .then(res => res.results)
-            .catch((err) => openToast(err.message));
+            .then(res => res.results);
+    }
+
+    const getUserCampaigns = () => {
+        return axios.get(`${campaignsUrl}list_user_campaigns/`)
+            .then(res => res.data);
+    }
+
+    const getSelectableCampaigns = () => {
+        return axios.get(campaignsUrl + 'list_user_selectable/')
+            .then(res => res.data);
+    }
+
+    const requestCampaignJoin = (id: number) => {
+        return axios.post(campaignsUrl + id + '/join_campaign/')
+    }
+
+    const requestCampaignInfo = (id: number) => {
+        return axios.get(campaignsUrl + id + '/')
+            .then(res => res.data)
     }
 
     const getChains = (campaignId: number) => {
@@ -86,6 +103,16 @@ const useAxios = () => {
             .catch((err) => openToast(err.message));
     }
 
+    // TaskCard Functions
+    const requestTaskCreation = (id: number) => {
+        return axios.post(taskstagesUrl + id + '/create_task/')
+            .then(res => res.data)
+    }
+
+    const requestTaskAssignment = (id: number) => {
+        return axios.post(tasksUrl + id + '/request_assignment/')
+    }
+
     return {
         axios,
         getCampaigns,
@@ -97,7 +124,13 @@ const useAxios = () => {
         saveTaskStage,
         getTaskStageOptions,
         getConditionalStage,
-        saveConditionalStage
+        saveConditionalStage,
+        getUserCampaigns,
+        getSelectableCampaigns,
+        requestCampaignJoin,
+        requestCampaignInfo,
+        requestTaskCreation,
+        requestTaskAssignment,
     }
 }
 

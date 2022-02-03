@@ -23,6 +23,27 @@ const useAxios = () => {
         error => Promise.reject(error)
     );
 
+    // Pagination Functions
+    const paginatedDataHandler = (
+        data: any,
+        setDataFunction: (res: any) => void,
+        setCountFunction: (count: number) => void,
+    ) => {
+        const {results, count} = data;
+        const numOfPages = Math.ceil(count / 10)
+        console.log("numOfPages", numOfPages)
+        console.log("results", results)
+        setDataFunction(results)
+        setCountFunction(numOfPages)
+    }
+
+    const createPaginationURL = (request: string, page?: number) => {
+        if (page && page > 0) {
+            return `${request}&limit=10&offset=${(page - 1) * 10}`
+        } else {
+            return request
+        }
+    }
 
     const getCampaigns = () => {
         return axios.get(`${campaignsUrl}?limit=1000`)
@@ -113,6 +134,50 @@ const useAxios = () => {
         return axios.post(tasksUrl + id + '/request_assignment/')
     }
 
+    // TaskMenu Functions
+    const getSelectableTasks = (campaignId: string | number, page?: number, filter?: { query?: string, stage?: string } | null) => {
+        console.log(page)
+        let url = createPaginationURL(`${tasksUrl}user_selectable/?stage__chain__campaign=${campaignId}`, page)
+        if (filter) {
+            if (filter.query) {
+                // url += `&task_responses=${filter.query}`
+                url += `&search=${filter.query}`
+            }
+            if (filter.stage) {
+                url += `&stage=${filter.stage}`
+            }
+            // url = `${tasksUrl}?task_responses=${filter.query}`
+        }
+        console.log("SELECTABLE URL", url)
+        return axios.get(url).then(res => {
+            console.log("getSelectableTasks", res.data)
+            return res.data;
+        })
+    };
+
+    const getCompleteTasks = (campaignId: number) => {
+        return axios.get(`${tasksUrl}user_relevant/?complete=${true}&stage__chain__campaign=${campaignId}`)
+            .then(res => res.data)
+            .then(res => {
+                console.log("getCompleteTasks", res)
+                return (res)
+            })
+    };
+
+    const getOpenTasks = (campaignId: number) => {
+        return axios.get(`${tasksUrl}user_relevant/?complete=${false}&stage__chain__campaign=${campaignId}`)
+            .then(res => res.data)
+            .then(res => {
+                console.log("getOpenTasks", res)
+                return (res)
+            })
+    };
+
+    const getCreatableTasks = (campaignId: number) => {
+        return axios.get(`${taskstagesUrl}user_relevant/?chain__campaign=${campaignId}`)
+            .then(res => res.data)
+    };
+
     return {
         axios,
         getCampaigns,
@@ -131,6 +196,10 @@ const useAxios = () => {
         requestCampaignInfo,
         requestTaskCreation,
         requestTaskAssignment,
+        getCompleteTasks,
+        getOpenTasks,
+        getCreatableTasks,
+        getSelectableTasks
     }
 }
 

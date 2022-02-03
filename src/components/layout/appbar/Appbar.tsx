@@ -108,7 +108,7 @@ export default function Appbar(props: { children?: any }) {
     };
 
     const DrawerItems = [
-        {page: "chain", title: "Цепочки", icon: <InboxIcon/>}
+        {page: "tasks", title: "Задания", icon: <InboxIcon/>}
     ]
 
     const renderDrawerItems = () => {
@@ -146,7 +146,7 @@ export default function Appbar(props: { children?: any }) {
                                 boxShadow: 'none',
                             }
                         }}>
-                            GigaTurnip Admin Interface
+                            GigaTurnip Tasks
                         </MuiLink>
                     </Box>
                     <Button color={"inherit"} onClick={() => logout(() => navigate('/'))}>Выход</Button>

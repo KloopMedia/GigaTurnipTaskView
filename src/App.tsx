@@ -1,70 +1,35 @@
-import React, {useContext} from "react";
-import Task from './components/tasks/Task'
-import Appbar from "./components/appbar/Appbar";
+import React from "react";
+import {HashRouter as Router, Route, Routes} from "react-router-dom";
+import AuthProvider from "./context/authentication/AuthProvider";
+import ToastProvider from "./context/toast/ToastProvider";
+import RequireAuth from "./pages/login/RequireAuth";
+import Layout from "./components/layout/Layout";
+import Login from "./pages/login/Login";
+import Tasks from "./pages/tasks/Tasks";
+import Campaigns from "./pages/campaigns/Campaigns";
 
-import {HashRouter as Router, Route, Switch} from "react-router-dom";
-import SimpleAppbar from "./components/appbar/SimpleAppbar";
-import Campaigns from "./components/campaigns/Campaigns";
-import TaskMenu from "./components/tasks/TaskMenu";
-import About from "./components/campaigns/About";
-import {AuthContext} from "./util/Auth";
-import Notifications from "./components/notifications/Notifications";
-import NotificationContent from "./components/notifications/NotificationContent";
-import IntegratedTask from "./components/tasks/IntegratedTask";
-import {Box} from "@mui/material";
-
-const App = () => {
-    const {currentUser} = useContext(AuthContext)
-    if (currentUser) {
-        const token = localStorage.getItem("token");
-        currentUser.getIdToken(false).then((idToken: string) => {
-            if (token) {
-                if (idToken !== token) {
-                    localStorage.setItem("token", idToken);
-                    window.location.reload()
-                }
-            } else {
-                localStorage.setItem("token", idToken);
-                window.location.reload()
-            }
-        })
-    }
-    return (
-        <Box>
+const App = () => (
+    <AuthProvider>
+        <ToastProvider>
             <Router>
-                <Switch>
-                    <Route exact path={"/campaign/about/:id"}>
-                        <About/>
+                <Routes>
+                    <Route path="/" element={<RequireAuth><Layout/></RequireAuth>}>
+                        <Route path={"campaign"}>
+                            <Route path=":campaignId">
+                                <Route path={"tasks"}>
+                                    <Route index element={<Tasks/>}/>
+                                </Route>
+                                <Route index element={<Tasks/>}/>
+                            </Route>
+                            <Route index element={<Campaigns/>}/>
+                        </Route>
+                        <Route index element={<Campaigns/>}/>
                     </Route>
-                    <Route path={"/campaign/:campaignId"}>
-                        <Appbar>
-                            <Route exact path="/campaign/:campaignId/tasks">
-                                <TaskMenu/>
-                            </Route>
-                            <Route exact path="/campaign/:campaignId/tasks/:id">
-                                <Task/>
-                            </Route>
-                            <Route exact path="/campaign/:campaignId/tasks/:id/integrated">
-                                <IntegratedTask/>
-                            </Route>
-                            <Route exact path={"/campaign/:campaignId/notifications"}>
-                                <Notifications/>
-                            </Route>
-                            <Route exact path={"/campaign/:campaignId/notifications/:id"}>
-                                <NotificationContent/>
-                            </Route>
-                        </Appbar>
-                    </Route>
-                    <Route path="/">
-                        <SimpleAppbar>
-                            <Campaigns/>
-                        </SimpleAppbar>
-                    </Route>
-                </Switch>
+                    <Route path={"login"} element={<Login/>}/>
+                </Routes>
             </Router>
-
-        </Box>
-    );
-}
+        </ToastProvider>
+    </AuthProvider>
+)
 
 export default App

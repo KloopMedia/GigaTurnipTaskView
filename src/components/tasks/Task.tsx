@@ -75,7 +75,7 @@ const Task = () => {
 
     useEffect(() => {
         if (id && currentUser) {
-            setData()
+            setData().then(() => window.scrollTo(0, 0))
         }
     }, [id, currentUser])
 
@@ -148,11 +148,11 @@ const Task = () => {
                 }}
             />
 
-            {reopened && <Typography variant={"h6"} color={"red"}>Это задание было возвращено</Typography>}
+            <Typography hidden={!reopened} variant={"h6"} color={"red"}>Это задание было возвращено</Typography>
 
-            {editorData !== "" && <div style={{paddingBottom: 20}}>
+            <Box hidden={!editorData} style={{paddingBottom: 20}}>
                 <TextViewer data={editorData}/>
-            </div>}
+            </Box>
 
             {prevTasks.length > 0 &&
                 <Grid>

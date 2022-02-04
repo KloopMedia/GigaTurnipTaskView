@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from "react";
-import TabPanel from "../tabs/TabPanel";
-import SimpleTabs from "../tabs/Tabs";
+import TabPanel from "../Tabs/TabPanel";
+import SimpleTabs from "../Tabs/Tabs";
 import TaskList from "./TaskList";
 import {AuthContext} from "../../util/Auth";
 import {Box, Grid, Pagination} from "@mui/material";

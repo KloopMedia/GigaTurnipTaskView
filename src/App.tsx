@@ -8,6 +8,7 @@ import Login from "./pages/login/Login";
 import Tasks from "./pages/tasks/Tasks";
 import Campaigns from "./pages/campaigns/Campaigns";
 import About from "./pages/campaigns/about/About";
+import Task from "./pages/tasks/task/Task";
 
 const App = () => (
     <AuthProvider>
@@ -19,6 +20,9 @@ const App = () => (
                             <Route path=":campaignId">
                                 <Route path={"about"} element={<About/>}/>
                                 <Route path={"tasks"}>
+                                    <Route path={":taskId"}>
+                                        <Route index element={<Task/>}/>
+                                    </Route>
                                     <Route index element={<Tasks/>}/>
                                 </Route>
                                 <Route index element={<Tasks/>}/>

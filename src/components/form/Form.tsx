@@ -2,18 +2,20 @@ import React from 'react';
 import {AudioWidget, AutoCompleteWidget, LinkWidget, RadioWidget} from "./custom-widgets";
 import JsonForm from "@rjsf/bootstrap-4";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {FormProps} from "@rjsf/core"
 
-type Props = {
+interface Props extends FormProps<any> {
     schema: object,
     uiSchema?: object,
     formData?: any,
     onChange?: (formData: object) => void,
     onSubmit?: (formData: object) => void,
-    hideButton?: boolean
-};
+    hideButton?: boolean,
+    disabled?: boolean
+}
 
-const Form = (props: Props) => {
-    const {schema, uiSchema, formData, hideButton, onChange, onSubmit} = props;
+const Form: React.FC<Props> = (props) => {
+    const {schema, uiSchema, formData, hideButton, onChange, onSubmit, children, disabled, ...rest} = props;
 
     const widgets = {
         customfile: AudioWidget,
@@ -41,6 +43,16 @@ const Form = (props: Props) => {
         }
     }
 
+    const renderButton = () => {
+        if (children) {
+            return children;
+        } else if (hideButton) {
+            return " "
+        } else {
+            return <button type="submit" className="btn btn-primary" disabled={disabled}>Отправить</button>
+        }
+    }
+
     return (
         <JsonForm
             schema={schema}
@@ -49,9 +61,10 @@ const Form = (props: Props) => {
             widgets={widgets}
             onChange={handleChange}
             onSubmit={handleSubmit}
+            disabled={disabled}
+            {...rest}
         >
-            {hideButton ? " " :
-                <button type="submit" className="btn btn-primary">Отправить</button>}
+            {renderButton()}
         </JsonForm>
     );
 };

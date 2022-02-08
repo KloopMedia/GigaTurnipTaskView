@@ -1,6 +1,6 @@
 import React from 'react'
 
-
+// TODO: Change File Widget
 const CustomFileWidget = (props: any) => {
     const {schema, uiSchema} = props;
     const multipleSelect = uiSchema["ui:options"] && uiSchema["ui:options"].multiple ? uiSchema["ui:options"].multiple : false

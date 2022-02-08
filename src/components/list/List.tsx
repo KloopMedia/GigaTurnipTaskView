@@ -16,8 +16,8 @@ type Props = {
     onSelect: (id: number) => void,
 };
 
-const List = (props: Props) => {
-    const {id, data, label, defaultView, hideCreateButton, hideViewButton, onSelect} = props;
+const List: React.FC<Props> = (props) => {
+    const {id, data, label, defaultView, hideCreateButton, hideViewButton, children, onSelect} = props;
     const location = useLocation();
 
     const [view, setView] = useState<ViewProps>(defaultView ?? "grid");
@@ -40,7 +40,9 @@ const List = (props: Props) => {
         <Box>
             <ListHeader label={label} view={view} onViewChange={handleViewChange} location={location}
                         hideCreateButton={hideCreateButton} hideViewButton={hideViewButton}/>
-            <ListContent data={data} view={view} onSelect={onSelect}/>
+            <ListContent data={data} view={view} onSelect={onSelect}>
+                {children}
+            </ListContent>
         </Box>
     );
 };

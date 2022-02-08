@@ -10,8 +10,8 @@ type Props = {
     onSelect: (id: number) => void
 };
 
-const ListContent = (props: Props) => {
-    const {data, view, onSelect} = props;
+const ListContent: React.FC<Props> = (props) => {
+    const {data, view, children, onSelect} = props;
     if (!data) {
         return <Typography>Error</Typography>;
     }
@@ -31,7 +31,9 @@ const ListContent = (props: Props) => {
             <Grid container py={2} spacing={2}>
                 {data.map((item, index) =>
                     <Grid item xs={12} key={index}>
-                        <ExpandableCard data={item} hideExpandButton={true} onClick={onSelect}/>
+                        <ExpandableCard data={item} hideExpandButton={true} onClick={onSelect}>
+                            {children}
+                        </ExpandableCard>
                     </Grid>
                 )}
             </Grid>

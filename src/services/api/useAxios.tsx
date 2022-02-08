@@ -178,6 +178,20 @@ const useAxios = () => {
             .then(res => res.data)
     };
 
+    // Task Functions
+    const getPreviousTasks = (id: number) => {
+        return axios.get(`${tasksUrl + id}/list_displayed_previous/`)
+            .then(res => res.data)
+    }
+
+    const getTask = (id: number) => {
+        return axios.get(`${tasksUrl + id}/`).then((res: any) => res.data)
+    }
+
+    const saveTask = (id: number, data: {responses: any, complete?: boolean}) => {
+        return axios.patch(`${tasksUrl + id}/`, data)
+    }
+
     return {
         axios,
         getCampaigns,
@@ -199,7 +213,10 @@ const useAxios = () => {
         getCompleteTasks,
         getOpenTasks,
         getCreatableTasks,
-        getSelectableTasks
+        getSelectableTasks,
+        getPreviousTasks,
+        getTask,
+        saveTask
     }
 }
 

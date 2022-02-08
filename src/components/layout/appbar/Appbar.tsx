@@ -43,6 +43,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
     }
 });
 
+// @ts-ignore
 const DrawerHeader = styled('div')(({theme}) => ({
     display: 'flex',
     alignItems: 'center',

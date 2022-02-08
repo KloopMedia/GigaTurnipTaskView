@@ -21,7 +21,7 @@ const Integrated = (props: Props) => {
 
     return (
         <BuilderLayout p={2}>
-            <Common {...props} />
+            {/*<Common {...props} />*/}
         </BuilderLayout>
     );
 };

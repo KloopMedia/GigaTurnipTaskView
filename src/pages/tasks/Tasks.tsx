@@ -6,11 +6,8 @@ import {useNavigate, useParams} from "react-router-dom";
 import Tabs from "../../components/tabs/Tabs";
 import useHelpers from "../../utils/hooks/UseHelpers";
 
-type Props = {};
 
-const Tasks = (props: Props) => {
-    const {} = props;
-
+const Tasks = () => {
     const {
         getOpenTasks,
         getCompleteTasks,
@@ -39,7 +36,7 @@ const Tasks = (props: Props) => {
     }
 
     const handleCreate = (id: number) => {
-        requestTaskCreation(id).then(() => handleOpen(id))
+        requestTaskCreation(id).then((res) => handleOpen(res.id))
     }
 
     const handleSelect = (id: number) => {

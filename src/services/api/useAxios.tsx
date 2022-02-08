@@ -185,11 +185,23 @@ const useAxios = () => {
     }
 
     const getTask = (id: number) => {
-        return axios.get(`${tasksUrl + id}/`).then((res: any) => res.data)
+        return axios.get(`${tasksUrl + id}/`)
+            .then((res: any) => res.data)
     }
 
-    const saveTask = (id: number, data: {responses: any, complete?: boolean}) => {
+    const saveTask = (id: number, data: { responses: any, complete?: boolean }) => {
         return axios.patch(`${tasksUrl + id}/`, data)
+            .then(res => res.data)
+    }
+
+    const releaseTask = (id: number) => {
+        return axios.post(`${tasksUrl + id}/release_assignment/`)
+            .then(res => res.data)
+    }
+
+    const openPreviousTask = (id: number) => {
+        return axios.get(`${tasksUrl + id}/open_previous/`)
+            .then(res => res.data)
     }
 
     return {
@@ -216,7 +228,9 @@ const useAxios = () => {
         getSelectableTasks,
         getPreviousTasks,
         getTask,
-        saveTask
+        saveTask,
+        releaseTask,
+        openPreviousTask,
     }
 }
 

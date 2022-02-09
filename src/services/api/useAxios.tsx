@@ -132,6 +132,7 @@ const useAxios = () => {
 
     const requestTaskAssignment = (id: number) => {
         return axios.post(tasksUrl + id + '/request_assignment/')
+            .then(res => res.data)
     }
 
     // TaskMenu Functions

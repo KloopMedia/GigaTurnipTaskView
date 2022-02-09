@@ -15,6 +15,11 @@ const ListContent: React.FC<Props> = (props) => {
     if (!data) {
         return <Typography>Error</Typography>;
     }
+
+    if (view === "custom") {
+        return <>{children}</>
+    }
+
     if (view === "grid") {
         return (
             <Grid container py={2} spacing={{xs: 2, md: 3}} columns={{xs: 4, sm: 8, md: 12}}>

@@ -1,0 +1,1 @@
+export type TaskViews = "join" | "split";

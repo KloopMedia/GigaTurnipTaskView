@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {ReactNode, useState} from 'react';
 import CardHeader from "@mui/material/CardHeader";
 import {Button, Stack} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -12,6 +12,7 @@ type Props = {
     data: any,
     hideExpandButton?: boolean,
     hideOpenButton?: boolean,
+    extraActions?: ReactNode[],
     onClick?: (id: number) => void
 };
 
@@ -31,7 +32,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 const ExpandableCard: React.FC<Props> = (props) => {
-    const {data, children, hideExpandButton, hideOpenButton, onClick} = props;
+    const {data, children, hideExpandButton, hideOpenButton, extraActions, onClick} = props;
     const {name, description, id} = data;
     const [expand, setExpand] = useState(false);
 
@@ -46,11 +47,16 @@ const ExpandableCard: React.FC<Props> = (props) => {
     }
 
     const actions = [];
+    if (extraActions) {
+        actions.push(extraActions)
+    }
+
     if (!hideOpenButton) {
         actions.push(
             <Button key={"open_button"} variant={"contained"} onClick={handleClick}>Открыть</Button>
         )
     }
+
     if (!hideExpandButton) {
         actions.push(
             <ExpandMore
@@ -73,7 +79,6 @@ const ExpandableCard: React.FC<Props> = (props) => {
                         {actions}
                     </Stack>
                 }
-
                 title={name}
                 subheader={`ID: ${id}`}
                 titleTypographyProps={{variant: "h6"}}

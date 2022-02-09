@@ -1,1 +1,1 @@
-export type ViewProps = "grid" | "list";
+export type ViewProps = "grid" | "list" | "custom";

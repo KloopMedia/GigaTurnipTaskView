@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Box} from "@mui/material";
+import {Box, Grid} from "@mui/material";
 import List from "../../components/list/List";
 import useAxios from "../../services/api/useAxios";
 import {useNavigate, useParams} from "react-router-dom";
 import Tabs from "../../components/tabs/Tabs";
 import useHelpers from "../../utils/hooks/UseHelpers";
-
+import Task from "./task/Task";
 
 const Tasks = () => {
     const {
@@ -69,8 +69,15 @@ const Tasks = () => {
 
         TAB_DATA.push({
             label: 'Доступные',
-            component: <List id={"selectable_tasks"} data={d} onSelect={handleSelect}
-                             hideCreateButton={true}/>
+            component: (
+                <Grid container py={2} spacing={2}>
+                    {selectableTasks.results.map((item: any, index: number) =>
+                        <Grid item xs={12} key={index}>
+                            <Task key={index} id={item.id} hidePrompt={true} variant={"quick"}/>
+                        </Grid>
+                    )}
+                </Grid>
+            )
         })
     }
 

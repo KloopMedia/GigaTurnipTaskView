@@ -16,7 +16,7 @@ const Quick: React.FC<Props> = (props) => {
 
     const requestButton = active ?
         (
-            <Tooltip title={"Получен"}>
+            <Tooltip key={"edit_button"} title={"Получен"}>
                 <IconButton color={"primary"} size={"small"}>
                     <CheckCircleIcon color={"primary"} fontSize={"large"}/>
                 </IconButton>
@@ -24,7 +24,7 @@ const Quick: React.FC<Props> = (props) => {
         )
         :
         (
-            <Button key={"open_button"} variant={"contained"} onClick={() => onRequest(data.id)}>
+            <Button key={"edit_button"} variant={"contained"} onClick={() => onRequest(data.id)}>
                 Редактировать
             </Button>
         );

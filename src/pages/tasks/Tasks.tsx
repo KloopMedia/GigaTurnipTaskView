@@ -39,12 +39,6 @@ const Tasks = () => {
         requestTaskCreation(id).then((res) => handleOpen(res.id))
     }
 
-    const handleSelect = (id: number) => {
-        requestTaskAssignment(id)
-            .then(() => handleOpen(id))
-            .catch(err => alert(err))
-    }
-
     const formatData = (data: any[]) => {
         return data.map((item: { id: number, stage: { name: string, description: string } }) => ({
             id: item.id,
@@ -73,7 +67,7 @@ const Tasks = () => {
                 <Grid container py={2} spacing={2}>
                     {selectableTasks.results.map((item: any, index: number) =>
                         <Grid item xs={12} key={index}>
-                            <Task key={index} id={item.id} hidePrompt={true} variant={"quick"}/>
+                            <Task id={item.id} hidePrompt={true} variant={"quick"}/>
                         </Grid>
                     )}
                 </Grid>

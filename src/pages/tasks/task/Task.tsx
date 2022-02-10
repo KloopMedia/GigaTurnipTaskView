@@ -136,11 +136,15 @@ const Task = (props: Props) => {
     }
 
     const handleSelect = () => {
-        requestTask(parsedId)
-            .then(res => {
-                const {id} = res;
-                handleRedirect(id);
-            })
+        if (active) {
+            navigate(`${parsedId}`);
+        } else {
+            requestTask(parsedId)
+                .then(res => {
+                    const {id} = res;
+                    navigate(`${id}`);
+                })
+        }
     }
 
     const formProps = {

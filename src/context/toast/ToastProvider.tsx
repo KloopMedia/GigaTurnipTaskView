@@ -7,7 +7,7 @@ interface ToastContextType {
     closeToast: (event?: React.SyntheticEvent | Event, reason?: string) => void;
 }
 
-type ToastVariants = "success" | "error" | "warning" | "info";
+export type ToastVariants = "success" | "error" | "warning" | "info";
 
 export const ToastContext = React.createContext<ToastContextType>(null!);
 

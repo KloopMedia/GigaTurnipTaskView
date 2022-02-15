@@ -205,6 +205,15 @@ const useAxios = () => {
             .then(res => res.data)
     }
 
+    const getIntegratedData = (id: number) => {
+        return axios.get(`${tasksUrl + id}/get_integrated_tasks/`)
+            .then(res => res.data);
+    }
+
+    const triggerTaskWebhook = (id: number) => {
+        return axios.get(`${tasksUrl + id}/trigger_webhook/`)
+    }
+
     return {
         axios,
         getCampaigns,
@@ -232,6 +241,8 @@ const useAxios = () => {
         saveTask,
         releaseTask,
         openPreviousTask,
+        getIntegratedData,
+        triggerTaskWebhook
     }
 }
 

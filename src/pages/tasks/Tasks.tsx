@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {Box, Grid} from "@mui/material";
 import List from "../../components/list/List";
 import useAxios from "../../services/api/useAxios";
@@ -14,7 +14,6 @@ const Tasks = () => {
         getCreatableTasks,
         requestTaskCreation,
         getSelectableTasks,
-        requestTaskAssignment
     } = useAxios();
 
     const navigate = useNavigate();
@@ -58,41 +57,52 @@ const Tasks = () => {
         },
     ];
 
-    if (selectableTasks.count > 0) {
-        const d = formatData(selectableTasks.results)
+    const getData = useCallback((id: number, tab?: number) => {
+        switch (tab) {
+            case 0:
+                return getOpenTasks(id);
+            case 1:
+                return getCompleteTasks(id);
+            default:
+                return getOpenTasks(id);
+        }
+    }, [])
 
+    const mountData = useCallback((tab) => {
+        getData(parsedCampaignId, tab)
+            .then(res => formatData(res))
+            .then(res => setData(res));
+
+        getCreatableTasks(parsedCampaignId)
+            .then(res => setCreatableTasks(res));
+
+        getSelectableTasks(parsedCampaignId)
+            .then(res => setSelectableTasks(res));
+    }, [parsedCampaignId])
+
+    useEffect(() => {
+        mountData(tab)
+    }, [mountData, tab])
+
+    if (selectableTasks.count > 0) {
         TAB_DATA.push({
             label: 'Доступные',
             component: (
                 <Grid container py={2} spacing={2}>
                     {selectableTasks.results.map((item: any, index: number) =>
                         <Grid item xs={12} key={index}>
-                            <Task id={item.id} hidePrompt={true} variant={"quick"}/>
+                            <Task id={item.id} view={"split"} updateState={mountData} hidePrompt={true}
+                                  variant={"quick"}/>
                         </Grid>
                     )}
                 </Grid>
             )
         })
-    }
-
-    useEffect(() => {
-        const getData = (tab: number) => {
-            switch (tab) {
-                case 0:
-                    return getOpenTasks(parsedCampaignId);
-                case 1:
-                    return getCompleteTasks(parsedCampaignId);
-                default:
-                    return getOpenTasks(parsedCampaignId);
-            }
+    } else {
+        if (tab === 2) {
+            setTab(0);
         }
-
-        getData(tab)
-            .then(res => formatData(res))
-            .then(res => setData(res));
-        getCreatableTasks(parsedCampaignId).then(res => setCreatableTasks(res));
-        getSelectableTasks(parsedCampaignId).then(res => setSelectableTasks(res));
-    }, [parsedCampaignId, tab])
+    }
 
     return (
         <Box px={3}>

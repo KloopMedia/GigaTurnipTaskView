@@ -26,7 +26,6 @@ const Form: React.FC<Props> = (props) => {
     };
 
     const handleChange = (e: { formData: object }) => {
-        console.log(e.formData)
         if (onChange) {
             onChange(e.formData)
         } else {
@@ -35,7 +34,6 @@ const Form: React.FC<Props> = (props) => {
     }
 
     const handleSubmit = (e: {formData: object}) => {
-        console.log(e.formData)
         if (onSubmit) {
             onSubmit(e.formData)
         } else {

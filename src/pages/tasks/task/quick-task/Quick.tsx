@@ -1,39 +1,154 @@
-import React from 'react';
-import {Button, IconButton, Tooltip} from "@mui/material";
-import ExpandableCard from "../../../../components/card/ExpandableCard";
-import DoneIcon from '@mui/icons-material/Done';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import React, {useCallback, useEffect, useState} from 'react';
+import {Box} from "@mui/material";
+import {TaskProps} from "../Task.types";
+import {useNavigate} from "react-router-dom";
+import QuickView from "./QuickView";
 
-type Props = {
-    data: any,
+type Props = TaskProps & {
     active?: boolean,
-    onRequest: (id: number) => void,
-    onSelect: (id: number) => void
-};
+    hideSubmit?: boolean,
+    hideOpen?: boolean,
+    onAction?: (id: number, action: "add" | "remove") => void
+}
 
-const Quick: React.FC<Props> = (props) => {
-    const {data, active, onSelect, onRequest, children} = props;
+const Quick = (props: Props) => {
+    const {
+        id,
+        view,
+        active: isActive,
+        hideSubmit,
+        hideOpen,
+        fullwidth,
+        disabled,
+        getData,
+        getPreviousData,
+        saveData,
+        releaseTask,
+        debouncedSave,
+        openPreviousTask,
+        handleRedirect,
+        handlePrompt,
+        openToast,
+        requestTask,
+        onAction,
+        updateState
+    } = props;
 
-    const requestButton = active ?
-        (
-            <Tooltip key={"edit_button"} title={"Получен"}>
-                <IconButton color={"primary"} size={"small"}>
-                    <CheckCircleIcon color={"primary"} fontSize={"large"}/>
-                </IconButton>
-            </Tooltip>
-        )
-        :
-        (
-            <Button key={"edit_button"} variant={"contained"} onClick={() => onRequest(data.id)}>
-                Редактировать
-            </Button>
-        );
+    const navigate = useNavigate();
+
+    const [data, setData] = useState<any>();
+    const [formData, setFormData] = useState();
+    const [complete, setComplete] = useState(false);
+    const [previousTasks, setPreviousTasks] = useState([]);
+    const [active, setActive] = useState(isActive ?? false)
+
+    const mountData = useCallback(async (id) => {
+        const data = await getData(id);
+        const prev = await getPreviousData(id);
+
+        setPreviousTasks(prev)
+        setData(data);
+        setFormData(data.responses);
+        setComplete(data.complete);
+    }, [])
+
+    useEffect(() => {
+        mountData(id);
+    }, [mountData, id])
+
+    useEffect(() => {
+        if (typeof isActive === "boolean") {
+            setActive(isActive)
+        }
+    }, [isActive])
+
+
+    const handleRelease = () => {
+        releaseTask(id)
+            .then(() => setActive(false));
+    }
+
+    const handleOpenPrevious = () => {
+        openPreviousTask(id)
+            .then(res => {
+                const {id: prevId} = res;
+                handleRedirect(id, prevId, mountData);
+            })
+    };
+
+    const handleChange = (formData: any) => {
+        setFormData(formData);
+    }
+
+    const handleSubmit = (formData: any) => {
+        return saveData(id, {responses: formData, complete: true})
+            .then((res) => {
+                openToast("Данные сохранены", "success");
+                setActive(false);
+                updateState()
+            })
+            .catch(err => openToast(err.message, "error"));
+    }
+
+    const handleRequest = () => {
+        if (onAction) {
+            onAction(id, "add")
+        } else {
+            requestTask(id)
+                .then((res) => mountData(res.id))
+                .then(() => setActive(true))
+        }
+    }
+
+    const handleOpen = () => {
+        if (active) {
+            navigate(`${id}`);
+        } else {
+            requestTask(id)
+                .then(res => {
+                    const {id} = res;
+                    navigate(`${id}`);
+                })
+        }
+    }
+
+    const handleAction = () => {
+        if (onAction) {
+            onAction(id, "remove")
+        } else {
+            return null
+        }
+    }
+
+    useEffect(() => {
+        debouncedSave(id, {responses: formData});
+    }, [formData, complete, debouncedSave, id])
+
+    const formProps = {
+        data,
+        formData,
+        complete,
+        previousTasks: previousTasks,
+        disabled,
+        onChange: handleChange,
+        onSubmit: handleSubmit,
+        onRelease: handleRelease,
+        onPrevious: handleOpenPrevious,
+        onOpen: handleOpen,
+        onRequest: handleRequest
+    }
+
+    if (!data) {
+        return null;
+    }
 
     return (
-        <ExpandableCard data={data} extraActions={[requestButton]} onClick={onSelect}>
-            {children}
-        </ExpandableCard>
+        <Box>
+            <QuickView active={active} hideOpen={hideOpen} onAction={handleAction} hideSubmit={hideSubmit}
+                       view={view} {...formProps}/>
+        </Box>
     );
+
 };
 
 export default Quick

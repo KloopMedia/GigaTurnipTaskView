@@ -1,105 +1,121 @@
-import React from 'react';
-import Form from "../../../../components/form/Form";
-import {Box, Button, Grid, Stack} from "@mui/material";
+import React, {useCallback, useEffect, useState} from 'react';
+import {Box} from "@mui/material";
 import BuilderLayout from "../../../../components/layout/common-layouts/BuilderLayout";
-import {TaskViews} from "../Task.types";
+import {TaskProps} from "../Task.types";
+import CommonView from "./CommonView";
+import {useNavigate} from "react-router-dom";
 
-type Props = {
-    data: any,
-    formData: any,
-    complete: boolean,
-    view?: TaskViews,
-    fullwidth?: boolean,
-    disabled?: boolean,
-    previousTasks?: any[],
-    onChange: (formData: any) => void,
-    onSubmit: (formData: any) => void,
-    onRelease: () => void,
-    onPrevious: () => void
-};
 
-const Common = (props: Props) => {
+const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boolean) => void }) => {
     const {
-        data,
-        formData,
-        complete,
+        id,
         view,
         fullwidth,
         disabled,
-        previousTasks,
-        onChange,
-        onSubmit,
-        onRelease,
-        onPrevious
+        getData,
+        getPreviousData,
+        saveData,
+        releaseTask,
+        debouncedSave,
+        openPreviousTask,
+        handleRedirect,
+        handlePrompt,
+        openToast,
+        update,
+        forceUpdate
     } = props;
-    const {schema, uiSchema} = data;
-    const {allow_go_back, allow_release} = data.stage;
 
-    const inactive = disabled || complete;
-    const previousTasksCount = Array.isArray(previousTasks) && previousTasks.length;
+    const navigate = useNavigate();
 
-    const renderPreviousTasks = (tasks: any[] | undefined) => {
-        if (Array.isArray(tasks) && tasks.length > 0) {
-            return tasks.map((task: any, index) => {
-                    const {responses, schema, uiSchema} = task;
-                    return <Form key={`prev_task_${index}`} schema={schema} uiSchema={uiSchema} formData={responses}
-                                 hideButton={true} disabled={true}/>;
-                }
-            );
-        } else {
-            return null;
+    const [data, setData] = useState<any>();
+    const [formData, setFormData] = useState();
+    const [complete, setComplete] = useState(false);
+    const [previousTasks, setPreviousTasks] = useState([]);
+
+    const mountData = useCallback(async (id) => {
+        const data = await getData(id);
+        const prev = await getPreviousData(id);
+        console.log('updated')
+        setPreviousTasks(prev)
+        setData(data);
+        setFormData(data.responses);
+        setComplete(data.complete);
+    }, [])
+
+    useEffect(() => {
+        mountData(id);
+    }, [mountData, id])
+
+    useEffect(() => {
+        if (update && forceUpdate) {
+            mountData(id).then(() => forceUpdate(false))
         }
+    }, [update])
+
+
+    const handleRelease = () => {
+        handlePrompt(false);
+        releaseTask(id)
+            .then(() => navigate('../..'));
     }
 
-    const renderButtons = () => (
-        <Stack spacing={1} py={1}>
-            <Button type={"submit"} variant={"contained"} disabled={complete}>Отправить</Button>
-            <Button hidden={!allow_go_back} variant={"contained"} color={"warning"} disabled={complete}
-                    onClick={onPrevious}>Открыть предыдущее задание</Button>
-            <Button hidden={!allow_release} variant={"contained"} color={"error"} disabled={complete}
-                    onClick={onRelease}>Освободить задание</Button>
-        </Stack>
-    )
+    const handleOpenPrevious = () => {
+        openPreviousTask(id)
+            .then(res => {
+                const {id: prevId} = res;
+                handleRedirect(id, prevId, mountData);
+            })
+    };
 
-    let COMPONENT;
-
-    if (view === "split" && previousTasksCount) {
-        COMPONENT = (
-            <Grid container direction='row' spacing={1}>
-                <Grid container item sm={6} xs={12} sx={{display: 'block'}}>
-                    {renderPreviousTasks(previousTasks)}
-                </Grid>
-                <Grid container item sm={6} xs={12} sx={{display: 'block'}}>
-                    <Form schema={schema} uiSchema={uiSchema} formData={formData} onChange={onChange}
-                          onSubmit={onSubmit} disabled={inactive}>
-                        {renderButtons()}
-                    </Form>
-                </Grid>
-            </Grid>
-        );
-    } else {
-        COMPONENT = (
-            <Box>
-                {renderPreviousTasks(previousTasks)}
-                <Form schema={schema} uiSchema={uiSchema} formData={formData} onChange={onChange} onSubmit={onSubmit}
-                      disabled={inactive}>
-                    {renderButtons()}
-                </Form>
-            </Box>
-        );
+    const handleChange = (formData: any) => {
+        setFormData(formData);
     }
 
+    const handleSubmit = (formData: any) => {
+        return saveData(id, {responses: formData, complete: true})
+            .then((res) => {
+                handlePrompt(false);
+                openToast("Данные сохранены", "success");
+                const {next_direct_id} = res;
+                handleRedirect(id, next_direct_id, mountData);
+            })
+            .catch(err => openToast(err.message, "error"));
+    }
+
+    useEffect(() => {
+        debouncedSave(id, {responses: formData});
+        // Show Prompt if not complete
+        handlePrompt(!complete);
+    }, [formData, complete, debouncedSave, id])
+
+    const formProps = {
+        data,
+        formData,
+        complete,
+        previousTasks: previousTasks,
+        disabled,
+        onChange: handleChange,
+        onSubmit: handleSubmit,
+        onRelease: handleRelease,
+        onPrevious: handleOpenPrevious,
+    }
+
+    // TODO: Add rich_text
+
+    if (!data) {
+        return null;
+    }
     if (fullwidth) {
         return (
-            <Box p={2}>
-                {COMPONENT}
+            <Box>
+                <CommonView view={view} {...formProps}/>
             </Box>
         );
     }
 
     return (
-        <BuilderLayout p={2}>
-            {COMPONENT}
+        <BuilderLayout>
+            <CommonView view={view} {...formProps}/>
         </BuilderLayout>
     );
 };

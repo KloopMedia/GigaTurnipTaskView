@@ -9,6 +9,7 @@ import {useToast} from "../../../context/toast/hooks/useToast";
 import {usePrompt} from "../../../components/prompt/Prompt";
 import {TaskViews} from "./Task.types";
 import Quick from "./quick-task/Quick";
+import {Box} from "@mui/material";
 
 type Props = {
     variant?: "quick" | "integrated" | "common",
@@ -16,14 +17,26 @@ type Props = {
     view?: TaskViews,
     fullWidth?: boolean,
     hidePrompt?: boolean,
+    active?: boolean,
+    updateState?: Function
 }
 
 
 const Task = (props: Props) => {
-    const {variant, id, view, hidePrompt, fullWidth} = props;
+    const {variant, id, view, updateState: updateData, active: isActive, hidePrompt, fullWidth} = props;
 
     const {taskId} = useParams();
-    const {getTask, saveTask, getPreviousTasks, releaseTask, openPreviousTask, requestTaskAssignment} = useAxios();
+    const {
+        getTask,
+        saveTask,
+        getPreviousTasks,
+        releaseTask,
+        openPreviousTask,
+        requestTaskAssignment,
+        getIntegratedData,
+        triggerTaskWebhook
+    } = useAxios();
+
     const {openToast} = useToast();
     const navigate = useNavigate();
     const {parseId, parseTaskData} = useHelpers();
@@ -31,12 +44,8 @@ const Task = (props: Props) => {
     const parsedId = id ? id : parseId(taskId);
     const DEBOUNCE_SAVE_DELAY_MS = 2000;
 
-    const [data, setData] = useState<any>();
-    const [formData, setFormData] = useState();
-    const [complete, setComplete] = useState(false);
-    const [previousTasks, setPreviousTasks] = useState([]);
     const [showPrompt, setShowPrompt] = useState(false);
-    const [active, setActive] = useState(false);
+    const [data, setData] = useState<any>();
 
     usePrompt("Вы уверены, что хотите покинуть эту страницу?", hidePrompt ? false : showPrompt);
 
@@ -50,51 +59,39 @@ const Task = (props: Props) => {
             .then(res => res.map((task: any) => parseTaskData(task)));
     }, [])
 
-    const mountData = useCallback(async (id) => {
-        const data = await getData(id);
-        const prev = await getPreviousData(id);
+    const getIntegrated = useCallback((id) => {
+        return getIntegratedData(id)
+    }, [])
 
-        setPreviousTasks(prev)
-        setData(data);
-        setFormData(data.responses);
-        setComplete(data.complete);
+    const releaseUserTask = useCallback((id) => {
+        return releaseTask(id)
+    }, [])
+
+    const openPrevious = useCallback((id) => {
+        return openPreviousTask(id)
     }, [])
 
     const requestTask = useCallback((id) => {
         return requestTaskAssignment(id)
     }, [])
 
-    useEffect(() => {
-        mountData(parsedId);
-    }, [mountData, parsedId])
+    const triggerWebhook = useCallback((id) => {
+        return triggerTaskWebhook(id)
+    }, [])
 
-    const saveData = (data: { responses: any, complete?: boolean }) => {
-        return saveTask(parsedId, data);
-    }
+    const saveData = useCallback((id: number, data: { responses: any, complete?: boolean }) => {
+        return saveTask(id, data);
+    }, [])
 
-    const debouncedSave = useCallback(debounce((data, complete: boolean) => {
-        if (complete) {
-            return false;
-        }
-        return saveData(data)
+    const debouncedSave = useCallback(debounce((id: number, data) => {
+        return saveData(id, data)
     }, DEBOUNCE_SAVE_DELAY_MS), []);
 
-    useEffect(() => {
-        debouncedSave({responses: formData}, complete);
-        // Show Prompt if not complete
-        setShowPrompt(!complete);
-        return () => debouncedSave.cancel();
-    }, [formData, complete, debouncedSave])
-
-    const handleChange = (formData: any) => {
-        setFormData(formData);
-    }
-
-    const handleRedirect = (next_direct_id: number) => {
+    const handleRedirect = useCallback((id: number, next_direct_id: number, callback: Function) => {
         if (next_direct_id) {
-            if (next_direct_id === parsedId) {
+            if (next_direct_id === id) {
                 // Refresh data if it is the same task
-                getData(parsedId);
+                callback(id);
             } else {
                 // Go to next task
                 navigate(`../../${next_direct_id}`);
@@ -102,80 +99,58 @@ const Task = (props: Props) => {
         } else {
             navigate('../..');
         }
+    }, [])
+
+    const handlePrompt = useCallback((value: boolean) => {
+        setShowPrompt(value)
+    }, [])
+
+    const updateState = useCallback((id) => {
+        getData(id).then(res => setData(res))
+    }, [])
+
+    useEffect(() => {
+        updateState(parsedId)
+    }, [])
+
+    const taskMethods = {
+        getData,
+        getPreviousData,
+        getIntegrated,
+        releaseTask: releaseUserTask,
+        requestTask,
+        triggerWebhook,
+        saveData,
+        debouncedSave,
+        openPreviousTask: openPrevious,
+        handleRedirect,
+        handlePrompt,
+        openToast,
+        updateState: updateData ?? updateState
     }
 
-    const handleSubmit = (formData: any) => {
-        setComplete(true);
-        saveData({responses: formData, complete: true})
-            .then((res) => {
-                openToast("Данные сохранены", "success");
-                const {next_direct_id} = res;
-                handleRedirect(next_direct_id);
-            })
-            .catch(err => openToast(err.message, "error"));
-    }
 
-    const handleRelease = () => {
-        setShowPrompt(false);
-        releaseTask(parsedId)
-            .then(() => navigate('../..'));
-    }
-
-    const handleOpenPrevious = () => {
-        openPreviousTask(parsedId)
-            .then(res => {
-                const {id} = res;
-                handleRedirect(id);
-            })
-    };
-
-    const handleRequest = () => {
-        requestTask(parsedId)
-            .then((res) => mountData(res.id))
-            .then(() => setActive(true))
-    }
-
-    const handleSelect = () => {
-        if (active) {
-            navigate(`${parsedId}`);
-        } else {
-            requestTask(parsedId)
-                .then(res => {
-                    const {id} = res;
-                    navigate(`${id}`);
-                })
-        }
-    }
-
-    const formProps = {
-        data,
-        formData,
-        complete,
-        previousTasks: previousTasks,
-        onChange: handleChange,
-        onSubmit: handleSubmit,
-        onRelease: handleRelease,
-        onPrevious: handleOpenPrevious,
-    }
-
-    if (data) {
-        if (variant === "quick") {
-            const d = {name: data.stage.name, id: parsedId}
-            return <Quick active={active} data={d} onRequest={handleRequest} onSelect={handleSelect}>
-                <Common view={"split"} disabled={!active} fullwidth={true} {...formProps} />
-            </Quick>;
-        }
-
-        if (variant === "integrated") {
-            return <Integrated {...formProps} />;
-        }
-
+    if (variant === "quick") {
         return (
-            <Common view={view} fullwidth={fullWidth} {...formProps} />
+            <Box p={2}>
+                <Quick id={parsedId} view={view} fullwidth={fullWidth} {...taskMethods}/>
+            </Box>
         );
-    } else {
-        return null;
     }
+
+    if (variant === "integrated" || data?.integrator_group) {
+        return (
+            <Box p={2}>
+                <Integrated id={parsedId} {...taskMethods}/>
+            </Box>
+        );
+    }
+
+    return (
+        <Box p={2}>
+            <Common id={parsedId} view={view} fullwidth={fullWidth} {...taskMethods}/>
+        </Box>
+    );
 };
 
 export default Task

@@ -52,7 +52,7 @@ const Integrated = (props: TaskProps) => {
     }
 
     return (
-        <BuilderLayout>
+        <Box>
             <Grid container spacing={2}>
                 {integrations.map((item: any, index: number) =>
                     (
@@ -69,7 +69,7 @@ const Integrated = (props: TaskProps) => {
                 <Chip icon={<ArrowCircleDownIcon/>} label="Обобщающая форма"/>
             </Divider>
             <Common fullwidth={true} update={update} forceUpdate={forceUpdate} {...props} />
-        </BuilderLayout>
+        </Box>
     );
 };
 

@@ -100,11 +100,10 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
         onPrevious: handleOpenPrevious,
     }
 
-    // TODO: Add rich_text
-
     if (!data) {
         return null;
     }
+
     if (fullwidth) {
         return (
             <Box>

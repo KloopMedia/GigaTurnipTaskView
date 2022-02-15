@@ -10,6 +10,7 @@ import {usePrompt} from "../../../components/prompt/Prompt";
 import {TaskViews} from "./Task.types";
 import Quick from "./quick-task/Quick";
 import {Box} from "@mui/material";
+import TextViewer from "../../../components/text-editor/TextViewer";
 
 type Props = {
     variant?: "quick" | "integrated" | "common",
@@ -148,7 +149,8 @@ const Task = (props: Props) => {
 
     return (
         <Box p={2}>
-            <Common id={parsedId} view={view} fullwidth={fullWidth} {...taskMethods}/>
+            <TextViewer data={data?.stage?.rich_text} hidden={!data?.stage?.rich_text}/>
+            <Common id={parsedId} view={view} fullwidth={true} {...taskMethods}/>
         </Box>
     );
 };

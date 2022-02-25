@@ -133,7 +133,7 @@ const Task = (props: Props) => {
 
     if (variant === "quick") {
         return (
-            <Box p={2}>
+            <Box>
                 <Quick id={parsedId} view={view} fullwidth={fullWidth} {...taskMethods}/>
             </Box>
         );

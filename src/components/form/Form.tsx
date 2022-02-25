@@ -1,5 +1,5 @@
 import React from 'react';
-import {AudioWidget, AutoCompleteWidget, LinkWidget, RadioWidget} from "./custom-widgets";
+import {AudioWidget, AutoCompleteWidget, FileWidget, LinkWidget, RadioWidget} from "./custom-widgets";
 import JsonForm from "@rjsf/bootstrap-4";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {FormProps} from "@rjsf/core"
@@ -18,7 +18,7 @@ const Form: React.FC<Props> = (props) => {
     const {schema, uiSchema, formData, hideButton, onChange, onSubmit, children, disabled, ...rest} = props;
 
     const widgets = {
-        customfile: AudioWidget,
+        customfile: FileWidget,
         autocomplete: AutoCompleteWidget,
         RadioWidget: RadioWidget,
         customlink: LinkWidget,

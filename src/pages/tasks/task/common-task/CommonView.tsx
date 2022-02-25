@@ -2,6 +2,7 @@ import React from 'react';
 import {Box, Button, Grid, Stack} from "@mui/material";
 import Form from "../../../../components/form/Form";
 import {TaskViews} from "../Task.types";
+import {useAuth} from "../../../../context/authentication/hooks/useAuth";
 
 export type Props = {
     data: any,
@@ -19,9 +20,13 @@ export type Props = {
 
 const CommonView = (props: Props) => {
     const {data, view, complete, previousTasks, formData, disabled, hideSubmit, onChange, onSubmit, onRelease, onPrevious} = props;
-    const {schema, uiSchema} = data;
-    const {allow_go_back, allow_release} = data.stage;
+    const {id: taskId, schema, uiSchema} = data;
+    const {id: stageId, allow_go_back, allow_release} = data.stage;
+    const {id: chainId, campaign: campaignId} = data.stage.chain;
     const inactive = disabled || complete;
+
+    const {user} = useAuth();
+    const storagePath = user ? `${campaignId}/${chainId}/${stageId}/${user.uid}/${taskId}` : null;
 
     const renderPreviousTasks = (tasks: any[] | undefined) => {
         if (Array.isArray(tasks) && tasks.length > 0) {
@@ -54,7 +59,7 @@ const CommonView = (props: Props) => {
                 </Grid>
                 <Grid container item sm={6} xs={12} sx={{display: 'block'}}>
                     <Form schema={schema} uiSchema={uiSchema} formData={formData} onChange={onChange}
-                          onSubmit={onSubmit} disabled={inactive}>
+                          onSubmit={onSubmit} formContext={{storagePath}} disabled={inactive}>
                         {renderButtons()}
                     </Form>
                 </Grid>
@@ -65,8 +70,7 @@ const CommonView = (props: Props) => {
             <Box>
                 {renderPreviousTasks(previousTasks)}
                 <Form schema={schema} uiSchema={uiSchema} formData={formData} onChange={onChange}
-                      onSubmit={onSubmit}
-                      disabled={inactive}>
+                      onSubmit={onSubmit} formContext={{storagePath}} disabled={inactive}>
                     {renderButtons()}
                 </Form>
             </Box>

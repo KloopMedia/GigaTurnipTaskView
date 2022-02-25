@@ -1,8 +1,8 @@
-import AudioWidget from "./AudioWidget";
-import AutoCompleteWidget from "./AutoCompleteWidget";
-import FileWidget from "./CustomFileWidget";
-import LinkWidget from "./CustomLinkWidget";
-import RadioWidget from "./FixedRadioWidget";
+import AudioWidget from "./audio-widget/AudioWidget";
+import AutoCompleteWidget from "./auto-complete-widget/AutoCompleteWidget";
+import FileWidget from "./file-widget/CustomFileWidget";
+import LinkWidget from "./link-widget/CustomLinkWidget";
+import RadioWidget from "./radio-widget/FixedRadioWidget";
 
 export {
     AudioWidget,

@@ -10,6 +10,7 @@ const conditionalstagesUrl = "api/v1/conditionalstages/"
 const manualstagesUrl = "api/v1/manualstages/" // TBD
 const casesUrl = "api/v1/cases/"
 const tasksUrl = "api/v1/tasks/"
+const notificationsUrl = "/api/v1/notifications/"
 
 export {
     baseUrl,
@@ -22,5 +23,6 @@ export {
     conditionalstagesUrl,
     casesUrl,
     tasksUrl,
-    manualstagesUrl
+    manualstagesUrl,
+    notificationsUrl
 }

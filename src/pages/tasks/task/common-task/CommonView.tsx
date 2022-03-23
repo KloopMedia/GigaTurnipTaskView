@@ -3,6 +3,7 @@ import {Box, Button, Grid, Stack} from "@mui/material";
 import Form from "../../../../components/form/Form";
 import {TaskViews} from "../Task.types";
 import {useAuth} from "../../../../context/authentication/hooks/useAuth";
+import {useTranslation} from "react-i18next";
 
 export type Props = {
     data: any,
@@ -19,12 +20,25 @@ export type Props = {
 };
 
 const CommonView = (props: Props) => {
-    const {data, view, complete, previousTasks, formData, disabled, hideSubmit, onChange, onSubmit, onRelease, onPrevious} = props;
+    const {
+        data,
+        view,
+        complete,
+        previousTasks,
+        formData,
+        disabled,
+        hideSubmit,
+        onChange,
+        onSubmit,
+        onRelease,
+        onPrevious
+    } = props;
     const {id: taskId, schema, uiSchema} = data;
     const {id: stageId, allow_go_back, allow_release} = data.stage;
     const {id: chainId, campaign: campaignId} = data.stage.chain;
     const inactive = disabled || complete;
 
+    const {t} = useTranslation();
     const {user} = useAuth();
     const storagePath = user ? `${campaignId}/${chainId}/${stageId}/${user.uid}/${taskId}` : null;
 
@@ -32,8 +46,14 @@ const CommonView = (props: Props) => {
         if (Array.isArray(tasks) && tasks.length > 0) {
             return tasks.map((task: any, index) => {
                     const {responses, schema, uiSchema} = task;
-                    return <Form key={`prev_task_${index}`} schema={schema} uiSchema={uiSchema} formData={responses}
-                                 hideButton={true} disabled={true}/>;
+                    return <Form
+                        key={`prev_task_${index}`}
+                        schema={schema}
+                        uiSchema={uiSchema}
+                        formData={responses}
+                        hideButton={true}
+                        disabled={true}
+                    />;
                 }
             );
         } else {
@@ -43,11 +63,12 @@ const CommonView = (props: Props) => {
 
     const renderButtons = () => (
         <Stack spacing={1} py={1}>
-            <Button type={"submit"} variant={"contained"} hidden={hideSubmit} disabled={inactive}>Отправить</Button>
+            <Button type={"submit"} variant={"contained"} hidden={hideSubmit}
+                    disabled={inactive}>{t("task.submit")}</Button>
             <Button hidden={!allow_go_back} variant={"contained"} color={"warning"} disabled={inactive}
-                    onClick={onPrevious}>Открыть предыдущее задание</Button>
+                    onClick={onPrevious}>{t("task.open_previous")}</Button>
             <Button hidden={!allow_release} variant={"contained"} color={"error"} disabled={inactive}
-                    onClick={onRelease}>Освободить задание</Button>
+                    onClick={onRelease}>{t("task.release")}</Button>
         </Stack>
     )
 

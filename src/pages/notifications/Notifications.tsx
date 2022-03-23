@@ -4,6 +4,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import useAxios from "../../services/api/useAxios";
 import useHelpers from "../../utils/hooks/UseHelpers";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
+import {useTranslation} from "react-i18next";
 
 
 const Notifications = ({importance, onlyNew}: { importance?: number, onlyNew?: boolean }) => {
@@ -19,6 +20,7 @@ const Notifications = ({importance, onlyNew}: { importance?: number, onlyNew?: b
     const {parseId, formatDateString} = useHelpers();
     const parsedCampaignId = parseId(campaignId);
     const {getUserNotifications} = useAxios();
+    const {t} = useTranslation();
 
     useEffect(() => {
         if (tab === "1") {
@@ -84,13 +86,13 @@ const Notifications = ({importance, onlyNew}: { importance?: number, onlyNew?: b
     } else {
         return (
             <Box>
-                <Typography align={"center"} variant={"h5"} p={2}>Уведомления</Typography>
+                <Typography align={"center"} variant={"h5"} p={2}>{t("notifications.title")}</Typography>
                 <Box sx={{width: '100%', typography: 'body1'}}>
                     <TabContext value={tab}>
                         <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                             <TabList onChange={handleTabChange} aria-label="lab API tabs example" centered variant={"fullWidth"}>
-                                <Tab label="Непрочитанные" value="1"/>
-                                <Tab label="Прочитанные" value="2"/>
+                                <Tab label={t("notifications.unread")} value="1"/>
+                                <Tab label={t("notifications.read")} value="2"/>
                             </TabList>
                         </Box>
                         <TabPanel value="1">

@@ -7,6 +7,7 @@ import CardContent from "@mui/material/CardContent";
 import Card from "@mui/material/Card";
 import {styled} from "@mui/material/styles";
 import IconButton, {IconButtonProps} from "@mui/material/IconButton";
+import {useTranslation} from "react-i18next";
 
 type Props = {
     data: any,
@@ -35,6 +36,7 @@ const ExpandableCard: React.FC<Props> = (props) => {
     const {data, children, hideExpandButton, hideOpenButton, extraActions, onClick} = props;
     const {name, description, id} = data;
     const [expand, setExpand] = useState(false);
+    const {t} = useTranslation();
 
     const handleToggle = () => {
         setExpand(!expand)
@@ -53,7 +55,7 @@ const ExpandableCard: React.FC<Props> = (props) => {
 
     if (!hideOpenButton) {
         actions.push(
-            <Button key={"open_button"} variant={"contained"} onClick={handleClick}>Открыть</Button>
+            <Button key={"open_button"} variant={"contained"} onClick={handleClick}>{t("open")}</Button>
         )
     }
 

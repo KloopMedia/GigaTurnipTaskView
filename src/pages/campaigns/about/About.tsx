@@ -5,6 +5,7 @@ import useAxios from "../../../services/api/useAxios";
 import {useNavigate, useParams} from "react-router-dom";
 import useHelpers from "../../../utils/hooks/UseHelpers";
 import TextViewer from "../../../components/text-editor/TextViewer";
+import {useTranslation} from "react-i18next";
 
 type Props = {};
 
@@ -15,6 +16,7 @@ const About = (props: Props) => {
     const {campaignId} = useParams();
     const {parseId} = useHelpers();
     const parsedCampaignId = parseId(campaignId);
+    const {t} = useTranslation();
 
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
@@ -45,7 +47,7 @@ const About = (props: Props) => {
             <Typography variant={"h3"} align={"center"}>{name}</Typography>
             <Typography variant={"h6"} align={"center"}>{description}</Typography>
             {richText && <TextViewer data={richText}/>}
-            <Button variant={"contained"} color={"warning"} fullWidth onClick={joinCampaign}>Присоединиться / Кошулуу</Button>
+            <Button variant={"contained"} color={"warning"} fullWidth onClick={joinCampaign}>{t("campaigns.join")}</Button>
         </BuilderLayout>
     );
 };

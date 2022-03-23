@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Box, Grid, Pagination, Tab, Typography} from "@mui/material";
+import {Box, Grid, Pagination, Tab} from "@mui/material";
 import List from "../../components/list/List";
 import useAxios from "../../services/api/useAxios";
 import {useNavigate, useParams} from "react-router-dom";
@@ -8,6 +8,7 @@ import Task from "./task/Task";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
 import TaskFilter from "./TaskFilter";
 import Notifications from '../notifications/Notifications';
+import {useTranslation} from "react-i18next";
 
 const Tasks = () => {
     const {
@@ -22,6 +23,7 @@ const Tasks = () => {
     const {campaignId} = useParams();
     const {parseId} = useHelpers();
     const parsedCampaignId = parseId(campaignId);
+    const {t} = useTranslation();
 
     const [openTasks, setOpenTasks] = useState([]);
     const [completedTasks, setCompletedTasks] = useState([]);
@@ -107,9 +109,9 @@ const Tasks = () => {
             <TabContext value={tab}>
                 <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                     <TabList onChange={handleTabChange} aria-label="lab API tabs example" variant="fullWidth">
-                        <Tab label="Открытые" value="1"/>
-                        <Tab label="Завершенные" value="2"/>
-                        <Tab label="Доступные" value="3" hidden={selectableTasks.length === 0}/>
+                        <Tab label={t("tasks.uncompleted")} value="1"/>
+                        <Tab label={t("tasks.completed")} value="2"/>
+                        <Tab label={t("tasks.available")} value="3" hidden={selectableTasks.length === 0}/>
                     </TabList>
                 </Box>
                 <TabPanel value="1">

@@ -1,28 +1,31 @@
-import React, {useContext} from "react";
-import {Box, Button, Grid, Typography} from "@mui/material";
+import React from "react";
+import {Box, Button, Typography} from "@mui/material";
 import {useAuth} from "../../context/authentication/hooks/useAuth";
 import {useLocation, useNavigate} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 
 const Login = () => {
     const {login} = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+    const {t} = useTranslation();
 
     // @ts-ignore
     const from = location?.state?.from?.pathname || "/";
 
     const handleLogin = () => {
-        login(() => navigate(from, { replace: true }))
+        login(() => navigate(from, {replace: true}))
     }
 
     return (
         <Box p={3}>
-            <Typography align="center" variant="h4">Регистрация</Typography>
-            <Typography variant="body1" align="center">Нажмите на кнопку (Вход или Регистрация).</Typography>
-            <Typography variant="body1" align="center">Если у вас нет аккаунта Google, то создайте его.</Typography>
+            <Typography align="center" variant="h4">{t("sign_up_page.title")}</Typography>
+            <Typography variant="body1" align="center">{t("sign_up_page.description1")}</Typography>
+            <Typography variant="body1" align="center">{t("sign_up_page.description2")}</Typography>
             <Box display={"flex"} justifyContent={"center"} p={2}>
-                <Button size="large" color="primary" variant="contained" fullWidth={true} onClick={handleLogin}>Регистрация</Button>
+                <Button size="large" color="primary" variant="contained" fullWidth={true}
+                        onClick={handleLogin}>{t("sign_up_page.sign_up_button")}</Button>
             </Box>
         </Box>
     )

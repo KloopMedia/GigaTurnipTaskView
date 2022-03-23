@@ -3,6 +3,7 @@ import {AudioWidget, AutoCompleteWidget, FileWidget, LinkWidget, RadioWidget} fr
 import JsonForm from "@rjsf/bootstrap-4";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {FormProps} from "@rjsf/core"
+import {useTranslation} from "react-i18next";
 
 interface Props extends FormProps<any> {
     schema: object,
@@ -16,6 +17,7 @@ interface Props extends FormProps<any> {
 
 const Form: React.FC<Props> = (props) => {
     const {schema, uiSchema, formData, hideButton, onChange, onSubmit, children, disabled, ...rest} = props;
+    const {t} = useTranslation();
 
     const widgets = {
         customfile: FileWidget,
@@ -47,7 +49,7 @@ const Form: React.FC<Props> = (props) => {
         } else if (hideButton) {
             return " "
         } else {
-            return <button type="submit" className="btn btn-primary" disabled={disabled}>Отправить</button>
+            return <button type="submit" className="btn btn-primary" disabled={disabled}>{t("submit")}</button>
         }
     }
 

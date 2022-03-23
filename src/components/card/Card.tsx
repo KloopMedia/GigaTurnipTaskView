@@ -1,6 +1,7 @@
 import React from 'react';
 import {Button, CardActions, CardContent, Typography} from '@mui/material'
 import MuiCard from '@mui/material/Card';
+import {useTranslation} from "react-i18next";
 
 type Props = {
     data: any;
@@ -10,6 +11,8 @@ type Props = {
 const Card = (props: Props) => {
     const {data, onClick} = props;
     const {name, description, id} = data;
+
+    const {t} = useTranslation();
 
     const handleClick = () => {
         onClick(id)
@@ -27,7 +30,7 @@ const Card = (props: Props) => {
                 </Typography>
             </CardContent>
             <CardActions>
-                <Button size="small" onClick={handleClick}>Открыть</Button>
+                <Button size="small" onClick={handleClick}>{t("open")}</Button>
             </CardActions>
         </MuiCard>
     );

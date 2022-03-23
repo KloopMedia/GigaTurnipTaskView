@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {auth, provider} from "../../services/firebase/Firebase";
 import {signInWithPopup, getIdToken, signOut, onIdTokenChanged} from "firebase/auth";
+import {useTranslation} from "react-i18next";
 
 interface AuthContextType {
     user: any;
@@ -15,6 +16,7 @@ export const AuthContext = React.createContext<AuthContextType>(null!);
 const AuthProvider = ({children}: { children: React.ReactNode }) => {
     const [user, setUser] = useState<any>(null);
     const [ready, setReady] = useState(false);
+    const {i18n} = useTranslation();
 
     useEffect(() => {
         onIdTokenChanged(auth, async (user) => {
@@ -25,6 +27,11 @@ const AuthProvider = ({children}: { children: React.ReactNode }) => {
             }
             setReady(true)
         });
+
+        const lang = localStorage.getItem('lang');
+        if (lang) {
+            i18n.changeLanguage(lang);
+        }
     }, [])
 
     const getToken = async () => {

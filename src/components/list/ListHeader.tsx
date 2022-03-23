@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import GridViewIcon from "@mui/icons-material/GridView";
 import ViewListIcon from "@mui/icons-material/ViewList";
 import {ViewProps} from "./List.types";
+import {useTranslation} from "react-i18next";
 
 type Props = {
     label?: string,
@@ -16,6 +17,8 @@ type Props = {
 
 const ListHeader = (props: Props) => {
     const {label, view, location, hideCreateButton, hideViewButton, onViewChange} = props;
+    const {t} = useTranslation();
+
     return (
         <Grid container alignItems={"center"} spacing={1}>
             <Grid item flex={1}>
@@ -27,10 +30,10 @@ const ListHeader = (props: Props) => {
                         color: 'white',
                         boxShadow: 'none',
                     }
-                }}>Создать</Button>
+                }}>{t("list_header.create")}</Button>
             </Grid>
             <Grid item hidden={hideViewButton}>
-                <Tooltip title={"Сетка"}>
+                <Tooltip title={t("list_header.grid") as string}>
                     <IconButton
                         color={view === "grid" ? "primary" : "default"}
                         onClick={() => onViewChange("grid")}
@@ -38,7 +41,7 @@ const ListHeader = (props: Props) => {
                         <GridViewIcon/>
                     </IconButton>
                 </Tooltip>
-                <Tooltip title={"Список"}>
+                <Tooltip title={t("list_header.list") as string}>
                     <IconButton
                         color={view === "list" ? "primary" : "default"}
                         onClick={() => onViewChange("list")}

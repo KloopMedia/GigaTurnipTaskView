@@ -20,6 +20,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {Button} from "@mui/material";
 import {useAuth} from "../../../context/authentication/hooks/useAuth";
+import {useTranslation} from "react-i18next";
 
 const drawerWidth = 240;
 
@@ -99,6 +100,8 @@ export default function Appbar(props: { children?: any }) {
     const navigate = useNavigate();
     const {logout} = useAuth();
     const [open, setOpen] = React.useState(false);
+    const { t, i18n } = useTranslation();
+
     const {children} = props;
 
     const handleDrawerOpen = () => {
@@ -110,8 +113,8 @@ export default function Appbar(props: { children?: any }) {
     };
 
     const DrawerItems = [
-        {page: "tasks", title: "Задания", icon: <AssignmentIcon/>},
-        {page: "notifications", title: "Уведомления", icon: <NotificationsIcon/>}
+        {page: "tasks", title: t("appbar.tasks"), icon: <AssignmentIcon/>},
+        {page: "notifications", title: t("appbar.tasks"), icon: <NotificationsIcon/>}
     ]
 
     const renderDrawerItems = () => {
@@ -124,6 +127,16 @@ export default function Appbar(props: { children?: any }) {
             </ListItem>
         ));
     };
+
+    const handleLanguageChange = () => {
+        if (i18n.language === "ru") {
+            i18n.changeLanguage("en");
+            localStorage.setItem('lang', "en");
+        } else {
+            i18n.changeLanguage("ru");
+            localStorage.setItem('lang', "ru");
+        }
+    }
 
     return (
         <Box sx={{display: 'flex'}}>
@@ -152,7 +165,8 @@ export default function Appbar(props: { children?: any }) {
                             GigaTurnip Tasks
                         </MuiLink>
                     </Box>
-                    <Button color={"inherit"} onClick={() => logout(() => navigate('/'))}>Выход</Button>
+                    <Button color={"inherit"} onClick={handleLanguageChange}>{i18n.language}</Button>
+                    <Button color={"inherit"} onClick={() => logout(() => navigate('/'))}>{t("appbar.log_out")}</Button>
                 </Toolbar>
             </StyledAppBar>
             {campaignId && <Drawer variant="permanent" open={open}>

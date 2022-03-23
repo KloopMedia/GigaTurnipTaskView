@@ -121,7 +121,9 @@ const Quick = (props: Props) => {
     }
 
     useEffect(() => {
-        debouncedSave(id, {responses: formData});
+        if (active) {
+            debouncedSave(id, {responses: formData});
+        }
     }, [formData, complete, debouncedSave, id])
 
     const formProps = {

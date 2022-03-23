@@ -21,3 +21,11 @@ export type TaskProps = {
     openToast: (msg: string, type: ToastVariants) => void,
     updateState: Function
 };
+
+export type FilterData = {
+    schema: object,
+    uiSchema?: object,
+    formData?: any,
+    onChange: (formData: object) => void,
+    onSubmit?: (formData: object) => void
+};

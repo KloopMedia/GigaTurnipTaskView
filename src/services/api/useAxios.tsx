@@ -136,7 +136,7 @@ const useAxios = () => {
     }
 
     // TaskMenu Functions
-    const getSelectableTasks = (campaignId: string | number, page?: number, filter?: { query?: string, stage?: string } | null) => {
+    const getSelectableTasks = (campaignId: number, page?: number, filter?: { query?: string, stage?: string } | null) => {
         console.log(page)
         let url = createPaginationURL(`${tasksUrl}user_selectable/?stage__chain__campaign=${campaignId}`, page)
         if (filter) {

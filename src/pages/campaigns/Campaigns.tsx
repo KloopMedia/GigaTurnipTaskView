@@ -27,7 +27,7 @@ const Campaigns = () => {
     return (
         <Box px={3} py={1}>
             <List id={"user_campaigns"} data={data} hideCreateButton={true} label={"Кампании"} onSelect={handleOpen}/>
-            <List id={"selectable_campaigns"} data={data} hideCreateButton={true} label={"Доступные кампании"} onSelect={handleSelect}/>
+            <List hidden={selectableCampaigns.length === 0} id={"selectable_campaigns"} data={selectableCampaigns} hideCreateButton={true} label={"Доступные кампании"} onSelect={handleSelect}/>
         </Box>
     )
 }

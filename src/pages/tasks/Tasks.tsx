@@ -7,6 +7,7 @@ import useHelpers from "../../utils/hooks/UseHelpers";
 import Task from "./task/Task";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
 import TaskFilter from "./TaskFilter";
+import Notifications from '../notifications/Notifications';
 
 const Tasks = () => {
     const {
@@ -100,6 +101,7 @@ const Tasks = () => {
 
     return (
         <Box px={3}>
+            <Notifications importance={0} onlyNew={true}/>
             <List id={"creatable_tasks"} data={creatableTasks} onSelect={handleCreate} hideViewButton={true}
                   hideCreateButton={true}/>
             <TabContext value={tab}>

@@ -24,10 +24,26 @@ const useHelpers = () => {
         })
     }
 
+    const formatDateString = (date: string) => {
+        const d = new Date(date)
+        const year = d.getFullYear()
+        const month = addZeroesToDate(d.getMonth() + 1)
+        const day = addZeroesToDate(d.getDate())
+        const hours = addZeroesToDate(d.getHours())
+        const minutes = addZeroesToDate(d.getMinutes())
+        const seconds = addZeroesToDate(d.getSeconds())
+        return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`
+    }
+
+    const addZeroesToDate = (date: number) => {
+        return date < 10 ? '0' + date : date
+    }
+
     return {
         parseId,
         parseJson,
-        parseTaskData
+        parseTaskData,
+        formatDateString
     };
 };
 

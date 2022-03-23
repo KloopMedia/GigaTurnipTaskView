@@ -1,4 +1,12 @@
-import {baseUrl, campaignsUrl, chainsUrl, conditionalstagesUrl, taskstagesUrl, tasksUrl} from "./Urls";
+import {
+    baseUrl,
+    campaignsUrl,
+    chainsUrl,
+    conditionalstagesUrl,
+    notificationsUrl,
+    taskstagesUrl,
+    tasksUrl
+} from "./Urls";
 import defaultAxios from "axios";
 import {useAuth} from "../../context/authentication/hooks/useAuth";
 import {useToast} from "../../context/toast/hooks/useToast";
@@ -214,6 +222,22 @@ const useAxios = () => {
         return axios.get(`${tasksUrl + id}/trigger_webhook/`)
     }
 
+    // Notifications Functions
+    const getUserNotifications = (campaignId: number, viewed: boolean, importance?: number, page?: number) => {
+        const url = createPaginationURL(`${notificationsUrl}list_user_notifications/?campaign=${campaignId}&viewed=${viewed}`, page)
+        if (importance === 0) {
+            return axios.get(`${url}&importance=${importance}`)
+                .then(res => res.data)
+        } else {
+            return axios.get(url)
+                .then(res => res.data)
+        }
+    }
+
+    const getNotificationContent = (id: number) => {
+        return axios.get(`${notificationsUrl + id}/`).then(res => res.data)
+    }
+
     return {
         axios,
         getCampaigns,
@@ -242,7 +266,9 @@ const useAxios = () => {
         releaseTask,
         openPreviousTask,
         getIntegratedData,
-        triggerTaskWebhook
+        triggerTaskWebhook,
+        getUserNotifications,
+        getNotificationContent
     }
 }
 

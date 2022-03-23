@@ -15,7 +15,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {Button} from "@mui/material";
 import {useAuth} from "../../../context/authentication/hooks/useAuth";
@@ -109,7 +110,8 @@ export default function Appbar(props: { children?: any }) {
     };
 
     const DrawerItems = [
-        {page: "tasks", title: "Задания", icon: <InboxIcon/>}
+        {page: "tasks", title: "Задания", icon: <AssignmentIcon/>},
+        {page: "notifications", title: "Уведомления", icon: <NotificationsIcon/>}
     ]
 
     const renderDrawerItems = () => {

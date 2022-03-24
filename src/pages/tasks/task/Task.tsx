@@ -9,8 +9,9 @@ import {useToast} from "../../../context/toast/hooks/useToast";
 import {usePrompt} from "../../../components/prompt/Prompt";
 import {TaskViews} from "./Task.types";
 import Quick from "./quick-task/Quick";
-import {Box} from "@mui/material";
+import {Alert, Box} from "@mui/material";
 import TextViewer from "../../../components/text-editor/TextViewer";
+import AssignmentReturnIcon from '@mui/icons-material/AssignmentReturn';
 
 type Props = {
     variant?: "quick" | "integrated" | "common",
@@ -150,6 +151,9 @@ const Task = (props: Props) => {
 
     return (
         <Box p={2}>
+            <Alert icon={<AssignmentReturnIcon fontSize="inherit"/>} hidden={!(data && data.reopened)} sx={{mb: 2}}
+                   severity="error">Это задание было возвращено!
+            </Alert>
             <TextViewer data={data?.stage?.rich_text} hidden={!data?.stage?.rich_text}/>
             <Common id={parsedId} view={view} fullwidth={true} {...taskMethods}/>
         </Box>

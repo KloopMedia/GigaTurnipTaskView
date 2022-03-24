@@ -10,7 +10,7 @@ type Props = {
 
 const Card = (props: Props) => {
     const {data, onClick} = props;
-    const {name, description, id} = data;
+    const {name, description, id, reopened} = data;
 
     const {t} = useTranslation();
 
@@ -25,12 +25,14 @@ const Card = (props: Props) => {
                     {name}
                 </Typography>
                 <Typography gutterBottom variant={"caption"} color="text.secondary">ID: {id}</Typography>
-                <Typography overflow={"hidden"} textOverflow={"ellipsis"} variant="body2" sx={{height: 60, maxWidth: 500}}>
+                <Typography overflow={"hidden"} textOverflow={"ellipsis"} variant="body2"
+                            sx={{height: 60, maxWidth: 500}}>
                     {description}
                 </Typography>
             </CardContent>
-            <CardActions>
+            <CardActions sx={{justifyContent: "space-between"}}>
                 <Button size="small" onClick={handleClick}>{t("open")}</Button>
+                <Typography color={"error"} hidden={!reopened}>Возвращено</Typography>
             </CardActions>
         </MuiCard>
     );

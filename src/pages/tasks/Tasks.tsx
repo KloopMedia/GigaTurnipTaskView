@@ -48,10 +48,11 @@ const Tasks = () => {
     }
 
     const formatData = (data: any[]) => {
-        return data.map((item: { id: number, stage: { name: string, description: string } }) => ({
+        return data.map((item: { id: number, reopened?: boolean, stage: { name: string, description: string } }) => ({
             id: item.id,
             name: item.stage.name,
-            description: item.stage.description
+            description: item.stage.description,
+            reopened: item.reopened ? item.reopened : false
         })) as any;
     }
 

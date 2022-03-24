@@ -114,7 +114,7 @@ export default function Appbar(props: { children?: any }) {
 
     const DrawerItems = [
         {page: "tasks", title: t("appbar.tasks"), icon: <AssignmentIcon/>},
-        {page: "notifications", title: t("appbar.tasks"), icon: <NotificationsIcon/>}
+        {page: "notifications", title: t("appbar.notifications"), icon: <NotificationsIcon/>}
     ]
 
     const renderDrawerItems = () => {

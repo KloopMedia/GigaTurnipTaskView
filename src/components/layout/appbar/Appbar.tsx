@@ -18,7 +18,7 @@ import ListItemText from '@mui/material/ListItemText';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {Button} from "@mui/material";
+import {Button, Typography} from "@mui/material";
 import {useAuth} from "../../../context/authentication/hooks/useAuth";
 import {useTranslation} from "react-i18next";
 
@@ -98,7 +98,7 @@ export default function Appbar(props: { children?: any }) {
     const theme = useTheme();
     const {campaignId} = useParams();
     const navigate = useNavigate();
-    const {logout} = useAuth();
+    const {user, logout} = useAuth();
     const [open, setOpen] = React.useState(false);
     const { t, i18n } = useTranslation();
 
@@ -149,7 +149,7 @@ export default function Appbar(props: { children?: any }) {
                         onClick={handleDrawerOpen}
                         edge="start"
                         sx={{
-                            marginRight: '36px',
+                            marginRight: '16px',
                             ...(open && {display: 'none'}),
                         }}
                     >
@@ -164,6 +164,7 @@ export default function Appbar(props: { children?: any }) {
                         }}>
                             GigaTurnip Tasks
                         </MuiLink>
+                        <Typography variant={"subtitle2"}>{user?.email}</Typography>
                     </Box>
                     <Button color={"inherit"} onClick={handleLanguageChange}>{i18n.language}</Button>
                     <Button color={"inherit"} onClick={() => logout(() => navigate('/'))}>{t("appbar.log_out")}</Button>

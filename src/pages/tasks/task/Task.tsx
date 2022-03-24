@@ -107,11 +107,12 @@ const Task = (props: Props) => {
     }, [])
 
     const updateState = useCallback((id) => {
-        getData(id).then(res => setData(res))
+        return getData(id).then(res => setData(res))
     }, [])
 
     useEffect(() => {
         updateState(parsedId)
+            .then(() => window.scrollTo(0, 0));
     }, [parsedId])
 
     const taskMethods = {

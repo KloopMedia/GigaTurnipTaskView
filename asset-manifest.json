@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/GigaTurnipTaskView/static/css/main.afd7172b.chunk.css",
-    "main.js": "/GigaTurnipTaskView/static/js/main.ba4f4bed.chunk.js",
-    "main.js.map": "/GigaTurnipTaskView/static/js/main.ba4f4bed.chunk.js.map",
+    "main.js": "/GigaTurnipTaskView/static/js/main.204afed9.chunk.js",
+    "main.js.map": "/GigaTurnipTaskView/static/js/main.204afed9.chunk.js.map",
     "runtime-main.js": "/GigaTurnipTaskView/static/js/runtime-main.1d4af3d5.js",
     "runtime-main.js.map": "/GigaTurnipTaskView/static/js/runtime-main.1d4af3d5.js.map",
     "static/css/2.0a9ec390.chunk.css": "/GigaTurnipTaskView/static/css/2.0a9ec390.chunk.css",
@@ -20,6 +20,6 @@
     "static/css/2.0a9ec390.chunk.css",
     "static/js/2.341b9df3.chunk.js",
     "static/css/main.afd7172b.chunk.css",
-    "static/js/main.ba4f4bed.chunk.js"
+    "static/js/main.204afed9.chunk.js"
   ]
 }

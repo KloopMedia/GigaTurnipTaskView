@@ -112,7 +112,7 @@ const Task = (props: Props) => {
 
     useEffect(() => {
         updateState(parsedId)
-    }, [])
+    }, [parsedId])
 
     const taskMethods = {
         getData,

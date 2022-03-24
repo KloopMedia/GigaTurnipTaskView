@@ -1,5 +1,4 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import BuilderLayout from "../../../../components/layout/common-layouts/BuilderLayout";
 import {Box, Button, Chip, Divider, Grid} from "@mui/material";
 import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown"
 import Quick from "../quick-task/Quick";

@@ -48,7 +48,7 @@ const Quick = (props: Props) => {
 
         setPreviousTasks(prev)
         setData(data);
-        setFormData(data.responses);
+        setFormData(data.responses ?? {});
         setComplete(data.complete);
     }, [])
 

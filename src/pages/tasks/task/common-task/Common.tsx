@@ -38,7 +38,7 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
         console.log('updated')
         setPreviousTasks(prev)
         setData(data);
-        setFormData(data.responses);
+        setFormData(data.responses ?? {});
         setComplete(data.complete);
     }, [])
 

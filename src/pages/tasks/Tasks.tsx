@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {Box, Grid, Pagination, Tab} from "@mui/material";
+import {Box, Grid, Pagination, Tab, Typography} from "@mui/material";
 import List from "../../components/list/List";
 import useAxios from "../../services/api/useAxios";
 import {useNavigate, useParams} from "react-router-dom";
@@ -9,6 +9,8 @@ import {TabContext, TabList, TabPanel} from "@mui/lab";
 import TaskFilter from "./TaskFilter";
 import Notifications from '../notifications/Notifications';
 import {useTranslation} from "react-i18next";
+import Card from "../../components/card/Card";
+import TaskCard from "../../components/card/TaskCard";
 
 const Tasks = () => {
     const {
@@ -56,26 +58,28 @@ const Tasks = () => {
         })) as any;
     }
 
-    const getSelectable = useCallback(() => {
+    const getSelectable = () => {
         return getSelectableTasks(parsedCampaignId, page, filterFormData).then(res => {
             setTotalPages(Math.ceil(res.count / 10))
             return res.results;
         })
-    }, [parsedCampaignId, page, filterFormData]);
+    };
 
     const getData = (id: number, tab: string) => {
         if (tab === "1") {
-            getOpenTasks(id).then(res => formatData(res)).then(res => setOpenTasks(res));
+            getOpenTasks(id).then(res => setOpenTasks(res));
         } else if (tab === "2") {
-            getCompleteTasks(id).then(res => formatData(res)).then(res => setCompletedTasks(res));
+            getCompleteTasks(id).then(res => setCompletedTasks(res));
+        } else if (tab === "3") {
+            getSelectable().then(res => setSelectableTasks(res));
         }
     }
 
     useEffect(() => {
         getData(parsedCampaignId, tab);
 
-        getSelectable()
-            .then(res => setSelectableTasks(res));
+        // getSelectable()
+        //     .then(res => setSelectableTasks(res));
     }, [tab, page])
 
     useEffect(() => {
@@ -103,7 +107,7 @@ const Tasks = () => {
     }
 
     return (
-        <Box px={3}>
+        <Box px={1}>
             <Notifications importance={0} onlyNew={true}/>
             <List id={"creatable_tasks"} data={creatableTasks} onSelect={handleCreate} hideViewButton={true}
                   hideCreateButton={true}/>
@@ -112,27 +116,58 @@ const Tasks = () => {
                     <TabList onChange={handleTabChange} aria-label="lab API tabs example" variant="fullWidth">
                         <Tab label={t("tasks.uncompleted")} value="1"/>
                         <Tab label={t("tasks.completed")} value="2"/>
-                        <Tab label={t("tasks.available")} value="3" hidden={selectableTasks.length === 0}/>
+                        <Tab label={t("tasks.available")} value="3"/>
                     </TabList>
                 </Box>
-                <TabPanel value="1">
-                    <List id={"open_tasks"} data={openTasks} onSelect={handleOpen} hideCreateButton={true}/>
+                <TabPanel value="1" sx={{padding: 1}}>
+                    {/*<List id={"open_tasks"} data={openTasks} onSelect={handleOpen} hideCreateButton={true}/>*/}
+                    <Grid container py={2} spacing={{xs: 2, md: 3}} columns={{xs: 4, sm: 8, md: 12}}>
+                        {openTasks.length > 0 && openTasks.map((item: any, index) =>
+                            <Grid item xs={2} sm={4} md={4} key={index}>
+                                <TaskCard onClick={handleOpen} id={item.id} name={item.stage.name}
+                                          description={item.stage.description} reopened={item.reopened}/>
+                            </Grid>
+                        )}
+                    </Grid>
                 </TabPanel>
-                <TabPanel value="2">
-                    <List id={"complete_tasks"} data={completedTasks} onSelect={handleOpen} hideCreateButton={true}/>
+                <TabPanel value="2" sx={{padding: 1}}>
+                    {/*<List id={"complete_tasks"} data={completedTasks} onSelect={handleOpen} hideCreateButton={true}/>*/}
+                    <Grid container py={2} spacing={{xs: 2, md: 3}} columns={{xs: 4, sm: 8, md: 12}}>
+                        {completedTasks.length > 0 && completedTasks.map((item: any, index) =>
+                            <Grid item xs={2} sm={4} md={4} key={index}>
+                                <TaskCard onClick={handleOpen} id={item.id} name={item.stage.name}
+                                          description={item.stage.description} reopened={item.reopened}/>
+                            </Grid>
+                        )}
+                    </Grid>
+                    {/*<Box pb={2} display={"flex"} justifyContent={"center"}>*/}
+                    {/*    <Pagination count={totalPages} page={page} onChange={handlePageChange} showFirstButton*/}
+                    {/*                showLastButton/>*/}
+                    {/*</Box>*/}
                 </TabPanel>
-                <TabPanel value="3">
+                <TabPanel value="3" sx={{padding: 1}}>
                     <TaskFilter onFilter={getFilteredData} campaign={parsedCampaignId}/>
                     <Grid container py={2} spacing={2}>
-                        {selectableTasks.length > 0 && selectableTasks.map((item: any, index: number) =>
+                        {selectableTasks.length > 0 ? selectableTasks.map((item: any, index: number) =>
                             <Grid item xs={12} key={index}>
                                 <Task id={item.id} view={"split"} updateState={() => getData(parsedCampaignId, tab)}
                                       hidePrompt={true}
                                       variant={"quick"}/>
                             </Grid>
-                        )}
+                        )
+                            :
+                            <Typography align={"center"}>Нет доступных заданий.</Typography>
+                        }
                     </Grid>
-                    <Box pb={2} display={"flex"} justifyContent={"center"}>
+                    {/*<Grid container py={2} spacing={{xs: 2, md: 3}} columns={{xs: 4, sm: 8, md: 12}}>*/}
+                    {/*    {selectableTasks.length > 0 && selectableTasks.map((item: any, index: number) =>*/}
+                    {/*        <Grid item xs={2} sm={4} md={4} key={index}>*/}
+                    {/*            <TaskCard onClick={handleOpen} id={item.id} name={item.stage.name}*/}
+                    {/*                      description={item.stage.description} reopened={item.reopened}/>*/}
+                    {/*        </Grid>*/}
+                    {/*    )}*/}
+                    {/*</Grid>*/}
+                    <Box pb={2} display={"flex"} justifyContent={"center"} hidden={totalPages <= 1}>
                         <Pagination count={totalPages} page={page} onChange={handlePageChange} showFirstButton
                                     showLastButton/>
                     </Box>

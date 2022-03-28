@@ -10,7 +10,7 @@ type Props = {
     reopened: boolean,
     onClick: (id: number) => void;
 };
-
+// TODO: Merge TaskCard with Card
 const TaskCard = (props: Props) => {
     const {name, description, id, reopened, onClick} = props;
 
@@ -34,7 +34,7 @@ const TaskCard = (props: Props) => {
             </CardContent>
             <CardActions sx={{justifyContent: "space-between"}}>
                 <Button size="small" onClick={handleClick}>{t("open")}</Button>
-                <Typography color={"error"} hidden={!reopened}>Возвращено</Typography>
+                <Typography color={"error"} hidden={!reopened}>{t('returned')}</Typography>
             </CardActions>
         </MuiCard>
     );

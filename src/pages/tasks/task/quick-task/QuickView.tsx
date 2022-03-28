@@ -4,6 +4,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ExpandableCard from "../../../../components/card/ExpandableCard";
 import CommonView from "../common-task/CommonView";
 import {TaskViews} from "../Task.types";
+import {useTranslation} from "react-i18next";
 
 type Props = {
     active: boolean,
@@ -27,9 +28,12 @@ type Props = {
 const QuickView = (props: Props) => {
     const {active, onRequest, onOpen, onAction, hideSubmit, hideOpen, ...rest} = props;
     const cardData = {name: props.data.stage.name, id: props.data.id}
+
+    const {t} = useTranslation();
+
     const requestButton = active ?
         (
-            <Tooltip key={"edit_button"} title={"Получен"}>
+            <Tooltip key={"edit_button"} title={t("accepted") as string}>
                 <IconButton color={"primary"} size={"small"} onClick={onAction}>
                     <CheckCircleIcon color={"primary"} fontSize={"large"}/>
                 </IconButton>
@@ -38,7 +42,7 @@ const QuickView = (props: Props) => {
         :
         (
             <Button key={"edit_button"} variant={"contained"} onClick={onRequest}>
-                Редактировать
+                {t('edit')}
             </Button>
         );
 

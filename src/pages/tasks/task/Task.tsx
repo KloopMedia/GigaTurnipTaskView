@@ -12,6 +12,7 @@ import Quick from "./quick-task/Quick";
 import {Alert, Box} from "@mui/material";
 import TextViewer from "../../../components/text-editor/TextViewer";
 import AssignmentReturnIcon from '@mui/icons-material/AssignmentReturn';
+import {useTranslation} from "react-i18next";
 
 type Props = {
     variant?: "quick" | "integrated" | "common",
@@ -27,6 +28,7 @@ type Props = {
 const Task = (props: Props) => {
     const {variant, id, view, updateState: updateData, active: isActive, hidePrompt, fullWidth} = props;
 
+    const {t} = useTranslation();
     const {taskId} = useParams();
     const {
         getTask,
@@ -152,7 +154,8 @@ const Task = (props: Props) => {
     return (
         <Box p={2}>
             <Alert icon={<AssignmentReturnIcon fontSize="inherit"/>} hidden={!(data && data.reopened)} sx={{mb: 2}}
-                   severity="error">Это задание было возвращено!
+                   severity="error">
+                {t('task.returned_message')}
             </Alert>
             <TextViewer data={data?.stage?.rich_text} hidden={!data?.stage?.rich_text}/>
             <Common id={parsedId} view={view} fullwidth={true} {...taskMethods}/>

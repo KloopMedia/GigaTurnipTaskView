@@ -4,6 +4,9 @@ import {initReactI18next} from "react-i18next";
 const resources = {
     en: {
         translation: {
+            returned: "Returned",
+            edit: "Edit",
+            accepted: "Accepted",
             notifications: {
                 title: "Notifications",
                 unread: "Unread",
@@ -17,6 +20,7 @@ const resources = {
                 notifications: "Notifications"
             },
             task: {
+                returned_message: "This task was returned",
                 open_previous: "Open previous",
                 release: "Release",
                 submit: "Submit",
@@ -48,6 +52,9 @@ const resources = {
     },
     ru: {
         translation: {
+            returned: "Возвращено",
+            edit: "Редактировать",
+            accepted: "Получен",
             notifications: {
                 title: "Уведомления",
                 unread: "Непрочитанные",
@@ -61,6 +68,7 @@ const resources = {
                 notifications: "Уведомления"
             },
             task: {
+                returned_message: "Это задание было возвращено!",
                 open_previous: "Открыть предыдущее задание",
                 release: "Освободить задание",
                 submit: "Отправить",

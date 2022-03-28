@@ -44,12 +44,16 @@ const Quick = (props: Props) => {
 
     const mountData = useCallback(async (id) => {
         const data = await getData(id);
-        const prev = await getPreviousData(id);
-
-        setPreviousTasks(prev)
         setData(data);
         setFormData(data.responses ?? {});
         setComplete(data.complete);
+        try {
+            const prev = await getPreviousData(id);
+            setPreviousTasks(prev)
+        } catch (error) {
+            setPreviousTasks([])
+            console.log(error);
+        }
     }, [])
 
     useEffect(() => {

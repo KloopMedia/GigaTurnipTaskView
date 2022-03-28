@@ -4,6 +4,7 @@ import BuilderLayout from "../../../../components/layout/common-layouts/BuilderL
 import {TaskProps} from "../Task.types";
 import CommonView from "./CommonView";
 import {useNavigate} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 
 const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boolean) => void }) => {
@@ -26,6 +27,7 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
     } = props;
 
     const navigate = useNavigate();
+    const {t} = useTranslation();
 
     const [data, setData] = useState<any>();
     const [formData, setFormData] = useState();
@@ -75,7 +77,7 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
         return saveData(id, {responses: formData, complete: true})
             .then((res) => {
                 handlePrompt(false);
-                openToast("Данные сохранены", "success");
+                openToast(t("task.saved_message"), "success");
                 const {next_direct_id} = res;
                 handleRedirect(id, next_direct_id, mountData);
             })

@@ -51,7 +51,7 @@ const Task = (props: Props) => {
     const [showPrompt, setShowPrompt] = useState(false);
     const [data, setData] = useState<any>();
 
-    usePrompt("Вы уверены, что хотите покинуть эту страницу?", hidePrompt ? false : showPrompt);
+    usePrompt(t("task.leave_page"), hidePrompt ? false : showPrompt);
 
     const getData = useCallback((id) => {
         return getTask(id)

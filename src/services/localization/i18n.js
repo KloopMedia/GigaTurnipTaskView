@@ -20,10 +20,12 @@ const resources = {
                 notifications: "Notifications"
             },
             task: {
+                leave_page: "Are you sure you want to leave this page?",
                 returned_message: "This task was returned",
                 open_previous: "Open previous",
                 release: "Release",
                 submit: "Submit",
+                saved_message: "Saved"
             },
             sign_up_page: {
                 title: "Register",
@@ -68,10 +70,12 @@ const resources = {
                 notifications: "Уведомления"
             },
             task: {
+                leave_page: "Вы уверены, что хотите покинуть эту страницу?",
                 returned_message: "Это задание было возвращено!",
                 open_previous: "Открыть предыдущее задание",
                 release: "Освободить задание",
                 submit: "Отправить",
+                saved_message: "Данные сохранены"
             },
             sign_up_page: {
                 title: "Регистрация",

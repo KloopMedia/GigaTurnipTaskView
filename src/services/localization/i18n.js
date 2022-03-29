@@ -7,6 +7,7 @@ const resources = {
             returned: "Returned",
             edit: "Edit",
             accepted: "Accepted",
+            choose_files: "Choose files",
             notifications: {
                 title: "Notifications",
                 unread: "Unread",
@@ -57,6 +58,7 @@ const resources = {
             returned: "Возвращено",
             edit: "Редактировать",
             accepted: "Получен",
+            choose_files: "Выбрать файлы",
             notifications: {
                 title: "Уведомления",
                 unread: "Непрочитанные",

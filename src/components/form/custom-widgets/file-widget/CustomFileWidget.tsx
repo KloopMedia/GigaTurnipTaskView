@@ -2,10 +2,16 @@ import React, {useEffect, useState} from 'react'
 import upload from "./Upload";
 import LinearProgressWithLabel from "../../../progress/LinearProgressWithLabel";
 import ImageViewer from 'react-simple-image-viewer';
-import {Dialog} from "@mui/material";
+import {Button, Dialog} from "@mui/material";
 import {ref, getDownloadURL, getMetadata} from "firebase/storage";
 import {storage} from "../../../../services/firebase/Firebase";
+import {styled} from "@mui/material/styles";
+import {useTranslation} from "react-i18next";
 
+
+const Input = styled('input')({
+    display: 'none',
+});
 
 const CustomFileWidget = (props: any) => {
     const {schema, uiSchema, disabled, required, formContext, value, id} = props;
@@ -17,6 +23,8 @@ const CustomFileWidget = (props: any) => {
     const [isVideoOpen, setIsVideoOpen] = useState(false);
     const [fileType, setFileType] = useState("")
     const [parsedValue, setParsedValue] = useState<any>({})
+
+    const {t} = useTranslation();
 
     const privateUpload = uiSchema["ui:options"] && uiSchema["ui:options"].private ? uiSchema["ui:options"].private : false
     const multipleSelect = uiSchema["ui:options"] && uiSchema["ui:options"].multiple ? uiSchema["ui:options"].multiple : false
@@ -161,8 +169,20 @@ const CustomFileWidget = (props: any) => {
 
             <label className={"form-label"}>{schema?.title}</label>
             <br/>
-            <input disabled={disabled} required={isInputRequired} multiple={multipleSelect} type="file"
-                   onChange={handleChange} onBlur={_onBlur} onFocus={_onFocus}/>
+            <label htmlFor="contained-button-file" style={{paddingBottom: 8}}>
+                <Input
+                    id="contained-button-file"
+                    disabled={disabled}
+                    required={isInputRequired}
+                    multiple={multipleSelect} type="file"
+                    onChange={handleChange}
+                    onBlur={_onBlur}
+                    onFocus={_onFocus}
+                />
+                <Button disabled={disabled} variant="contained" component="span">
+                    {t('choose_files')}
+                </Button>
+            </label>
 
             {Object.keys(uploadedFiles).map((filename, i) =>
                 <div key={filename}>

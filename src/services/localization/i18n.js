@@ -4,6 +4,10 @@ import {initReactI18next} from "react-i18next";
 const resources = {
     en: {
         translation: {
+            widgets: {
+                date_time_label: "Date & Time",
+                date_label: "Date"
+            },
             returned: "Returned",
             edit: "Edit",
             accepted: "Accepted",
@@ -55,6 +59,10 @@ const resources = {
     },
     ru: {
         translation: {
+            widgets: {
+                date_time_label: "Дата и Время",
+                date_label: "Дата"
+            },
             returned: "Возвращено",
             edit: "Редактировать",
             accepted: "Получен",

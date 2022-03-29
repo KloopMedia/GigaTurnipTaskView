@@ -1,9 +1,18 @@
 import React from 'react';
-import {AudioWidget, AutoCompleteWidget, FileWidget, LinkWidget, RadioWidget} from "./custom-widgets";
+import {
+    AudioWidget,
+    AutoCompleteWidget,
+    DateTimeWidget,
+    DateWidget,
+    FileWidget,
+    LinkWidget,
+    RadioWidget
+} from "./custom-widgets";
 import JsonForm from "@rjsf/bootstrap-4";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {FormProps} from "@rjsf/core"
 import {useTranslation} from "react-i18next";
+
 
 interface Props extends FormProps<any> {
     schema: object,
@@ -24,7 +33,9 @@ const Form: React.FC<Props> = (props) => {
         autocomplete: AutoCompleteWidget,
         RadioWidget: RadioWidget,
         customlink: LinkWidget,
-        audio: AudioWidget
+        audio: AudioWidget,
+        DateTimeWidget: DateTimeWidget,
+        DateWidget: DateWidget
     };
 
     const handleChange = (e: { formData: object }) => {
@@ -35,7 +46,7 @@ const Form: React.FC<Props> = (props) => {
         }
     }
 
-    const handleSubmit = (e: {formData: object}) => {
+    const handleSubmit = (e: { formData: object }) => {
         if (onSubmit) {
             onSubmit(e.formData)
         } else {

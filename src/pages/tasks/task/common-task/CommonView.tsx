@@ -65,9 +65,9 @@ const CommonView = (props: Props) => {
         <Stack spacing={1} py={1}>
             <Button type={"submit"} variant={"contained"} hidden={hideSubmit}
                     disabled={inactive}>{t("task.submit")}</Button>
-            <Button hidden={!allow_go_back} variant={"contained"} color={"warning"} disabled={inactive}
+            <Button hidden={!allow_go_back} variant={"contained"} color={"secondary"} disabled={inactive}
                     onClick={onPrevious}>{t("task.open_previous")}</Button>
-            <Button hidden={!allow_release} variant={"contained"} color={"error"} disabled={inactive}
+            <Button hidden={!allow_release} variant={"contained"} color={"warning"} disabled={inactive}
                     onClick={onRelease}>{t("task.release")}</Button>
         </Stack>
     )

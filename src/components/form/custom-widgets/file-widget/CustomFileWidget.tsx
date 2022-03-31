@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import upload from "./Upload";
 import LinearProgressWithLabel from "../../../progress/LinearProgressWithLabel";
 import ImageViewer from 'react-simple-image-viewer';
-import {Button, Dialog} from "@mui/material";
+import {Box, Button, Dialog} from "@mui/material";
 import {ref, getDownloadURL, getMetadata} from "firebase/storage";
 import {storage} from "../../../../services/firebase/Firebase";
 import {styled} from "@mui/material/styles";
@@ -169,51 +169,73 @@ const CustomFileWidget = (props: any) => {
 
             <label className={"form-label"}>{schema?.title}</label>
             <br/>
-            <label htmlFor="contained-button-file" style={{paddingBottom: 8}}>
-                <Input
-                    id="contained-button-file"
-                    disabled={disabled}
-                    required={isInputRequired}
-                    multiple={multipleSelect} type="file"
-                    onChange={handleChange}
-                    onBlur={_onBlur}
-                    onFocus={_onFocus}
-                />
-                <Button disabled={disabled} variant="contained" component="span">
-                    {t('choose_files')}
-                </Button>
-            </label>
+            {/*<label htmlFor="contained-button-file" style={{paddingBottom: 8}}>*/}
+            {/*    <Input*/}
+            {/*        id="contained-button-file"*/}
+            {/*        disabled={disabled}*/}
+            {/*        required={isInputRequired}*/}
+            {/*        multiple={multipleSelect} type="file"*/}
+            {/*        onChange={handleChange}*/}
+            {/*        onBlur={_onBlur}*/}
+            {/*        onFocus={_onFocus}*/}
+            {/*    />*/}
+            {/*    <Button disabled={disabled} variant="contained" component="span">*/}
+            {/*        {t('choose_files')}*/}
+            {/*    </Button>*/}
+            {/*</label>*/}
 
-            {Object.keys(uploadedFiles).map((filename, i) =>
-                <div key={filename}>
-                    <div style={{display: "flex", alignItems: "baseline"}}>
-                        <p>{filename}</p>
-                        {uploadedFiles[filename].status === 'complete' &&
-                            <div style={{display: "flex", alignItems: "baseline"}}>
-                                <button
-                                    onClick={() => handleFileClick(filename)}
-                                    style={{fontSize: "14px", padding: 0, margin: "0 10px"}}
-                                    type="button"
-                                    className="btn btn-link text-success"
-                                >
-                                    посмотреть файл
-                                </button>
-                                {!disabled &&
+            <Box pb={1}>
+                <Button
+                    variant="contained"
+                    component="label"
+                    disabled={disabled}
+                >
+                    {t('choose_files')}
+                    <input
+                        type="file"
+                        hidden
+                        disabled={disabled}
+                        required={isInputRequired}
+                        multiple={multipleSelect}
+                        onChange={handleChange}
+                        onBlur={_onBlur}
+                        onFocus={_onFocus}
+                    />
+                </Button>
+            </Box>
+
+            {
+                Object.keys(uploadedFiles).map((filename, i) =>
+                    <div key={filename}>
+                        <div style={{display: "flex", alignItems: "baseline"}}>
+                            <p>{filename}</p>
+                            {uploadedFiles[filename].status === 'complete' &&
+                                <div style={{display: "flex", alignItems: "baseline"}}>
                                     <button
-                                        onClick={() => deleteFile(filename)}
+                                        onClick={() => handleFileClick(filename)}
                                         style={{fontSize: "14px", padding: 0, margin: "0 10px"}}
                                         type="button"
-                                        className="btn btn-link text-danger"
+                                        className="btn btn-link text-success"
                                     >
-                                        удалить
-                                    </button>}
-                            </div>
-                        }
+                                        посмотреть файл
+                                    </button>
+                                    {!disabled &&
+                                        <button
+                                            onClick={() => deleteFile(filename)}
+                                            style={{fontSize: "14px", padding: 0, margin: "0 10px"}}
+                                            type="button"
+                                            className="btn btn-link text-danger"
+                                        >
+                                            удалить
+                                        </button>}
+                                </div>
+                            }
+                        </div>
+                        {uploadedFiles[filename].status === 'loading' &&
+                            <LinearProgressWithLabel value={uploadedFiles[filename].progress}/>}
                     </div>
-                    {uploadedFiles[filename].status === 'loading' &&
-                        <LinearProgressWithLabel value={uploadedFiles[filename].progress}/>}
-                </div>
-            )}
+                )
+            }
         </div>
     )
 }

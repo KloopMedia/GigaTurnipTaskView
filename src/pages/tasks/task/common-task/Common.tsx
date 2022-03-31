@@ -31,7 +31,7 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
 
     const [data, setData] = useState<any>();
     const [formData, setFormData] = useState();
-    const [complete, setComplete] = useState(false);
+    const [complete, setComplete] = useState(true);
     const [previousTasks, setPreviousTasks] = useState([]);
 
     const mountData = useCallback(async (id) => {

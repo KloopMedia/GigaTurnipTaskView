@@ -38,7 +38,7 @@ const Quick = (props: Props) => {
 
     const [data, setData] = useState<any>();
     const [formData, setFormData] = useState();
-    const [complete, setComplete] = useState(false);
+    const [complete, setComplete] = useState(true);
     const [previousTasks, setPreviousTasks] = useState([]);
     const [active, setActive] = useState(isActive ?? false)
 

@@ -115,7 +115,11 @@ const Task = (props: Props) => {
 
     useEffect(() => {
         updateState(parsedId)
-            .then(() => window.scrollTo(0, 0));
+            .then(() => {
+                if (variant !== "quick") {
+                    window.scrollTo(0, 0);
+                }
+            });
     }, [parsedId])
 
     const taskMethods = {

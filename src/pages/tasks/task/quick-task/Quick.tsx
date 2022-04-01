@@ -43,6 +43,7 @@ const Quick = (props: Props) => {
     const [active, setActive] = useState(isActive ?? false)
 
     const mountData = useCallback(async (id) => {
+        setActive(false);
         const data = await getData(id);
         setData(data);
         setFormData(data.responses ?? {});

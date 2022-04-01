@@ -1,4 +1,4 @@
-import React, {ReactNode, useState} from 'react';
+import React, {ReactNode, useEffect, useState} from 'react';
 import CardHeader from "@mui/material/CardHeader";
 import {Button, Stack} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -41,6 +41,10 @@ const ExpandableCard: React.FC<Props> = (props) => {
     const handleToggle = () => {
         setExpand(!expand)
     }
+
+    useEffect(() => {
+        setExpand(false);
+    }, [id])
 
     const handleClick = () => {
         if (onClick) {

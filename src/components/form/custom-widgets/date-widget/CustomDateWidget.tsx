@@ -39,7 +39,7 @@ function DateWidget(props: WidgetProps) {
                 mask="__.__.____"
                 disabled={disabled}
                 readOnly={readonly}
-                value={new Date(value)}
+                value={value ? new Date(value) : null}
                 label={t("widgets.date_label")}
                 onChange={value => onChange(value?.toJSON()?.slice(0, 10))}
                 ignoreInvalidInputs={true}

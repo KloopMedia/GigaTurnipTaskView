@@ -39,7 +39,7 @@ function DateTimeWidget(props: WidgetProps) {
                 mask="__.__.____ __:__"
                 disabled={disabled}
                 readOnly={readonly}
-                value={new Date(value)}
+                value={value ? new Date(value) : null}
                 label={t("widgets.date_time_label")}
                 onChange={value => onChange(value?.toJSON())}
                 ignoreInvalidInputs={true}

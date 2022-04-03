@@ -167,7 +167,10 @@ const CustomFileWidget = (props: any) => {
                 </video>
             </Dialog>
 
-            <label className={"form-label"}>{schema?.title}</label>
+            <label className={"form-label"}>
+                {schema?.title}
+                {schema?.title && required ? "*" : null}
+            </label>
             <br/>
             {/*<label htmlFor="contained-button-file" style={{paddingBottom: 8}}>*/}
             {/*    <Input*/}

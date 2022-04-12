@@ -1,9 +1,10 @@
 import React from 'react';
-import {Box, Button, Grid, Stack} from "@mui/material";
+import {Box, Button, Chip, Divider, Grid, Stack} from "@mui/material";
 import Form from "../../../../components/form/Form";
 import {TaskViews} from "../Task.types";
 import {useAuth} from "../../../../context/authentication/hooks/useAuth";
 import {useTranslation} from "react-i18next";
+import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 
 export type Props = {
     data: any,
@@ -90,6 +91,9 @@ const CommonView = (props: Props) => {
         return (
             <Box>
                 {renderPreviousTasks(previousTasks)}
+                <Divider hidden={previousTasks?.length === 0} sx={{py: 1}}>
+                    <Chip icon={<ArrowCircleDownIcon/>} color={"primary"} label={t("task.divider_text")}/>
+                </Divider>
                 <Form schema={schema} uiSchema={uiSchema} formData={formData} onChange={onChange}
                       onSubmit={onSubmit} formContext={{storagePath}} disabled={inactive}>
                     {renderButtons()}

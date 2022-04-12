@@ -35,6 +35,7 @@ const resources = {
                 release: "Release",
                 submit: "Submit",
                 saved_message: "Saved",
+                divider_text: "Current Task"
             },
             sign_up_page: {
                 title: "Register",
@@ -94,6 +95,7 @@ const resources = {
                 release: "Освободить задание",
                 submit: "Отправить",
                 saved_message: "Данные сохранены",
+                divider_text: "Текущая форма"
             },
             sign_up_page: {
                 title: "Регистрация",

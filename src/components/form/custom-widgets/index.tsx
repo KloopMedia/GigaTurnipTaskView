@@ -5,6 +5,7 @@ import LinkWidget from "./link-widget/CustomLinkWidget";
 import RadioWidget from "./radio-widget/FixedRadioWidget";
 import DateTimeWidget from "./date-time-widget/CustomDateTimeWidget";
 import DateWidget from "./date-widget/CustomDateWidget";
+import SelectWidget from "./select-widget/FixedSelectWidget";
 
 
 export {
@@ -14,5 +15,6 @@ export {
     LinkWidget,
     RadioWidget,
     DateTimeWidget,
-    DateWidget
+    DateWidget,
+    SelectWidget
 }

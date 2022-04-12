@@ -6,7 +6,8 @@ import {
     DateWidget,
     FileWidget,
     LinkWidget,
-    RadioWidget
+    RadioWidget,
+    SelectWidget
 } from "./custom-widgets";
 import JsonForm from "@rjsf/bootstrap-4";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -35,7 +36,8 @@ const Form: React.FC<Props> = (props) => {
         customlink: LinkWidget,
         audio: AudioWidget,
         DateTimeWidget: DateTimeWidget,
-        DateWidget: DateWidget
+        DateWidget: DateWidget,
+        SelectWidget: SelectWidget
     };
 
     const handleChange = (e: { formData: object }) => {

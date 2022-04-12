@@ -193,7 +193,7 @@ const CustomFileWidget = (props: any) => {
                     component="label"
                     disabled={disabled}
                 >
-                    {t('choose_files')}
+                    {t('files.choose_files')}
                     <input
                         type="file"
                         hidden
@@ -220,7 +220,7 @@ const CustomFileWidget = (props: any) => {
                                         type="button"
                                         className="btn btn-link text-success"
                                     >
-                                        посмотреть файл
+                                        {t("files.view_file")}
                                     </button>
                                     {!disabled &&
                                         <button
@@ -229,7 +229,7 @@ const CustomFileWidget = (props: any) => {
                                             type="button"
                                             className="btn btn-link text-danger"
                                         >
-                                            удалить
+                                            {t("files.remove_file")}
                                         </button>}
                                 </div>
                             }

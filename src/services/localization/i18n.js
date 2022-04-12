@@ -11,7 +11,11 @@ const resources = {
             returned: "Returned",
             edit: "Edit",
             accepted: "Accepted",
-            choose_files: "Choose files",
+            files: {
+                choose_files: "Choose files",
+                view_file: "View",
+                remove_file: "Remove"
+            },
             notifications: {
                 title: "Notifications",
                 unread: "Unread",
@@ -30,7 +34,7 @@ const resources = {
                 open_previous: "Open previous",
                 release: "Release",
                 submit: "Submit",
-                saved_message: "Saved"
+                saved_message: "Saved",
             },
             sign_up_page: {
                 title: "Register",
@@ -66,7 +70,11 @@ const resources = {
             returned: "Возвращено",
             edit: "Редактировать",
             accepted: "Получен",
-            choose_files: "Выбрать файлы",
+            files: {
+                choose_files: "Выбрать файлы",
+                view_file: "Посмотреть файл",
+                remove_file: "Удалить"
+            },
             notifications: {
                 title: "Уведомления",
                 unread: "Непрочитанные",
@@ -85,7 +93,7 @@ const resources = {
                 open_previous: "Открыть предыдущее задание",
                 release: "Освободить задание",
                 submit: "Отправить",
-                saved_message: "Данные сохранены"
+                saved_message: "Данные сохранены",
             },
             sign_up_page: {
                 title: "Регистрация",

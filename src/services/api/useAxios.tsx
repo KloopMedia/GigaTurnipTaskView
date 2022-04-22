@@ -132,6 +132,11 @@ const useAxios = () => {
             .catch((err) => openToast(err.message));
     }
 
+    const getTaskFields = (id: number) => {
+        return axios.get(`${taskstagesUrl + id}/schema_fields/`)
+            .then(res => res.data);
+    }
+
     // TaskCard Functions
     const requestTaskCreation = (id: number) => {
         return axios.post(taskstagesUrl + id + '/create_task/')
@@ -144,20 +149,11 @@ const useAxios = () => {
     }
 
     // TaskMenu Functions
-    const getSelectableTasks = (campaignId: number, page?: number, filter?: { query?: string, stage?: string } | null) => {
-        console.log(page)
+    const getSelectableTasks = (campaignId: number, page?: number, filter?: string) => {
         let url = createPaginationURL(`${tasksUrl}user_selectable/?stage__chain__campaign=${campaignId}`, page)
         if (filter) {
-            if (filter.query) {
-                // url += `&task_responses=${filter.query}`
-                url += `&search=${filter.query}`
-            }
-            if (filter.stage) {
-                url += `&stage=${filter.stage}`
-            }
-            // url = `${tasksUrl}?task_responses=${filter.query}`
+            url = `${tasksUrl}?task_responses=${filter}`
         }
-        console.log("SELECTABLE URL", url)
         return axios.get(url).then(res => {
             console.log("getSelectableTasks", res.data)
             return res.data;
@@ -268,7 +264,8 @@ const useAxios = () => {
         getIntegratedData,
         triggerTaskWebhook,
         getUserNotifications,
-        getNotificationContent
+        getNotificationContent,
+        getTaskFields
     }
 }
 

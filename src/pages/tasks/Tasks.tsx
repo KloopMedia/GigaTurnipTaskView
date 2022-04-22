@@ -91,8 +91,7 @@ const Tasks = () => {
         setPage(value);
     };
 
-    const getFilteredData = (query?: string, stage?: string) => {
-        const filter = query || stage ? {query: query, stage: stage} : null
+    const getFilteredData = (filter: string) => {
         getSelectableTasks(parsedCampaignId, 1, filter).then(res => {
             if (res.count > 0) {
                 setFilterFormData(filter)

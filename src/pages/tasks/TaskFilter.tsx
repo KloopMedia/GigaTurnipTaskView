@@ -1,32 +1,25 @@
 import React, {useEffect, useState} from "react";
-import {
-    Box,
-    Button,
-    FormControl,
-    FormGroup,
-    InputLabel,
-    MenuItem,
-    Select,
-    SelectChangeEvent,
-    TextField
-} from "@mui/material";
+import {Box, Button, FormControl, FormGroup, InputLabel, MenuItem, Select, SelectChangeEvent,} from "@mui/material";
 import useAxios from "../../services/api/useAxios";
 import {taskstagesUrl} from "../../services/api/Urls";
+import Form from "../../components/form/Form";
+import useHelpers from "../../utils/hooks/UseHelpers";
+import {useTranslation} from "react-i18next";
 
-const TaskFilter = (props: { campaign: number, onFilter: (filter: string, stage: string) => void }) => {
+const TaskFilter = (props: { campaign: number, onFilter: (filter: string) => void }) => {
     const {campaign, onFilter} = props;
 
-    const {axios, getChains} = useAxios();
+    const {axios, getChains, getTaskFields} = useAxios();
+    const {parseId} = useHelpers();
+    const {t} = useTranslation();
 
     const [chainId, setChainId] = useState("")
-    const [stageId, setStageId] = useState("")
     const [formStageId, setFormStageId] = useState("")
     const [chains, setChains] = useState([])
     const [stages, setStages] = useState([])
-    const [jsonSchema, setJsonSchema] = useState({})
+    const [jsonSchema, setJsonSchema] = useState<any>({})
     const [uiSchema, setUiSchema] = useState({})
     const [formResponses, setFormResponses] = useState({})
-    const [searchValue, setSearchValue] = useState("")
 
     useEffect(() => {
         getChains(campaign)
@@ -47,18 +40,8 @@ const TaskFilter = (props: { campaign: number, onFilter: (filter: string, stage:
                 .then(res => res.data)
                 .then(res => setStages(res.results))
                 .then(() => {
-                    if (!searchValue) {
-                        const search = localStorage.getItem("selectable_filter_search");
-                        if (search) {
-                            setSearchValue(search)
-                        }
-                    }
                     if (!formStageId) {
-                        const savedStage = localStorage.getItem("selectable_filter_stage");
                         const savedFormStage = localStorage.getItem("selectable_filter_form_stage");
-                        if (savedStage) {
-                            setStageId(savedStage)
-                        }
                         if (savedFormStage) {
                             setFormStageId(savedFormStage)
                         }
@@ -67,42 +50,76 @@ const TaskFilter = (props: { campaign: number, onFilter: (filter: string, stage:
         }
     }, [chainId])
 
-    useEffect(() => {
-        console.log(formStageId)
-        if (formStageId && stages.length > 0) {
-            const stage = stages.filter((item: any) => item.id == formStageId)[0] as any
-            console.log(stage)
-            if (stage) {
-                const schema = stage.json_schema ? JSON.parse(stage.json_schema) : {}
-                const ui = stage.ui_schema ? JSON.parse(stage.ui_schema) : {}
-                setJsonSchema(schema)
-                setUiSchema(ui)
-                const savedResponses = localStorage.getItem("selectable_filter_responses");
-                if (savedResponses) {
-                    setFormResponses(JSON.parse(savedResponses))
+    const createSchema = (fields: string[]) => {
+        return {
+            title: t("filter.filter_label"),
+            type: "array",
+            items: {
+                type: "object",
+                required: ["field", "type"],
+                properties: {
+                    field: {
+                        type: "string",
+                        title: t("filter.field_label"),
+                        enum: [...fields]
+                    },
+                    type: {
+                        type: "string",
+                        title: t("filter.type_label"),
+                        enum: ["string", "int", "datetime"],
+                        enumNames: t("filter.types", {returnObjects: true})
+                    },
+                    conditions: {
+                        type: "array",
+                        title: t("filter.conditions_label"),
+                        items: {
+                            type: "object",
+                            properties: {
+                                operator: {
+                                    title: t("filter.operator_label"),
+                                    type: "string",
+                                    enum: ["==", "!=", "<", ">", "<=", ">="],
+                                    enumNames: t("filter.operators", {returnObjects: true})
+                                },
+                                value: {
+                                    title: t("filter.value_label"),
+                                    description: t("filter.value_description"),
+                                    type: "string"
+                                }
+                            }
+                        }
+                    }
                 }
             }
+        };
+    }
+
+    useEffect(() => {
+        if (formStageId) {
+            const parsedStageId = parseId(formStageId)
+            const savedResponses = localStorage.getItem("selectable_filter_responses");
+            if (savedResponses) {
+                setFormResponses(JSON.parse(savedResponses))
+            }
+            getTaskFields(parsedStageId).then(res => {
+                const fields = res.fields;
+                const _schema: any = createSchema(fields)
+                setJsonSchema(_schema)
+            })
         }
     }, [formStageId])
 
 
     const handleChainChange = (event: SelectChangeEvent) => {
         setChainId(event.target.value);
-        setStageId("")
         setFormStageId("");
         setFormResponses({})
         setJsonSchema({})
         setUiSchema({})
         localStorage.setItem("selectable_filter_chain", event.target.value);
-        localStorage.setItem("selectable_filter_stage", "");
         localStorage.setItem("selectable_filter_form_stage", "");
         localStorage.setItem("selectable_filter_responses", JSON.stringify({}));
     };
-
-    const handleStageChange = (event: SelectChangeEvent) => {
-        setStageId(event.target.value)
-        localStorage.setItem("selectable_filter_stage", event.target.value);
-    }
 
     const handleFormStageChange = (event: SelectChangeEvent) => {
         setFormStageId(event.target.value);
@@ -113,39 +130,27 @@ const TaskFilter = (props: { campaign: number, onFilter: (filter: string, stage:
         localStorage.setItem("selectable_filter_responses", JSON.stringify({}));
     };
 
-    const handleFormChange = (e: { formData: object }) => {
-        setFormResponses(e.formData)
-        localStorage.setItem("selectable_filter_responses", JSON.stringify(e.formData));
+    const handleFormChange = (formData: object) => {
+        setFormResponses(formData)
+        localStorage.setItem("selectable_filter_responses", JSON.stringify(formData));
     }
 
     const handleFormSubmit = () => {
-        // const query = formStageId ? JSON.stringify({stage: formStageId, responses: formResponses}) : ""
-        const query = searchValue
-        onFilter(query, stageId)
+        const parsedFormStageId = parseId(formStageId);
+        const query = {all_conditions: formResponses, stage: parsedFormStageId};
+        const queryString = JSON.stringify(query)
+        onFilter(queryString)
     };
-
-    const handleSearchValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        localStorage.setItem("selectable_filter_search", event.target.value);
-        setSearchValue(event.target.value)
-    }
 
     return (
         <FormGroup>
-            <Box sx={{m: 1, minWidth: 120}}>
-                <TextField
-                    id="outlined-basic"
-                    label="Search Field"
-                    variant="outlined"
-                    fullWidth
-                    onChange={handleSearchValueChange}/>
-            </Box>
             {chains.length > 0 && <FormControl sx={{m: 1, minWidth: 120}}>
-                <InputLabel id="select-chain-filter">Chain</InputLabel>
+                <InputLabel id="select-chain-filter">{t("filter.chain_label")}</InputLabel>
                 <Select
                     labelId="select-chain-label"
                     id="select-chain"
                     value={chainId}
-                    label="Chain"
+                    label={t("filter.chain_label")}
                     onChange={handleChainChange}
                 >
                     <MenuItem value="">
@@ -155,50 +160,35 @@ const TaskFilter = (props: { campaign: number, onFilter: (filter: string, stage:
                                                          value={item.id}>{item.name}</MenuItem>)}
                 </Select>
             </FormControl>}
-            {chainId && <FormControl disabled={chainId === ""} sx={{m: 1, minWidth: 120}}>
-                <InputLabel id="select-stage-filter">Stage</InputLabel>
+            <FormControl disabled={chainId === ""} sx={{m: 1, minWidth: 120}}>
+                <InputLabel id="select-form-stage-filter">{t("filter.stage_label")}</InputLabel>
                 <Select
                     labelId="select-stage-label"
                     id="select-stage"
-                    value={stageId}
-                    label="Stage"
-                    onChange={handleStageChange}
+                    value={formStageId}
+                    label={t("filter.stage_label")}
+                    onChange={handleFormStageChange}
                 >
                     <MenuItem value="">
                         <em>None</em>
                     </MenuItem>
-                    {stages.map((item: any) => <MenuItem key={`filter_stage_${item.id}`}
+                    {stages.map((item: any) => <MenuItem key={`filter_form_stage_${item.id}`}
                                                          value={item.id}>{item.name}</MenuItem>)}
                 </Select>
-            </FormControl>}
-            {/*<FormControl disabled={chainId === ""} sx={{m: 1, minWidth: 120}}>*/}
-            {/*    <InputLabel id="select-form-stage-filter">Form Stage</InputLabel>*/}
-            {/*    <Select*/}
-            {/*        labelId="select-stage-label"*/}
-            {/*        id="select-stage"*/}
-            {/*        value={formStageId}*/}
-            {/*        label="Form Stage"*/}
-            {/*        onChange={handleFormStageChange}*/}
-            {/*    >*/}
-            {/*        <MenuItem value="">*/}
-            {/*            <em>None</em>*/}
-            {/*        </MenuItem>*/}
-            {/*        {stages.map((item: any) => <MenuItem key={`filter_form_stage_${item.id}`}*/}
-            {/*                                             value={item.id}>{item.name}</MenuItem>)}*/}
-            {/*    </Select>*/}
-            {/*</FormControl>*/}
+            </FormControl>
             <Box sx={{m: 1, minWidth: 120}}>
-                {/*<Form*/}
-                {/*    schema={jsonSchema}*/}
-                {/*    uiSchema={uiSchema}*/}
-                {/*    widgets={widgets}*/}
-                {/*    formData={formResponses}*/}
-                {/*    children={" "}*/}
-                {/*    onChange={handleFormChange}*/}
-                {/*    onSubmit={handleFormSubmit}*/}
-                {/*/>*/}
+                <Form
+                    schema={jsonSchema}
+                    uiSchema={uiSchema}
+                    formData={formResponses}
+                    hideButton={true}
+                    onChange={handleFormChange}
+                    onSubmit={handleFormSubmit}
+                >
+                     <Button fullWidth type={"submit"} sx={{mx: 1, mb: 2}} variant={"contained"}>{t("filter.search_button")}</Button>
+                </Form>
             </Box>
-            <Button sx={{mx: 1, mb: 2}} variant={"contained"} onClick={handleFormSubmit}>Search</Button>
+
         </FormGroup>
     );
 };

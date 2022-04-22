@@ -152,7 +152,7 @@ const useAxios = () => {
     const getSelectableTasks = (campaignId: number, page?: number, filter?: string) => {
         let url = createPaginationURL(`${tasksUrl}user_selectable/?stage__chain__campaign=${campaignId}`, page)
         if (filter) {
-            url = `${tasksUrl}?task_responses=${filter}`
+            url += `&task_responses=${filter}`
         }
         return axios.get(url).then(res => {
             console.log("getSelectableTasks", res.data)

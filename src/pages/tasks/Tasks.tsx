@@ -58,25 +58,25 @@ const Tasks = () => {
         })) as any;
     }
 
-    const getSelectable = () => {
-        return getSelectableTasks(parsedCampaignId, page, filterFormData).then(res => {
+    const getSelectable = (campaign: number, page?: number, filter?: string) => {
+        return getSelectableTasks(campaign, page, filter).then(res => {
             setTotalPages(Math.ceil(res.count / 10))
             return res.results;
         })
     };
 
-    const getData = (id: number, tab: string) => {
+    const getData = (id: number, tab: string, page?: number, filter?: string) => {
         if (tab === "1") {
             getOpenTasks(id).then(res => setOpenTasks(res));
         } else if (tab === "2") {
             getCompleteTasks(id).then(res => setCompletedTasks(res));
         } else if (tab === "3") {
-            getSelectable().then(res => setSelectableTasks(res));
+            getSelectable(id, page, filter).then(res => setSelectableTasks(res));
         }
     }
 
     useEffect(() => {
-        getData(parsedCampaignId, tab);
+        getData(parsedCampaignId, tab, page, filterFormData);
 
         // getSelectable()
         //     .then(res => setSelectableTasks(res));

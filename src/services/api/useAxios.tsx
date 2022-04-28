@@ -154,6 +154,7 @@ const useAxios = () => {
         if (filter) {
             url += `&task_responses=${filter}`
         }
+        console.log(url)
         return axios.get(url).then(res => {
             console.log("getSelectableTasks", res.data)
             return res.data;

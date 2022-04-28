@@ -62,7 +62,8 @@ const resources = {
             },
             filter: {
                 chain_label: "Chain",
-                stage_label: "Stage",
+                search_stage_label: "Desired Stage",
+                stage_label: "Filter Stage",
                 filter_label: "Filter",
                 field_label: "Field",
                 type_label: "Field's type",
@@ -136,7 +137,8 @@ const resources = {
             },
             filter: {
                 chain_label: "Цепочка",
-                stage_label: "Стейдж",
+                search_stage_label: "Искомый Cтейдж",
+                stage_label: "Фильтрующий Стейдж",
                 filter_label: "Фильтр",
                 field_label: "Поле",
                 type_label: "Тип поля",

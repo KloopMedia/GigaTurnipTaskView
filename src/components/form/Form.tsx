@@ -7,7 +7,8 @@ import {
     FileWidget,
     LinkWidget,
     RadioWidget,
-    SelectWidget
+    SelectWidget,
+    CounterWidget
 } from "./custom-widgets";
 import JsonForm from "@rjsf/bootstrap-4";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -37,8 +38,12 @@ const Form: React.FC<Props> = (props) => {
         audio: AudioWidget,
         DateTimeWidget: DateTimeWidget,
         DateWidget: DateWidget,
-        SelectWidget: SelectWidget
+        SelectWidget: SelectWidget,
     };
+
+    const fields = {
+        counter: CounterWidget
+    }
 
     const handleChange = (e: { formData: object }) => {
         if (onChange) {
@@ -72,6 +77,7 @@ const Form: React.FC<Props> = (props) => {
             uiSchema={uiSchema}
             formData={formData}
             widgets={widgets}
+            fields={fields}
             onChange={handleChange}
             onSubmit={handleSubmit}
             disabled={disabled}

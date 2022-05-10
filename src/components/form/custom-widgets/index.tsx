@@ -6,7 +6,7 @@ import RadioWidget from "./radio-widget/FixedRadioWidget";
 import DateTimeWidget from "./date-time-widget/CustomDateTimeWidget";
 import DateWidget from "./date-widget/CustomDateWidget";
 import SelectWidget from "./select-widget/FixedSelectWidget";
-
+import CounterWidget from './counter-widget/Counter'
 
 export {
     AudioWidget,
@@ -16,5 +16,6 @@ export {
     RadioWidget,
     DateTimeWidget,
     DateWidget,
-    SelectWidget
+    SelectWidget,
+    CounterWidget
 }

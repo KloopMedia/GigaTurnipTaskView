@@ -3,15 +3,20 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 
 import {FieldProps} from "@rjsf/core";
-import {Button} from "react-bootstrap";
-import {Box, Typography} from "@mui/material";
+import {Box, Button, Typography} from "@mui/material";
 
 const Counter = ({required, label, formData, schema, onChange, rawErrors = []}: FieldProps) => {
 
-    const _onChange = () => {
+    const _onChange = (action: "add" | "remove") => {
         const _value = Array.isArray(formData) ? formData : [];
-        const newValue = [..._value, new Date().toISOString()];
-        onChange(newValue);
+        if (action === "add") {
+            const newValue = [..._value, new Date().toISOString()];
+            onChange(newValue);
+        } else if (action === "remove") {
+            const newValue = [..._value];
+            newValue.pop();
+            onChange(newValue);
+        }
     }
 
     return (
@@ -21,9 +26,10 @@ const Counter = ({required, label, formData, schema, onChange, rawErrors = []}: 
                 {(label || schema.title) && required ? "*" : null}
             </Form.Label>
             <br/>
-            <Box display={"flex"}>
-                <Typography variant={"h4"} pr={1}>{Array.isArray(formData) ? formData.length : 0}</Typography>
-                <Button onClick={_onChange}>+</Button>
+            <Box display={"flex"} height={80} >
+                <Typography variant={"h2"} pr={1}>{Array.isArray(formData) ? formData.length : 0}</Typography>
+                <Button fullWidth variant={"contained"} onClick={() => _onChange("add")}>+</Button>
+                <Button variant={"contained"} color={"warning"} onClick={() => _onChange("remove")}>-</Button>
             </Box>
         </Form.Group>
     );

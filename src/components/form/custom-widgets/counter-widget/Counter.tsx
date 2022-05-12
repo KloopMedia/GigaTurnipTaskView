@@ -26,10 +26,18 @@ const Counter = ({required, label, formData, schema, onChange, rawErrors = []}: 
                 {(label || schema.title) && required ? "*" : null}
             </Form.Label>
             <br/>
-            <Box display={"flex"} height={80} >
-                <Typography variant={"h2"} pr={1}>{Array.isArray(formData) ? formData.length : 0}</Typography>
-                <Button fullWidth variant={"contained"} onClick={() => _onChange("add")}>+</Button>
-                <Button variant={"contained"} color={"warning"} onClick={() => _onChange("remove")}>-</Button>
+            <Box>
+                <Typography align={"center"} variant={"h2"}>{Array.isArray(formData) ? formData.length : 0}</Typography>
+                <Box display={"flex"} alignItems={"center"}>
+                    <Box width={"80%"} pr={1}>
+                        <Button sx={{height: 110}} color={"success"} fullWidth variant={"contained"}
+                                onClick={() => _onChange("add")}>+</Button>
+                    </Box>
+                    <Box width={"20%"}>
+                        <Button sx={{height: 110}} fullWidth variant={"contained"} color={"warning"}
+                                onClick={() => _onChange("remove")}>-</Button>
+                    </Box>
+                </Box>
             </Box>
         </Form.Group>
     );

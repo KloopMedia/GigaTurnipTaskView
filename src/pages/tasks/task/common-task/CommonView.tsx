@@ -80,8 +80,16 @@ const CommonView = (props: Props) => {
                     {renderPreviousTasks(previousTasks)}
                 </Grid>
                 <Grid container item sm={6} xs={12} sx={{display: 'block'}}>
-                    <Form schema={schema} uiSchema={uiSchema} formData={formData} onChange={onChange}
-                          onSubmit={onSubmit} formContext={{storagePath}} disabled={inactive}>
+                    <Form
+                        schema={schema}
+                        uiSchema={uiSchema}
+                        formData={formData}
+                        onChange={onChange}
+                        onSubmit={onSubmit}
+                        omitExtraData={true}
+                        liveOmit={true}
+                        formContext={{storagePath}}
+                        disabled={inactive}>
                         {renderButtons()}
                     </Form>
                 </Grid>
@@ -94,8 +102,15 @@ const CommonView = (props: Props) => {
                 <Divider hidden={previousTasks?.length === 0} sx={{py: 1}}>
                     <Chip icon={<ArrowCircleDownIcon/>} color={"primary"} label={t("task.divider_text")}/>
                 </Divider>
-                <Form schema={schema} uiSchema={uiSchema} formData={formData} onChange={onChange}
-                      onSubmit={onSubmit} formContext={{storagePath}} disabled={inactive}>
+                <Form schema={schema}
+                      uiSchema={uiSchema}
+                      formData={formData}
+                      onChange={onChange}
+                      omitExtraData={true}
+                      liveOmit={true}
+                      onSubmit={onSubmit}
+                      formContext={{storagePath}}
+                      disabled={inactive}>
                     {renderButtons()}
                 </Form>
             </Box>

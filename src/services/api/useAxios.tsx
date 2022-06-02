@@ -219,6 +219,11 @@ const useAxios = () => {
         return axios.get(`${tasksUrl + id}/trigger_webhook/`)
     }
 
+    const getDynamicSchema = (id: number, formData: any) => {
+        return axios.get(`${taskstagesUrl + id}/load_schema_answers/?responses=${formData}`)
+            .then(res => res.data);
+    }
+
     // Notifications Functions
     const getUserNotifications = (campaignId: number, viewed: boolean, importance?: number, page?: number) => {
         const url = createPaginationURL(`${notificationsUrl}list_user_notifications/?campaign=${campaignId}&viewed=${viewed}`, page)
@@ -266,7 +271,8 @@ const useAxios = () => {
         triggerTaskWebhook,
         getUserNotifications,
         getNotificationContent,
-        getTaskFields
+        getTaskFields,
+        getDynamicSchema
     }
 }
 

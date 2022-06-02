@@ -18,6 +18,7 @@ export type Props = {
     onRelease: () => void,
     onPrevious: () => void,
     hideSubmit?: boolean
+    onFocus?: (id: string, formData: any) => void
 };
 
 const CommonView = (props: Props) => {
@@ -32,7 +33,8 @@ const CommonView = (props: Props) => {
         onChange,
         onSubmit,
         onRelease,
-        onPrevious
+        onPrevious,
+        onFocus
     } = props;
     const {id: taskId, schema, uiSchema} = data;
     const {id: stageId, allow_go_back, allow_release} = data.stage;
@@ -73,6 +75,22 @@ const CommonView = (props: Props) => {
         </Stack>
     )
 
+    const form = (
+        <Form
+            schema={schema}
+            uiSchema={uiSchema}
+            formData={formData}
+            onChange={onChange}
+            onSubmit={onSubmit}
+            onFocus={onFocus}
+            omitExtraData={true}
+            liveOmit={true}
+            formContext={{storagePath}}
+            disabled={inactive}>
+            {renderButtons()}
+        </Form>
+    )
+
     if (view === "split" && Array.isArray(previousTasks) && previousTasks.length > 0) {
         return (
             <Grid container direction='row' spacing={1}>
@@ -80,18 +98,7 @@ const CommonView = (props: Props) => {
                     {renderPreviousTasks(previousTasks)}
                 </Grid>
                 <Grid container item sm={6} xs={12} sx={{display: 'block'}}>
-                    <Form
-                        schema={schema}
-                        uiSchema={uiSchema}
-                        formData={formData}
-                        onChange={onChange}
-                        onSubmit={onSubmit}
-                        omitExtraData={true}
-                        liveOmit={true}
-                        formContext={{storagePath}}
-                        disabled={inactive}>
-                        {renderButtons()}
-                    </Form>
+                    {form}
                 </Grid>
             </Grid>
         );
@@ -102,17 +109,7 @@ const CommonView = (props: Props) => {
                 <Divider hidden={previousTasks?.length === 0} sx={{py: 1}}>
                     <Chip icon={<ArrowCircleDownIcon/>} color={"primary"} label={t("task.divider_text")}/>
                 </Divider>
-                <Form schema={schema}
-                      uiSchema={uiSchema}
-                      formData={formData}
-                      onChange={onChange}
-                      omitExtraData={true}
-                      liveOmit={true}
-                      onSubmit={onSubmit}
-                      formContext={{storagePath}}
-                      disabled={inactive}>
-                    {renderButtons()}
-                </Form>
+                {form}
             </Box>
         );
     }

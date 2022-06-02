@@ -38,7 +38,8 @@ const Task = (props: Props) => {
         openPreviousTask,
         requestTaskAssignment,
         getIntegratedData,
-        triggerTaskWebhook
+        triggerTaskWebhook,
+        getDynamicSchema
     } = useAxios();
 
     const {openToast} = useToast();
@@ -122,6 +123,10 @@ const Task = (props: Props) => {
             });
     }, [parsedId])
 
+    const getDynamicForm = useCallback((id: number, formData: any) => {
+        return getDynamicSchema(id, formData);
+    }, [])
+
     const taskMethods = {
         getData,
         getPreviousData,
@@ -134,6 +139,7 @@ const Task = (props: Props) => {
         openPreviousTask: openPrevious,
         handleRedirect,
         handlePrompt,
+        getDynamicForm,
         openToast,
         updateState: updateData ?? updateState
     }

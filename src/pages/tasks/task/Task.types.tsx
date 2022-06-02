@@ -19,7 +19,8 @@ export type TaskProps = {
     handleRedirect: (id: number, nextId: number, callback: Function) => void,
     handlePrompt: (value: boolean) => void,
     openToast: (msg: string, type: ToastVariants) => void,
-    updateState: Function
+    updateState: Function,
+    getDynamicForm: (id: number, formData: any) => Promise<any>
 };
 
 export type FilterData = {

@@ -23,6 +23,7 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
         handlePrompt,
         openToast,
         update,
+        getDynamicForm,
         forceUpdate
     } = props;
 
@@ -30,14 +31,34 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
     const {t} = useTranslation();
 
     const [data, setData] = useState<any>();
-    const [formData, setFormData] = useState();
+    const [formData, setFormData] = useState<any>();
     const [complete, setComplete] = useState(true);
     const [previousTasks, setPreviousTasks] = useState([]);
+    const [isDynamic, setDynamic] = useState(false);
+
+    const setDynamicForm = (data: any, formData: object) => {
+        let _jsonData;
+        try {
+            _jsonData = JSON.stringify(formData)
+        } catch (e) {
+            _jsonData = '{}';
+        }
+        getDynamicForm(data.stage.id, _jsonData).then(res => {
+            const {schema, ...rest} = data;
+            const dynamicSchema = res.schema;
+            setData({schema: dynamicSchema, ...rest})
+        })
+    }
 
     const mountData = useCallback(async (id) => {
         const data = await getData(id);
         const prev = await getPreviousData(id);
-        console.log('updated')
+
+        console.log(data)
+        if (!data.complete && data.stage.hasOwnProperty("dynamic_jsons")) {
+            setDynamic(true);
+            setDynamicForm(data, {});
+        }
         setPreviousTasks(prev)
         setData(data);
         setFormData(data.responses ?? {});
@@ -84,6 +105,12 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
             .catch(err => openToast(err.message, "error"));
     }
 
+    const handleFocus = (id: string, value: any) => {
+        if (!data.complete && isDynamic) {
+            setDynamicForm(data, formData)
+        }
+    }
+
     useEffect(() => {
         debouncedSave(id, {responses: formData});
         // Show Prompt if not complete
@@ -100,6 +127,7 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
         onSubmit: handleSubmit,
         onRelease: handleRelease,
         onPrevious: handleOpenPrevious,
+        onFocus: handleFocus
     }
 
     if (!data) {

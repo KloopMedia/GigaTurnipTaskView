@@ -13,6 +13,7 @@ import {Alert, Box} from "@mui/material";
 import TextViewer from "../../../components/text-editor/TextViewer";
 import AssignmentReturnIcon from '@mui/icons-material/AssignmentReturn';
 import {useTranslation} from "react-i18next";
+import Presentation from "../../../components/presentation/Presentation";
 
 type Props = {
     variant?: "quick" | "integrated" | "common",
@@ -51,6 +52,7 @@ const Task = (props: Props) => {
 
     const [showPrompt, setShowPrompt] = useState(false);
     const [data, setData] = useState<any>();
+    const slides = data?.stage.external_metadata?.slides ?? [];
 
     usePrompt(t("task.leave_page"), hidePrompt ? false : showPrompt);
 
@@ -167,6 +169,7 @@ const Task = (props: Props) => {
                    severity="error">
                 {t('task.returned_message')}
             </Alert>
+            <Presentation urls={slides}/>
             <TextViewer data={data?.stage?.rich_text} hidden={!data?.stage?.rich_text}/>
             <Common id={parsedId} view={view} fullwidth={true} {...taskMethods}/>
         </Box>

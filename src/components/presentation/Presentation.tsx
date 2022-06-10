@@ -9,18 +9,22 @@ const Presentation = (props: { urls: string[] }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const handleNext = () => {
-        if (currentIndex < urls.length - 1) {
-            setCurrentIndex(prevState => prevState + 1)
-        } else {
-            setCurrentIndex(0);
+        if (urls.length > 1) {
+            if (currentIndex < urls.length - 1) {
+                setCurrentIndex(prevState => prevState + 1)
+            } else {
+                setCurrentIndex(0);
+            }
         }
     }
 
     const handlePrevious = () => {
-        if (currentIndex > 0) {
-            setCurrentIndex(prevState => prevState - 1)
-        } else {
-            setCurrentIndex(urls.length - 1)
+        if (urls.length > 1) {
+            if (currentIndex > 0) {
+                setCurrentIndex(prevState => prevState - 1)
+            } else {
+                setCurrentIndex(urls.length - 1)
+            }
         }
     }
 

@@ -5,6 +5,7 @@ import {TaskProps} from "../Task.types";
 import CommonView from "./CommonView";
 import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import debounce from "lodash.debounce";
 
 
 const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boolean) => void }) => {
@@ -17,7 +18,6 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
         getPreviousData,
         saveData,
         releaseTask,
-        debouncedSave,
         openPreviousTask,
         handleRedirect,
         handlePrompt,
@@ -35,6 +35,17 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
     const [complete, setComplete] = useState(true);
     const [previousTasks, setPreviousTasks] = useState([]);
     const [isDynamic, setDynamic] = useState(false);
+
+    const DEBOUNCE_SAVE_DELAY_MS = 2000;
+
+    const debouncedSave = useCallback(debounce((id: number, formData) => {
+        if (!complete) {
+            if (isDynamic) {
+                setDynamicForm(data, formData.responses)
+            }
+            return saveData(id, formData)
+        }
+    }, DEBOUNCE_SAVE_DELAY_MS), []);
 
     const setDynamicForm = (taskData: any, formData: object) => {
         let _jsonData;
@@ -108,12 +119,6 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
             .catch(err => openToast(err.message, "error"));
     }
 
-    const handleFocus = (id: string, value: any) => {
-        if (!data.complete && isDynamic) {
-            setDynamicForm(data, formData)
-        }
-    }
-
     useEffect(() => {
         debouncedSave(id, {responses: formData});
         // Show Prompt if not complete
@@ -130,7 +135,6 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
         onSubmit: handleSubmit,
         onRelease: handleRelease,
         onPrevious: handleOpenPrevious,
-        onFocus: handleFocus
     }
 
     if (!data) {

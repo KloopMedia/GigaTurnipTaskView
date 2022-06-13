@@ -36,15 +36,19 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
     const [previousTasks, setPreviousTasks] = useState([]);
     const [isDynamic, setDynamic] = useState(false);
 
-    const setDynamicForm = (data: any, formData: object) => {
+    const setDynamicForm = (taskData: any, formData: object) => {
         let _jsonData;
         try {
-            _jsonData = JSON.stringify(formData)
+            if (formData) {
+                _jsonData = JSON.stringify(formData);
+            } else {
+                _jsonData = '{}';
+            }
         } catch (e) {
             _jsonData = '{}';
         }
-        getDynamicForm(data.stage.id, _jsonData).then(res => {
-            const {schema, ...rest} = data;
+        getDynamicForm(taskData.stage.id, _jsonData).then(res => {
+            const {schema, ...rest} = taskData;
             const dynamicSchema = res.schema;
             setData({schema: dynamicSchema, ...rest})
         })
@@ -54,10 +58,9 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
         const data = await getData(id);
         const prev = await getPreviousData(id);
 
-        console.log(data)
         if (!data.complete && data.stage.hasOwnProperty("dynamic_jsons")) {
             setDynamic(true);
-            setDynamicForm(data, {});
+            setDynamicForm(data, data.responses);
         }
         setPreviousTasks(prev)
         setData(data);

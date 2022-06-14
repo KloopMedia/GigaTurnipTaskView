@@ -12,7 +12,7 @@ const Login = () => {
     const {t} = useTranslation();
 
     // @ts-ignore
-    const from = location?.state?.from?.pathname || "/";
+    const from = (location?.state?.from?.pathname ?? "/") + location?.state?.search;
 
     const handleLogin = () => {
         login(() => navigate(from, {replace: true}))

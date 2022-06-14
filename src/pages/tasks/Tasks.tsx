@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {Box, Grid, Pagination, Tab, Typography} from "@mui/material";
 import List from "../../components/list/List";
 import useAxios from "../../services/api/useAxios";
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import useHelpers from "../../utils/hooks/UseHelpers";
 import Task from "./task/Task";
 import {TabContext, TabList, TabPanel} from "@mui/lab";
@@ -19,6 +19,7 @@ const Tasks = () => {
         getCreatableTasks,
         requestTaskCreation,
         getSelectableTasks,
+        requestCampaignJoin
     } = useAxios();
 
     const navigate = useNavigate();
@@ -35,6 +36,8 @@ const Tasks = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [page, setPage] = useState(1);
     const [filterFormData, setFilterFormData] = useState<any>();
+
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
         setTab(newValue);
@@ -77,14 +80,17 @@ const Tasks = () => {
 
     useEffect(() => {
         getData(parsedCampaignId, tab, page, filterFormData);
-
-        // getSelectable()
-        //     .then(res => setSelectableTasks(res));
     }, [tab, page])
 
     useEffect(() => {
-        getCreatableTasks(parsedCampaignId)
-            .then(res => setCreatableTasks(res));
+        if (searchParams.has('join') && searchParams.get('join') === 'true') {
+            requestCampaignJoin(parsedCampaignId)
+                .then(() => getCreatableTasks(parsedCampaignId)
+                    .then(res => setCreatableTasks(res)));
+        } else {
+            getCreatableTasks(parsedCampaignId)
+                .then(res => setCreatableTasks(res));
+        }
     }, [])
 
     const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -148,12 +154,12 @@ const Tasks = () => {
                     <TaskFilter onFilter={getFilteredData} campaign={parsedCampaignId}/>
                     <Grid container py={2} spacing={2}>
                         {selectableTasks.length > 0 ? selectableTasks.map((item: any, index: number) =>
-                            <Grid item xs={12} key={index}>
-                                <Task id={item.id} view={"split"} updateState={() => getData(parsedCampaignId, tab)}
-                                      hidePrompt={true}
-                                      variant={"quick"}/>
-                            </Grid>
-                        )
+                                <Grid item xs={12} key={index}>
+                                    <Task id={item.id} view={"split"} updateState={() => getData(parsedCampaignId, tab)}
+                                          hidePrompt={true}
+                                          variant={"quick"}/>
+                                </Grid>
+                            )
                             :
                             <Typography align={"center"}>Нет доступных заданий.</Typography>
                         }

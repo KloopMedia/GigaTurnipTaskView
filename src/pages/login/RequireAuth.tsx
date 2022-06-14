@@ -9,7 +9,7 @@ const RequireAuth = ({ children }: { children: JSX.Element }) => {
   console.log(auth)
 
   if (auth.ready && !auth.user) {
-    return <Navigate to={"login"} state={{ from: location }} />;
+    return <Navigate to={"login"} state={{ from: location, search: location.search }} />;
   }
 
   return auth.ready ? children : <CircularProgress/>;

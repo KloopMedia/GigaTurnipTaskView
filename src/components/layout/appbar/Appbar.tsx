@@ -167,7 +167,7 @@ export default function Appbar(props: { children?: any }) {
                         <Typography variant={"subtitle2"}>{user?.email}</Typography>
                     </Box>
                     <Button color={"inherit"} onClick={handleLanguageChange}>{i18n.language}</Button>
-                    <Button color={"inherit"} onClick={() => logout(() => navigate('/'))}>{t("appbar.log_out")}</Button>
+                    <Button color={"inherit"} onClick={() => logout(() => console.log('log out'))}>{t("appbar.log_out")}</Button>
                 </Toolbar>
             </StyledAppBar>
             {campaignId && <Drawer variant="permanent" open={open}>

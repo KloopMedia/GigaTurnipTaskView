@@ -21,6 +21,7 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
         openPreviousTask,
         handleRedirect,
         handlePrompt,
+        // debouncedSave,
         openToast,
         update,
         getDynamicForm,
@@ -45,7 +46,7 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
             }
             return saveData(id, formData)
         }
-    }, DEBOUNCE_SAVE_DELAY_MS), []);
+    }, DEBOUNCE_SAVE_DELAY_MS), [complete, isDynamic]);
 
     const setDynamicForm = (taskData: any, formData: object) => {
         let _jsonData;

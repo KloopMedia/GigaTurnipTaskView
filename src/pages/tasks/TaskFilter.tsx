@@ -107,7 +107,6 @@ const TaskFilter = (props: { campaign: number, onFilter: (filter: string) => voi
             }
             getTaskFields(parsedStageId).then(res => {
                 const fields = res.fields;
-                console.log(fields)
                 const _schema: any = createSchema(fields)
                 setJsonSchema(_schema)
             })
@@ -152,8 +151,6 @@ const TaskFilter = (props: { campaign: number, onFilter: (filter: string) => voi
         const parsedSearchStageId = searchStageId ? parseId(searchStageId) : null;
         const query = {all_conditions: formResponses, stage: parsedFormStageId, search_stage: parsedSearchStageId};
         const queryString = JSON.stringify(query)
-        console.log(query)
-        console.log(queryString)
         onFilter(queryString)
     };
 

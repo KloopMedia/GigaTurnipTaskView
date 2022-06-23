@@ -5,13 +5,8 @@ import ImageViewer from 'react-simple-image-viewer';
 import {Box, Button, Dialog} from "@mui/material";
 import {ref, getDownloadURL, getMetadata} from "firebase/storage";
 import {storage} from "../../../../services/firebase/Firebase";
-import {styled} from "@mui/material/styles";
 import {useTranslation} from "react-i18next";
 
-
-const Input = styled('input')({
-    display: 'none',
-});
 
 const CustomFileWidget = (props: any) => {
     const {schema, uiSchema, disabled, required, formContext, value, id} = props;
@@ -29,7 +24,6 @@ const CustomFileWidget = (props: any) => {
     const privateUpload = uiSchema["ui:options"] && uiSchema["ui:options"].private ? uiSchema["ui:options"].private : false
     const multipleSelect = uiSchema["ui:options"] && uiSchema["ui:options"].multiple ? uiSchema["ui:options"].multiple : false
     const hasUploadedFiles = Object.keys(uploadedFiles).length > 0
-    const isInputRequired = required && !hasUploadedFiles
 
     const privatePath = privateUpload ? "private" : "public";
     const storageRef = ref(storage, `${privatePath}/${storagePath}`);
@@ -71,13 +65,11 @@ const CustomFileWidget = (props: any) => {
                 await props.onChange(stringify);
             } catch (error) {
                 const stringify = JSON.stringify(fileLinks)
-                console.error(error)
                 await props.onChange(stringify)
             }
         }
 
         if (fileLinks && Object.keys(fileLinks).length > 0) {
-            console.log("fileLinks", fileLinks)
             updateFormResponses().then(() => _onBlur())
         }
     }, [fileLinks])
@@ -86,7 +78,7 @@ const CustomFileWidget = (props: any) => {
         const parsed = parsedValue
         if (filename in parsed) {
             delete parsed[filename]
-            const stringify = JSON.stringify(parsed)
+            const stringify = Object.keys(parsed).length > 0 ? JSON.stringify(parsed) : undefined;
             await props.onChange(stringify)
             _onBlur()
         }
@@ -102,20 +94,16 @@ const CustomFileWidget = (props: any) => {
             delete uploaded[filename]
             setUploadedFiles(uploaded)
         }
-        console.log("DELETE LOG", uploaded)
     };
 
     const handleFileClick = async (filename: string) => {
         const parsed = parsedValue;
-        console.log("FILE CLICK VALUE", parsed)
         if (filename in parsed) {
             const path = parsed[filename];
-            console.log(path)
             const metadata = await getMetadata(ref(storage, path));
             if (metadata && metadata.contentType) {
                 const type = metadata.contentType.split("/")[0]
                 const ext = metadata.contentType.split("/")[1]
-                console.log("FILE TYPE", type)
                 switch (type) {
                     case "image":
                         setCurrentFile(uploadedFiles[filename].url);
@@ -172,20 +160,6 @@ const CustomFileWidget = (props: any) => {
                 {schema?.title && required ? "*" : null}
             </label>
             <br/>
-            {/*<label htmlFor="contained-button-file" style={{paddingBottom: 8}}>*/}
-            {/*    <Input*/}
-            {/*        id="contained-button-file"*/}
-            {/*        disabled={disabled}*/}
-            {/*        required={isInputRequired}*/}
-            {/*        multiple={multipleSelect} type="file"*/}
-            {/*        onChange={handleChange}*/}
-            {/*        onBlur={_onBlur}*/}
-            {/*        onFocus={_onFocus}*/}
-            {/*    />*/}
-            {/*    <Button disabled={disabled} variant="contained" component="span">*/}
-            {/*        {t('choose_files')}*/}
-            {/*    </Button>*/}
-            {/*</label>*/}
 
             <Box pb={1}>
                 <Button
@@ -198,7 +172,6 @@ const CustomFileWidget = (props: any) => {
                         type="file"
                         hidden
                         disabled={disabled}
-                        required={isInputRequired}
                         multiple={multipleSelect}
                         onChange={handleChange}
                         onBlur={_onBlur}

@@ -45,6 +45,10 @@ const Form: React.FC<Props> = (props) => {
         counter: CounterWidget
     }
 
+    const customFormats = {
+        'time': /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/
+    };
+
     const handleChange = (e: { formData: object }) => {
         if (onChange) {
             onChange(e.formData)
@@ -78,6 +82,7 @@ const Form: React.FC<Props> = (props) => {
             formData={formData}
             widgets={widgets}
             fields={fields}
+            customFormats={customFormats}
             onChange={handleChange}
             onSubmit={handleSubmit}
             disabled={disabled}

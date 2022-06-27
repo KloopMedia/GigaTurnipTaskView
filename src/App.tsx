@@ -1,5 +1,5 @@
 import React from "react";
-import {HashRouter as Router, Route, Routes} from "react-router-dom";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import AuthProvider from "./context/authentication/AuthProvider";
 import ToastProvider from "./context/toast/ToastProvider";
 import RequireAuth from "./pages/login/RequireAuth";
@@ -13,35 +13,35 @@ import Notifications from "./pages/notifications/Notifications";
 import NotificationContent from "./pages/notifications/NotificationContent";
 
 const App = () => (
-    <AuthProvider>
-        <ToastProvider>
+    <ToastProvider>
+        <AuthProvider>
             <Router>
                 <Routes>
-                    <Route path="/" element={<RequireAuth><Layout/></RequireAuth>}>
+                    <Route path="/" element={<RequireAuth><Layout /></RequireAuth>}>
                         <Route path={"campaign"}>
                             <Route path=":campaignId">
                                 <Route path={"notifications"}>
-                                    <Route path={":id"} element={<NotificationContent/>} />
-                                    <Route index element={<Notifications/>}/>
+                                    <Route path={":id"} element={<NotificationContent />} />
+                                    <Route index element={<Notifications />} />
                                 </Route>
-                                <Route path={"about"} element={<About/>}/>
+                                <Route path={"about"} element={<About />} />
                                 <Route path={"tasks"}>
                                     <Route path={":taskId"}>
-                                        <Route index element={<Task/>}/>
+                                        <Route index element={<Task />} />
                                     </Route>
-                                    <Route index element={<Tasks/>}/>
+                                    <Route index element={<Tasks />} />
                                 </Route>
-                                <Route index element={<Tasks/>}/>
+                                <Route index element={<Tasks />} />
                             </Route>
-                            <Route index element={<Campaigns/>}/>
+                            <Route index element={<Campaigns />} />
                         </Route>
-                        <Route index element={<Campaigns/>}/>
+                        <Route index element={<Campaigns />} />
                     </Route>
-                    <Route path={"login"} element={<Login/>}/>
+                    <Route path={"login"} element={<Login />} />
                 </Routes>
             </Router>
-        </ToastProvider>
-    </AuthProvider>
+        </AuthProvider>
+    </ToastProvider>
 )
 
 export default App

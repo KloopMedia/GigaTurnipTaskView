@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from "react";
-import {auth, provider} from "../../services/firebase/Firebase";
-import {signInWithPopup, getIdToken, signOut, onIdTokenChanged} from "firebase/auth";
-import {useTranslation} from "react-i18next";
+import React, { useEffect, useState } from "react";
+import { auth, provider } from "../../services/firebase/Firebase";
+import { signInWithPopup, getIdToken, signOut, onIdTokenChanged, RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult, ApplicationVerifier } from "firebase/auth";
+import { useTranslation } from "react-i18next";
+import { useToast } from "../toast/hooks/useToast";
 
 interface AuthContextType {
     user: any;
@@ -9,14 +10,18 @@ interface AuthContextType {
     getToken: () => Promise<string>;
     login: (callback: VoidFunction) => void;
     logout: (callback: VoidFunction) => void;
+    loginWithPhone: (code: string, callback: VoidFunction) => void;
+    requestOTP: (phone: string, appVerifier: RecaptchaVerifier) => Promise<boolean>;
 }
 
 export const AuthContext = React.createContext<AuthContextType>(null!);
 
-const AuthProvider = ({children}: { children: React.ReactNode }) => {
+const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<any>(null);
     const [ready, setReady] = useState(false);
-    const {i18n} = useTranslation();
+    const [userVerification, setUserVerification] = useState<ConfirmationResult | null>(null);
+    const { i18n, t } = useTranslation();
+    const {openToast} = useToast();
 
     useEffect(() => {
         onIdTokenChanged(auth, async (user) => {
@@ -38,23 +43,56 @@ const AuthProvider = ({children}: { children: React.ReactNode }) => {
         return await getIdToken(user);
     }
 
-    const login = (callback: VoidFunction) => {
-        return signInWithPopup(auth, provider).then((result) => {
-            const user = result.user;
-            console.log(user)
+    const login = async (callback: VoidFunction) => {
+        try {
+            const result_1 = await signInWithPopup(auth, provider);
+            const user = result_1.user;
             setUser(user);
             callback();
-        });
+        } catch (error) {
+
+        }
     };
 
-    const logout = (callback: VoidFunction) => {
-        return signOut(auth).then(() => {
-            setUser(null);
-            callback();
-        });
+    const loginWithPhone = async (code: string, callback: VoidFunction) => {
+        if (userVerification) {
+            try {
+                const { user } = await userVerification.confirm(code)
+                setUser(user);
+                callback();
+            } catch (error: any) {
+                console.log(error.code);
+                if (error.code === 'auth/invalid-verification-code') {
+                    openToast(t("sign_up_page.invalid_code_error"), 'error')
+                } else {
+                    openToast(t("sign_up_page.unknown_login_with_phone_error"), 'error')
+                }
+            }
+        }
+    }
+
+    const requestOTP = async (phone: string, appVerifier: RecaptchaVerifier): Promise<boolean> => {
+        try {
+            const confirmationResult = await signInWithPhoneNumber(auth, phone, appVerifier);
+            setUserVerification(confirmationResult);
+            return true;
+        } catch (error: any) {
+            if (error.code === 'auth/invalid-phone-number') {
+                openToast(t("sign_up_page.invalid_phone_number"), 'error')
+            } else {
+                openToast(t("sign_up_page.unknown_login_with_phone_error"), 'error')
+            }
+            return false;
+        }
+    }
+
+    const logout = async (callback: VoidFunction) => {
+        await signOut(auth);
+        setUser(null);
+        callback();
     };
 
-    const value = {user, ready, getToken, login, logout};
+    const value = { user, ready, getToken, login, logout, loginWithPhone, requestOTP };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

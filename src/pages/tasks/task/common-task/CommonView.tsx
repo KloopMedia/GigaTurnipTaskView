@@ -19,6 +19,7 @@ export type Props = {
     onPrevious: () => void,
     hideSubmit?: boolean
     onFocus?: (id: string, formData: any) => void
+    onBlur?: (id: string, formData: any) => void
 };
 
 const CommonView = (props: Props) => {
@@ -34,7 +35,8 @@ const CommonView = (props: Props) => {
         onSubmit,
         onRelease,
         onPrevious,
-        onFocus
+        onFocus,
+        onBlur
     } = props;
     const {id: taskId, schema, uiSchema} = data;
     const {id: stageId, allow_go_back, allow_release} = data.stage;
@@ -83,6 +85,7 @@ const CommonView = (props: Props) => {
             onChange={onChange}
             onSubmit={onSubmit}
             onFocus={onFocus}
+            onBlur={onBlur}
             omitExtraData={true}
             liveOmit={true}
             formContext={{storagePath}}

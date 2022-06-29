@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Box, Button, FormControl, FormGroup, InputLabel, MenuItem, Select, SelectChangeEvent,} from "@mui/material";
 import useAxios from "../../services/api/useAxios";
-import {taskstagesUrl} from "../../services/api/Urls";
+import {chainsUrl, taskstagesUrl} from "../../services/api/Urls";
 import Form from "../../components/form/Form";
 import useHelpers from "../../utils/hooks/UseHelpers";
 import {useTranslation} from "react-i18next";
@@ -40,9 +40,12 @@ const TaskFilter = (props: { campaign: number, onFilter: (filter: string) => voi
 
     useEffect(() => {
         if (chainId && chains.length > 0) {
-            axios.get(`${taskstagesUrl}?chain=${chainId}&chain__campaign=${campaign}&limit=100`)
+            axios.get(`${chainsUrl + chainId}/get_graph/`)
                 .then(res => res.data)
-                .then(res => setStages(res.results))
+                .then(res => {
+                    const stages = res.map((stage: any) => ({id: stage.pk, name: stage.name}))          
+                    return setStages(stages);
+                })
                 .then(() => {
                     if (!formStageId) {
                         const savedFormStage = localStorage.getItem("selectable_filter_form_stage");

@@ -50,6 +50,7 @@ const resources = {
                 invalid_code_error: "Invalid verification code",
                 invalid_phone_number: "Invalid number format",
                 unknown_login_with_phone_error: "Unknown error",
+                phone_helper_text: "Please enter your phone number using the country code. If you live in Kyrgyzstan, enter the number as in the example: +996 707 00 00 00",
             },
             campaigns: {
                 user_campaigns: "My campaigns",
@@ -133,6 +134,7 @@ const resources = {
                 invalid_code_error: "Неправильный код верификации",
                 invalid_phone_number: "Неправильный формат",
                 unknown_login_with_phone_error: "Неизвестная ошибка",
+                phone_helper_text: "Вы должны ввести свой номер телефона используя код страны, например: Если вы живете в Кыргызстане, то вы должны вписать свой номер так +996 707 00 00 00",
             },
             campaigns: {
                 user_campaigns: "Мои кампании",

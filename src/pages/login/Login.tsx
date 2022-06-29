@@ -69,7 +69,12 @@ const Login = () => {
                 <Divider><Typography variant={"caption"}>{t("sign_up_page.divider_text")}</Typography></Divider>
                 <Box py={2}>
                     <Box py={1}>
-                        <TextField label={t("sign_up_page.phone_number")} onChange={(event) => setPhoneNumber(event.target.value)} fullWidth />
+                        <TextField
+                            type="tel"
+                            label={t("sign_up_page.phone_number")}
+                            onChange={(event) => setPhoneNumber(event.target.value)}
+                            fullWidth
+                            helperText={t("sign_up_page.phone_helper_text")} />
                     </Box>
                     <Button onClick={requestSMSCode} size="large" color="primary" variant="contained" fullWidth={true}>
                         {t("sign_up_page.request_code_button")}

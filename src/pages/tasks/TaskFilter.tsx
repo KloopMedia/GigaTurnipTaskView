@@ -40,12 +40,9 @@ const TaskFilter = (props: { campaign: number, onFilter: (filter: string) => voi
 
     useEffect(() => {
         if (chainId && chains.length > 0) {
-            axios.get(`${chainsUrl + chainId}/get_graph/`)
+            axios.get(`${taskstagesUrl}?chain__campaign=${campaign}&chain=${chainId}`)
                 .then(res => res.data)
-                .then(res => {
-                    const stages = res.map((stage: any) => ({id: stage.pk, name: stage.name}))          
-                    return setStages(stages);
-                })
+                .then(res => setStages(res.results))
                 .then(() => {
                     if (!formStageId) {
                         const savedFormStage = localStorage.getItem("selectable_filter_form_stage");

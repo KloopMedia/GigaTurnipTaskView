@@ -93,7 +93,7 @@ const resources = {
                 date_label: "Дата"
             },
             returned: "Возвращено",
-            edit: "Редактировать",
+            edit: "Редак.",
             accepted: "Получен",
             files: {
                 choose_files: "Выбрать файлы",

@@ -39,7 +39,7 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
 
     const DEBOUNCE_SAVE_DELAY_MS = 2000;
 
-    const debouncedSave = useCallback(debounce((id: number, formData) => {
+    const debouncedSave = useCallback(debounce((id: number, formData, data) => {
         if (!complete) {
             if (isDynamic) {
                 setDynamicForm(data, formData.responses)
@@ -121,7 +121,7 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
     }
 
     useEffect(() => {
-        debouncedSave(id, {responses: formData});
+        debouncedSave(id, {responses: formData}, data);
         // Show Prompt if not complete
         handlePrompt(!complete);
     }, [formData, complete, debouncedSave, id])

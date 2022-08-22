@@ -1,26 +1,26 @@
-import React, {useEffect, useState} from 'react';
-import {Box, Card, CardContent, Grid, Pagination, Tab, Typography, useMediaQuery} from "@mui/material";
-import {useNavigate, useParams} from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { Box, Button, Card, CardContent, Grid, Pagination, Tab, Typography, useMediaQuery } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
 import useAxios from "../../services/api/useAxios";
 import useHelpers from "../../utils/hooks/UseHelpers";
-import {TabContext, TabList, TabPanel} from "@mui/lab";
-import {useTranslation} from "react-i18next";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { useTranslation } from "react-i18next";
 
 
-const Notifications = ({importance, onlyNew}: { importance?: number, onlyNew?: boolean }) => {
+const Notifications = ({ importance, onlyNew }: { importance?: number, onlyNew?: boolean }) => {
     const [viewedNotifications, setViewedNotifications] = useState<any[]>([]);
-    const [notViewedNotifications, setNotViewedNotifications] = useState<any[]>([]);
+    const [notViewedNotifications, setNotViewedNotifications] = useState<any[]>([{ id: 1, title: '123', importance: 0 }]);
     const [totalPages, setTotalPages] = useState(0)
     const [page, setPage] = React.useState(1);
     const [tab, setTab] = useState("1");
 
     const matches = useMediaQuery('(min-width:600px)');
     const navigate = useNavigate();
-    const {campaignId} = useParams();
-    const {parseId, formatDateString} = useHelpers();
+    const { campaignId } = useParams();
+    const { parseId, formatDateString } = useHelpers();
     const parsedCampaignId = parseId(campaignId);
-    const {getUserNotifications} = useAxios();
-    const {t} = useTranslation();
+    const { getUserNotifications, getNotificationContent } = useAxios();
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (tab === "1") {
@@ -69,7 +69,7 @@ const Notifications = ({importance, onlyNew}: { importance?: number, onlyNew?: b
                 {notViewedNotifications.map(message =>
                     <Grid container justifyContent="center" key={message.id} p={1}>
                         <Card onClick={() => openMessage(message.id)}
-                              sx={{width: matches ? 700 : 300, background: 'lightblue', cursor: "pointer"}}>
+                            sx={{ width: matches ? 700 : 300, background: 'lightblue', cursor: "pointer" }}>
                             <CardContent>
                                 <Typography variant="h6">
                                     {message.title}
@@ -79,6 +79,11 @@ const Notifications = ({importance, onlyNew}: { importance?: number, onlyNew?: b
                                 </Typography>
                             </CardContent>
                         </Card>
+                        <Button
+                            variant={'contained'}
+                            sx={{ background: '#adbce6' }}
+                            onClick={() => getNotificationContent(parseId(message.id))}>X
+                        </Button>
                     </Grid>
                 )}
             </Box>
@@ -87,19 +92,19 @@ const Notifications = ({importance, onlyNew}: { importance?: number, onlyNew?: b
         return (
             <Box>
                 <Typography align={"center"} variant={"h5"} p={2}>{t("notifications.title")}</Typography>
-                <Box sx={{width: '100%', typography: 'body1'}}>
+                <Box sx={{ width: '100%', typography: 'body1' }}>
                     <TabContext value={tab}>
-                        <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <TabList onChange={handleTabChange} aria-label="lab API tabs example" centered variant={"fullWidth"}>
-                                <Tab label={t("notifications.unread")} value="1"/>
-                                <Tab label={t("notifications.read")} value="2"/>
+                                <Tab label={t("notifications.unread")} value="1" />
+                                <Tab label={t("notifications.read")} value="2" />
                             </TabList>
                         </Box>
                         <TabPanel value="1">
                             {notViewedNotifications.map(message =>
                                 <Grid container justifyContent="center" key={message.id} p={1}>
                                     <Card onClick={() => openMessage(message.id)}
-                                          sx={{width: matches ? 700 : 300, background: 'lightblue', cursor: "pointer"}}>
+                                        sx={{ width: matches ? 700 : 300, background: 'lightblue', cursor: "pointer" }}>
                                         <CardContent>
                                             <Typography variant="h6">
                                                 {message.title}
@@ -116,7 +121,7 @@ const Notifications = ({importance, onlyNew}: { importance?: number, onlyNew?: b
                             {viewedNotifications.map(message =>
                                 <Grid container justifyContent="center" key={message.id} p={1}>
                                     <Card onClick={() => openMessage(message.id)}
-                                          sx={{width: matches ? 700 : 300, background: 'lightblue', cursor: "pointer"}}>
+                                        sx={{ width: matches ? 700 : 300, background: 'lightblue', cursor: "pointer" }}>
                                         <CardContent>
                                             <Typography variant="h6">
                                                 {message.title}
@@ -132,7 +137,7 @@ const Notifications = ({importance, onlyNew}: { importance?: number, onlyNew?: b
                     </TabContext>
                     {totalPages > 1 && <Box p={2} display={"flex"} justifyContent={"center"}>
                         <Pagination count={totalPages} page={page} onChange={handlePageChange} showFirstButton
-                                    showLastButton/>
+                            showLastButton />
                     </Box>}
                 </Box>
             </Box>

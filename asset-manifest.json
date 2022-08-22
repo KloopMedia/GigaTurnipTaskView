@@ -1,25 +1,25 @@
 {
   "files": {
     "main.css": "/GigaTurnipTaskView/static/css/main.afd7172b.chunk.css",
-    "main.js": "/GigaTurnipTaskView/static/js/main.55c13233.chunk.js",
-    "main.js.map": "/GigaTurnipTaskView/static/js/main.55c13233.chunk.js.map",
-    "runtime-main.js": "/GigaTurnipTaskView/static/js/runtime-main.9490b6bd.js",
-    "runtime-main.js.map": "/GigaTurnipTaskView/static/js/runtime-main.9490b6bd.js.map",
-    "static/css/2.0a9ec390.chunk.css": "/GigaTurnipTaskView/static/css/2.0a9ec390.chunk.css",
-    "static/js/2.5fe4e5dc.chunk.js": "/GigaTurnipTaskView/static/js/2.5fe4e5dc.chunk.js",
-    "static/js/2.5fe4e5dc.chunk.js.map": "/GigaTurnipTaskView/static/js/2.5fe4e5dc.chunk.js.map",
-    "static/js/3.dc92fec1.chunk.js": "/GigaTurnipTaskView/static/js/3.dc92fec1.chunk.js",
-    "static/js/3.dc92fec1.chunk.js.map": "/GigaTurnipTaskView/static/js/3.dc92fec1.chunk.js.map",
+    "main.js": "/GigaTurnipTaskView/static/js/main.e1785b27.chunk.js",
+    "main.js.map": "/GigaTurnipTaskView/static/js/main.e1785b27.chunk.js.map",
+    "runtime-main.js": "/GigaTurnipTaskView/static/js/runtime-main.709097fa.js",
+    "runtime-main.js.map": "/GigaTurnipTaskView/static/js/runtime-main.709097fa.js.map",
+    "static/css/2.cd29bc4e.chunk.css": "/GigaTurnipTaskView/static/css/2.cd29bc4e.chunk.css",
+    "static/js/2.b4f438cd.chunk.js": "/GigaTurnipTaskView/static/js/2.b4f438cd.chunk.js",
+    "static/js/2.b4f438cd.chunk.js.map": "/GigaTurnipTaskView/static/js/2.b4f438cd.chunk.js.map",
+    "static/js/3.cca3e326.chunk.js": "/GigaTurnipTaskView/static/js/3.cca3e326.chunk.js",
+    "static/js/3.cca3e326.chunk.js.map": "/GigaTurnipTaskView/static/js/3.cca3e326.chunk.js.map",
     "index.html": "/GigaTurnipTaskView/index.html",
-    "static/css/2.0a9ec390.chunk.css.map": "/GigaTurnipTaskView/static/css/2.0a9ec390.chunk.css.map",
+    "static/css/2.cd29bc4e.chunk.css.map": "/GigaTurnipTaskView/static/css/2.cd29bc4e.chunk.css.map",
     "static/css/main.afd7172b.chunk.css.map": "/GigaTurnipTaskView/static/css/main.afd7172b.chunk.css.map",
-    "static/js/2.5fe4e5dc.chunk.js.LICENSE.txt": "/GigaTurnipTaskView/static/js/2.5fe4e5dc.chunk.js.LICENSE.txt"
+    "static/js/2.b4f438cd.chunk.js.LICENSE.txt": "/GigaTurnipTaskView/static/js/2.b4f438cd.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.9490b6bd.js",
-    "static/css/2.0a9ec390.chunk.css",
-    "static/js/2.5fe4e5dc.chunk.js",
+    "static/js/runtime-main.709097fa.js",
+    "static/css/2.cd29bc4e.chunk.css",
+    "static/js/2.b4f438cd.chunk.js",
     "static/css/main.afd7172b.chunk.css",
-    "static/js/main.55c13233.chunk.js"
+    "static/js/main.e1785b27.chunk.js"
   ]
 }

@@ -1,33 +1,35 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-import {WidgetProps} from "@rjsf/core";
-import {useReactMediaRecorder} from "react-media-recorder";
-import {Box, Button, CircularProgress, Grid} from "@mui/material";
+import { WidgetProps } from "@rjsf/core";
+import { useReactMediaRecorder } from "react-media-recorder";
+import { Box, Button, CircularProgress, Grid } from "@mui/material";
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
-import {storage} from "../../../../services/firebase/Firebase"
-import {keyframes} from "@emotion/react";
+import { storage } from "../../../../services/firebase/Firebase"
+import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
-import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import AudioPlayer from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
 
 const AudioWidget = ({
-                         schema,
-                         id,
-                         options,
-                         value,
-                         required,
-                         disabled,
-                         readonly,
-                         label,
-                         formContext,
-                         onChange,
-                         onBlur
-                     }: WidgetProps) => {
+    schema,
+    id,
+    options,
+    value,
+    required,
+    disabled,
+    readonly,
+    label,
+    formContext,
+    onChange,
+    onBlur
+}: WidgetProps) => {
 
     const [record, setRecord] = useState<any>(null)
     const [loader, setLoader] = useState(false)
 
-    const {storagePath} = formContext;
+    const { storagePath } = formContext;
     const privateUpload = options.private ? options.private : false;
     const defaultRecord = options.default ? options.default : false;
 
@@ -69,7 +71,7 @@ const AudioWidget = ({
         status,
         startRecording,
         stopRecording
-    } = useReactMediaRecorder({video: false, onStop: handleStopRecording});
+    } = useReactMediaRecorder({ video: false, onStop: handleStopRecording });
 
     const renderButton = (status: string) => {
         switch (status) {
@@ -78,9 +80,9 @@ const AudioWidget = ({
                     <Button
                         variant={"contained"}
                         onClick={stopRecording}
-                        sx={{marginBottom: 1}}
+                        sx={{ marginBottom: 1 }}
                         disabled={disabled || readonly}
-                        endIcon={<StopCircleIcon/>}
+                        endIcon={<StopCircleIcon />}
                     >
                         Остановить
                     </Button>
@@ -90,9 +92,9 @@ const AudioWidget = ({
                     <Button
                         variant={"contained"}
                         onClick={startRecording}
-                        sx={{marginBottom: 1}}
+                        sx={{ marginBottom: 1 }}
                         disabled={disabled || readonly}
-                        endIcon={<RadioButtonCheckedIcon sx={{fill: disabled || readonly ? "grey" : "red"}}/>}
+                        endIcon={<RadioButtonCheckedIcon sx={{ fill: disabled || readonly ? "grey" : "red" }} />}
                     >
                         Запись
                     </Button>
@@ -104,13 +106,24 @@ const AudioWidget = ({
     return (
         <Box>
             <label className={"form-label"}>{label}{required && "*"}</label>
-            {!defaultRecord && <Grid container alignItems={"center"}>
-                <Grid item>{renderButton(status)}</Grid>
-                <Grid item>{status === "recording" && <Indicator/>}</Grid>
-                <Grid item>{loader && <CircularProgress sx={{marginLeft: 1}} size={30}/>}</Grid>
+            {!defaultRecord && !(disabled || readonly) && <Grid container alignItems={"center"}>
+                <Grid item>{!record ? renderButton(status) : null}</Grid>
+                <Grid item>{status === "recording" && <Indicator />}</Grid>
+                <Grid item>{loader && <CircularProgress sx={{ marginLeft: 1 }} size={30} />}</Grid>
+                {record && <Button
+                    variant={"contained"}
+                    disabled={disabled || readonly}
+                    onClick={() => {
+                        onChange('');
+                        setRecord(null);
+                    }}>Удалить</Button>}
             </Grid>}
             {record && <Grid container>
-                <audio controls src={record}/>
+                <AudioPlayer
+                    src={record}
+                    onPlay={e => console.log("onPlay")}
+                // progressJumpSteps={{backward: 10000, forward: 10000}}
+                />
             </Grid>}
         </Box>
     );

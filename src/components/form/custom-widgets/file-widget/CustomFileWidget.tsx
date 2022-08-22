@@ -1,16 +1,17 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import upload from "./Upload";
 import LinearProgressWithLabel from "../../../progress/LinearProgressWithLabel";
 import ImageViewer from 'react-simple-image-viewer';
-import {Box, Button, Dialog} from "@mui/material";
-import {ref, getDownloadURL, getMetadata} from "firebase/storage";
-import {storage} from "../../../../services/firebase/Firebase";
-import {useTranslation} from "react-i18next";
+import { Box, Button, Dialog } from "@mui/material";
+import { ref, getDownloadURL, getMetadata } from "firebase/storage";
+import { storage } from "../../../../services/firebase/Firebase";
+import { useTranslation } from "react-i18next";
+import { useToast } from '../../../../context/toast/hooks/useToast';
 
 
 const CustomFileWidget = (props: any) => {
-    const {schema, uiSchema, disabled, required, formContext, value, id} = props;
-    const {storagePath} = formContext;
+    const { schema, uiSchema, disabled, required, formContext, value, id } = props;
+    const { storagePath } = formContext;
     const [uploadedFiles, setUploadedFiles] = useState<any>({})
     const [fileLinks, setFileLinks] = useState<any>({})
     const [currentFile, setCurrentFile] = useState("")
@@ -19,7 +20,8 @@ const CustomFileWidget = (props: any) => {
     const [fileType, setFileType] = useState("")
     const [parsedValue, setParsedValue] = useState<any>({})
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
+    const { openToast } = useToast();
 
     const privateUpload = uiSchema["ui:options"] && uiSchema["ui:options"].private ? uiSchema["ui:options"].private : false
     const multipleSelect = uiSchema["ui:options"] && uiSchema["ui:options"].multiple ? uiSchema["ui:options"].multiple : false
@@ -37,7 +39,7 @@ const CustomFileWidget = (props: any) => {
                 getDownloadURL(fileRef)
                     .then(url => setUploadedFiles((prevState: any) => ({
                         ...prevState,
-                        [filename]: {url: url, status: "complete"}
+                        [filename]: { url: url, status: "complete" }
                     })))
             })
         }
@@ -57,7 +59,7 @@ const CustomFileWidget = (props: any) => {
                 let stringify = "";
                 if (multipleSelect) {
                     const parsed = JSON.parse(value);
-                    const allFiles = {...parsed, ...fileLinks};
+                    const allFiles = { ...parsed, ...fileLinks };
                     stringify = JSON.stringify(allFiles);
                 } else {
                     stringify = JSON.stringify(fileLinks);
@@ -83,13 +85,13 @@ const CustomFileWidget = (props: any) => {
             _onBlur()
         }
 
-        const links = {...fileLinks}
+        const links = { ...fileLinks }
         if (filename in links) {
             delete links[filename]
             setFileLinks(links)
         }
 
-        const uploaded = {...uploadedFiles}
+        const uploaded = { ...uploadedFiles }
         if (filename in uploaded) {
             delete uploaded[filename]
             setUploadedFiles(uploaded)
@@ -133,6 +135,15 @@ const CustomFileWidget = (props: any) => {
         setIsVideoOpen(false);
     };
 
+    const copyPath = (filename: string) => {
+        const parsed = parsedValue
+        if (filename in parsed) {
+            const path = parsed[filename]
+            navigator.clipboard.writeText(path)
+                .then(() => openToast(t("Путь скопирован!"), "success"))
+        }
+    }
+
     return (
         <div>
             {isImageOpen && <ImageViewer
@@ -150,7 +161,7 @@ const CustomFileWidget = (props: any) => {
                 fullWidth={true}
             >
                 <video height="360px" controls>
-                    <source src={currentFile} type={fileType}/>
+                    <source src={currentFile} type={fileType} />
                     Your browser does not support the video tag.
                 </video>
             </Dialog>
@@ -159,7 +170,7 @@ const CustomFileWidget = (props: any) => {
                 {schema?.title}
                 {schema?.title && required ? "*" : null}
             </label>
-            <br/>
+            <br />
 
             <Box pb={1}>
                 <Button
@@ -183,13 +194,13 @@ const CustomFileWidget = (props: any) => {
             {
                 Object.keys(uploadedFiles).map((filename, i) =>
                     <div key={filename}>
-                        <div style={{display: "flex", alignItems: "baseline"}}>
+                        <div style={{ display: "flex", alignItems: "baseline" }}>
                             <p>{filename}</p>
                             {uploadedFiles[filename].status === 'complete' &&
-                                <div style={{display: "flex", alignItems: "baseline"}}>
+                                <div style={{ display: "flex", alignItems: "baseline" }}>
                                     <button
                                         onClick={() => handleFileClick(filename)}
-                                        style={{fontSize: "14px", padding: 0, margin: "0 10px"}}
+                                        style={{ fontSize: "14px", padding: 0, margin: "0 10px" }}
                                         type="button"
                                         className="btn btn-link text-success"
                                     >
@@ -198,17 +209,25 @@ const CustomFileWidget = (props: any) => {
                                     {!disabled &&
                                         <button
                                             onClick={() => deleteFile(filename)}
-                                            style={{fontSize: "14px", padding: 0, margin: "0 10px"}}
+                                            style={{ fontSize: "14px", padding: 0, margin: "0 10px" }}
                                             type="button"
                                             className="btn btn-link text-danger"
                                         >
                                             {t("files.remove_file")}
                                         </button>}
+                                    <button
+                                        onClick={() => copyPath(filename)}
+                                        style={{ fontSize: "14px", padding: 0, margin: "0 10px" }}
+                                        type="button"
+                                        className="btn btn-link text-success"
+                                    >
+                                        Скопировать путь
+                                    </button>
                                 </div>
                             }
                         </div>
                         {uploadedFiles[filename].status === 'loading' &&
-                            <LinearProgressWithLabel value={uploadedFiles[filename].progress}/>}
+                            <LinearProgressWithLabel value={uploadedFiles[filename].progress} />}
                     </div>
                 )
             }

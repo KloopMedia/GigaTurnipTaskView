@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 
 const Notifications = ({ importance, onlyNew }: { importance?: number, onlyNew?: boolean }) => {
     const [viewedNotifications, setViewedNotifications] = useState<any[]>([]);
-    const [notViewedNotifications, setNotViewedNotifications] = useState<any[]>([{ id: 1, title: '123', importance: 0 }]);
+    const [notViewedNotifications, setNotViewedNotifications] = useState<any[]>([]);
     const [totalPages, setTotalPages] = useState(0)
     const [page, setPage] = React.useState(1);
     const [tab, setTab] = useState("1");

@@ -32,6 +32,7 @@ const AudioWidget = ({
     const { storagePath } = formContext;
     const privateUpload = options.private ? options.private : false;
     const defaultRecord = options.default ? options.default : false;
+    const readOnly = readonly || (options.readonly as boolean ?? false);
 
     const privatePath = privateUpload ? "private" : "public";
     const storageRef = ref(storage, `${privatePath}/${storagePath}`);
@@ -81,7 +82,7 @@ const AudioWidget = ({
                         variant={"contained"}
                         onClick={stopRecording}
                         sx={{ marginBottom: 1 }}
-                        disabled={disabled || readonly}
+                        disabled={disabled || readOnly}
                         endIcon={<StopCircleIcon />}
                     >
                         Остановить
@@ -93,7 +94,7 @@ const AudioWidget = ({
                         variant={"contained"}
                         onClick={startRecording}
                         sx={{ marginBottom: 1 }}
-                        disabled={disabled || readonly}
+                        disabled={disabled || readOnly}
                         endIcon={<RadioButtonCheckedIcon sx={{ fill: disabled || readonly ? "grey" : "red" }} />}
                     >
                         Запись
@@ -106,13 +107,13 @@ const AudioWidget = ({
     return (
         <Box>
             <label className={"form-label"}>{label}{required && "*"}</label>
-            {!defaultRecord && !(disabled || readonly) && <Grid container alignItems={"center"}>
+            {!defaultRecord && !(disabled || readOnly) && <Grid container alignItems={"center"}>
                 <Grid item>{!record ? renderButton(status) : null}</Grid>
                 <Grid item>{status === "recording" && <Indicator />}</Grid>
                 <Grid item>{loader && <CircularProgress sx={{ marginLeft: 1 }} size={30} />}</Grid>
                 {record && <Button
                     variant={"contained"}
-                    disabled={disabled || readonly}
+                    disabled={disabled || readOnly}
                     onClick={() => {
                         onChange('');
                         setRecord(null);

@@ -1,10 +1,10 @@
-import React, {useCallback, useEffect, useState} from 'react';
-import {Box} from "@mui/material";
+import React, { useCallback, useEffect, useState } from 'react';
+import { Box } from "@mui/material";
 import BuilderLayout from "../../../../components/layout/common-layouts/BuilderLayout";
-import {TaskProps} from "../Task.types";
+import { TaskProps } from "../Task.types";
 import CommonView from "./CommonView";
-import {useNavigate} from "react-router-dom";
-import {useTranslation} from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import debounce from "lodash.debounce";
 
 
@@ -29,7 +29,7 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
     } = props;
 
     const navigate = useNavigate();
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const [data, setData] = useState<any>();
     const [formData, setFormData] = useState<any>();
@@ -60,9 +60,9 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
             _jsonData = '{}';
         }
         getDynamicForm(taskData.stage.id, _jsonData).then(res => {
-            const {schema, ...rest} = taskData;
+            const { schema, ...rest } = taskData;
             const dynamicSchema = res.schema;
-            setData({schema: dynamicSchema, ...rest})
+            setData({ schema: dynamicSchema, ...rest })
         })
     }
 
@@ -100,7 +100,7 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
     const handleOpenPrevious = () => {
         openPreviousTask(id)
             .then(res => {
-                const {id: prevId} = res;
+                const { id: prevId } = res;
                 handleRedirect(id, prevId, mountData);
             })
     };
@@ -110,18 +110,22 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
     }
 
     const handleSubmit = (formData: any) => {
-        return saveData(id, {responses: formData, complete: true})
+        return saveData(id, { responses: formData, complete: true })
+            .then((res) => {
+                setFormData({})
+                return res;
+            })
             .then((res) => {
                 handlePrompt(false);
                 openToast(t("task.saved_message"), "success");
-                const {next_direct_id} = res;
+                const { next_direct_id } = res;
                 handleRedirect(id, next_direct_id, mountData);
             })
             .catch(err => openToast(err.message, "error"));
     }
 
     useEffect(() => {
-        debouncedSave(id, {responses: formData}, data);
+        debouncedSave(id, { responses: formData }, data);
         // Show Prompt if not complete
         handlePrompt(!complete);
     }, [formData, complete, debouncedSave, id])
@@ -145,14 +149,14 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
     if (fullwidth) {
         return (
             <Box>
-                <CommonView view={view} {...formProps}/>
+                <CommonView view={view} {...formProps} />
             </Box>
         );
     }
 
     return (
         <BuilderLayout>
-            <CommonView view={view} {...formProps}/>
+            <CommonView view={view} {...formProps} />
         </BuilderLayout>
     );
 };

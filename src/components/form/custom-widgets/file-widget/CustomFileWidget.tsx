@@ -31,6 +31,7 @@ const CustomFileWidget = (props: any) => {
     const storageRef = ref(storage, `${privatePath}/${storagePath}`);
 
     useEffect(() => {
+        setUploadedFiles({});
         if (value && Object.keys(value).length > 0) {
             const parsed = JSON.parse(value)
             setParsedValue(parsed)

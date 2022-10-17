@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from "react";
-import {Alert as MuiAlert, AlertProps, Snackbar} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Alert as MuiAlert, AlertProps, Snackbar } from "@mui/material";
 
 interface ToastContextType {
     open: boolean;
@@ -18,10 +18,18 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const ToastProvider = ({children}: { children: React.ReactNode }) => {
+const ToastProvider = ({ children }: { children: React.ReactNode }) => {
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState<any>("");
     const [variant, setVariant] = useState<ToastVariants>("error")
+
+    useEffect(() => {
+        if (open) {
+            setTimeout(() => {
+                setOpen(false)
+            }, 3500)
+        }
+    }, [open])
 
     const stringify = (value: any) => {
         switch (typeof value) {
@@ -50,16 +58,16 @@ const ToastProvider = ({children}: { children: React.ReactNode }) => {
         setOpen(false);
     };
 
-    const value = {open, openToast, closeToast};
+    const value = { open, openToast, closeToast };
 
     return <ToastContext.Provider value={value}>
-        <Snackbar open={open} autoHideDuration={5000} onClose={closeToast}
-                  anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'center',
-                  }}
+        <Snackbar open={open} autoHideDuration={3000} onClose={closeToast}
+            anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+            }}
         >
-            <Alert onClose={closeToast} severity={variant} sx={{width: '100%'}}>
+            <Alert onClose={closeToast} severity={variant} sx={{ width: '100%' }}>
                 {title}
             </Alert>
         </Snackbar>

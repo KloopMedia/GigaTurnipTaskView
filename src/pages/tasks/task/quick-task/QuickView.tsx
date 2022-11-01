@@ -50,7 +50,7 @@ const QuickView = (props: Props) => {
 
     return (
         <ExpandableCard data={cardData} extraActions={[requestButton]} hideOpenButton={hideOpen} onClick={onOpen}>
-            <CommonView {...rest} hideSubmit={hideSubmit} disabled={!active} />
+            <CommonView {...rest} hideSubmit={hideSubmit} disabled={!active} isUploading={false} />
         </ExpandableCard>
     );
 };

@@ -1,9 +1,9 @@
 import React from 'react';
-import {Box, Button, Chip, Divider, Grid, Stack} from "@mui/material";
+import { Box, Button, Chip, CircularProgress, Dialog, Divider, Grid, Stack, Typography } from "@mui/material";
 import Form from "../../../../components/form/Form";
-import {TaskViews} from "../Task.types";
-import {useAuth} from "../../../../context/authentication/hooks/useAuth";
-import {useTranslation} from "react-i18next";
+import { TaskViews } from "../Task.types";
+import { useAuth } from "../../../../context/authentication/hooks/useAuth";
+import { useTranslation } from "react-i18next";
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 
 export type Props = {
@@ -13,6 +13,7 @@ export type Props = {
     view?: TaskViews,
     disabled?: boolean,
     previousTasks?: any[],
+    isUploading: boolean,
     onChange: (formData: any) => void,
     onSubmit: (formData: any) => void,
     onRelease: () => void,
@@ -36,30 +37,31 @@ const CommonView = (props: Props) => {
         onRelease,
         onPrevious,
         onFocus,
-        onBlur
+        onBlur,
+        isUploading
     } = props;
-    const {id: taskId, schema, uiSchema} = data;
-    const {id: stageId, allow_go_back, allow_release} = data.stage;
-    const {id: chainId, campaign: campaignId} = data.stage.chain;
+    const { id: taskId, schema, uiSchema } = data;
+    const { id: stageId, allow_go_back, allow_release } = data.stage;
+    const { id: chainId, campaign: campaignId } = data.stage.chain;
     const inactive = disabled || complete;
 
-    const {t} = useTranslation();
-    const {user} = useAuth();
+    const { t } = useTranslation();
+    const { user } = useAuth();
     const storagePath = user ? `${campaignId}/${chainId}/${stageId}/${user.uid}/${taskId}` : null;
 
     const renderPreviousTasks = (tasks: any[] | undefined) => {
         if (Array.isArray(tasks) && tasks.length > 0) {
             return tasks.map((task: any, index) => {
-                    const {responses, schema, uiSchema} = task;
-                    return <Form
-                        key={`prev_task_${index}`}
-                        schema={schema}
-                        uiSchema={uiSchema}
-                        formData={responses}
-                        hideButton={true}
-                        disabled={true}
-                    />;
-                }
+                const { responses, schema, uiSchema } = task;
+                return <Form
+                    key={`prev_task_${index}`}
+                    schema={schema}
+                    uiSchema={uiSchema}
+                    formData={responses}
+                    hideButton={true}
+                    disabled={true}
+                />;
+            }
             );
         } else {
             return null;
@@ -69,11 +71,11 @@ const CommonView = (props: Props) => {
     const renderButtons = () => (
         <Stack spacing={1} py={1}>
             <Button type={"submit"} variant={"contained"} hidden={hideSubmit}
-                    disabled={inactive}>{t("task.submit")}</Button>
+                disabled={inactive}>{t("task.submit")}</Button>
             <Button hidden={!allow_go_back} variant={"contained"} color={"secondary"} disabled={inactive}
-                    onClick={onPrevious}>{t("task.open_previous")}</Button>
+                onClick={onPrevious}>{t("task.open_previous")}</Button>
             <Button hidden={!allow_release} variant={"contained"} color={"warning"} disabled={inactive}
-                    onClick={onRelease}>{t("task.release")}</Button>
+                onClick={onRelease}>{t("task.release")}</Button>
         </Stack>
     )
 
@@ -88,7 +90,7 @@ const CommonView = (props: Props) => {
             onBlur={onBlur}
             omitExtraData={true}
             liveOmit={true}
-            formContext={{storagePath}}
+            formContext={{ storagePath }}
             disabled={inactive}>
             {renderButtons()}
         </Form>
@@ -97,10 +99,10 @@ const CommonView = (props: Props) => {
     if (view === "split" && Array.isArray(previousTasks) && previousTasks.length > 0) {
         return (
             <Grid container direction='row' spacing={1}>
-                <Grid container item sm={6} xs={12} sx={{display: 'block'}}>
+                <Grid container item sm={6} xs={12} sx={{ display: 'block' }}>
                     {renderPreviousTasks(previousTasks)}
                 </Grid>
-                <Grid container item sm={6} xs={12} sx={{display: 'block'}}>
+                <Grid container item sm={6} xs={12} sx={{ display: 'block' }}>
                     {form}
                 </Grid>
             </Grid>
@@ -108,9 +110,17 @@ const CommonView = (props: Props) => {
     } else {
         return (
             <Box>
+                <Dialog open={isUploading}>
+                    <Box padding={2}>
+                        <Box display={"flex"} justifyContent="center" padding={1}>
+                            <CircularProgress />
+                        </Box>
+                        <Typography>Жиберүү / Отправка</Typography>
+                    </Box>
+                </Dialog>
                 {renderPreviousTasks(previousTasks)}
-                <Divider hidden={previousTasks?.length === 0} sx={{py: 1}}>
-                    <Chip icon={<ArrowCircleDownIcon/>} color={"primary"} label={t("task.divider_text")}/>
+                <Divider hidden={previousTasks?.length === 0} sx={{ py: 1 }}>
+                    <Chip icon={<ArrowCircleDownIcon />} color={"primary"} label={t("task.divider_text")} />
                 </Divider>
                 {form}
             </Box>

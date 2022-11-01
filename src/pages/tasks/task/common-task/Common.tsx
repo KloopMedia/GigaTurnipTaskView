@@ -36,6 +36,7 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
     const [complete, setComplete] = useState(true);
     const [previousTasks, setPreviousTasks] = useState([]);
     const [isDynamic, setDynamic] = useState(false);
+    const [isUploading, setUploading] = useState(false);
 
     const DEBOUNCE_SAVE_DELAY_MS = 2000;
 
@@ -110,9 +111,12 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
     }
 
     const handleSubmit = (formData: any) => {
+        setComplete(true);
+        setUploading(true);
         return saveData(id, { responses: formData, complete: true })
             .then((res) => {
                 setFormData({})
+                setUploading(false);
                 return res;
             })
             .then((res) => {
@@ -121,7 +125,11 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
                 const { next_direct_id } = res;
                 handleRedirect(id, next_direct_id, mountData);
             })
-            .catch(err => openToast(err.message, "error"));
+            .catch(err => {
+                setComplete(false);
+                setUploading(false);
+                openToast(err.message, "error")
+            });
     }
 
     useEffect(() => {
@@ -136,6 +144,7 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
         complete,
         previousTasks: previousTasks,
         disabled,
+        isUploading,
         onChange: handleChange,
         onSubmit: handleSubmit,
         onRelease: handleRelease,

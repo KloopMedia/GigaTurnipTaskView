@@ -14,6 +14,7 @@ import JsonForm from "@rjsf/bootstrap-4";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {FormProps} from "@rjsf/core"
 import {useTranslation} from "react-i18next";
+import { useToast } from '../../context/toast/hooks/useToast';
 
 
 interface Props extends FormProps<any> {
@@ -29,6 +30,7 @@ interface Props extends FormProps<any> {
 const Form: React.FC<Props> = (props) => {
     const {schema, uiSchema, formData, hideButton, onChange, onSubmit, children, disabled, ...rest} = props;
     const {t} = useTranslation();
+    const {openToast} = useToast();
 
     const widgets = {
         customfile: FileWidget,
@@ -86,6 +88,7 @@ const Form: React.FC<Props> = (props) => {
             onChange={handleChange}
             onSubmit={handleSubmit}
             disabled={disabled}
+            onError={(e) => openToast('Форманы толтурууда ката бар. Кайра текшерип чыгыңыз / Есть ошибка в заполнении формы. Проверьте ещё раз.', "error")}
             {...rest}
         >
             {renderButton()}

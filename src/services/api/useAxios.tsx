@@ -219,8 +219,8 @@ const useAxios = () => {
         return axios.get(`${tasksUrl + id}/trigger_webhook/`)
     }
 
-    const getDynamicSchema = (id: number, formData: any) => {
-        return axios.get(`${taskstagesUrl + id}/load_schema_answers/?responses=${formData}`)
+    const getDynamicSchema = (id: number, formData: any, taskId: number) => {
+        return axios.get(`${taskstagesUrl + id}/load_schema_answers/?current_task=${taskId}&responses=${formData}`)
             .then(res => res.data);
     }
 

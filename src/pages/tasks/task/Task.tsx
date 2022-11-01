@@ -125,8 +125,8 @@ const Task = (props: Props) => {
             });
     }, [parsedId])
 
-    const getDynamicForm = useCallback((id: number, formData: any) => {
-        return getDynamicSchema(id, formData);
+    const getDynamicForm = useCallback((id: number, formData: any, taskId: number) => {
+        return getDynamicSchema(id, formData, taskId);
     }, [])
 
     const taskMethods = {

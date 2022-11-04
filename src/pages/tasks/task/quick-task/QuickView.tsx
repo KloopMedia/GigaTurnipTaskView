@@ -34,14 +34,14 @@ const QuickView = (props: Props) => {
 
     const requestButton = active ?
         (
-            <Tooltip key={"edit_button"} title={t("accepted") as string}>
+            <Tooltip key={"edit_button_checked"} title={t("accepted") as string}>
                 <IconButton color={"primary"} size={"small"} onClick={onAction}>
                     <CheckCircleIcon color={"primary"} fontSize={"large"} />
                 </IconButton>
             </Tooltip>
         )
         :
-        <IconButton onClick={onRequest}>
+        <IconButton key={"edit_button"} onClick={onRequest}>
             <Box display={"flex"} justifyContent={"center"} alignItems={"center"} flexDirection={"column"}>
                 <EditIcon color={'primary'} />
                 <Typography variant={'caption'}>{t('edit')}</Typography>

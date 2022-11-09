@@ -20,7 +20,7 @@ export type TaskProps = {
     handlePrompt: (value: boolean) => void,
     openToast: (msg: string, type: ToastVariants) => void,
     updateState: Function,
-    getDynamicForm: (id: number, formData: any) => Promise<any>
+    getDynamicForm: (id: number, formData: any, taskId: number) => Promise<any>
 };
 
 export type FilterData = {

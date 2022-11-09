@@ -149,10 +149,13 @@ const useAxios = () => {
     }
 
     // TaskMenu Functions
-    const getSelectableTasks = (campaignId: number, page?: number, filter?: string) => {
+    const getSelectableTasks = (campaignId: number, page?: number, filter?: {query: string, mode: "simple" | "complex"}) => {
         let url = createPaginationURL(`${tasksUrl}user_selectable/?stage__chain__campaign=${campaignId}`, page)
-        if (filter) {
-            url += `&task_responses=${filter}`
+        if (filter?.mode == "simple") {
+            url += `&responses_contains=${filter.query}`
+        }
+        if (filter?.mode == "complex") {
+            url += `&task_responses=${filter.query}`
         }
         console.log(url)
         return axios.get(url).then(res => {
@@ -219,8 +222,8 @@ const useAxios = () => {
         return axios.get(`${tasksUrl + id}/trigger_webhook/`)
     }
 
-    const getDynamicSchema = (id: number, formData: any) => {
-        return axios.get(`${taskstagesUrl + id}/load_schema_answers/?responses=${formData}`)
+    const getDynamicSchema = (id: number, formData: any, taskId: number) => {
+        return axios.get(`${taskstagesUrl + id}/load_schema_answers/?current_task=${taskId}&responses=${formData}`)
             .then(res => res.data);
     }
 

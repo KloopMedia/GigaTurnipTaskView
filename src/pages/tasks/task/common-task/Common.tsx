@@ -60,7 +60,7 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
         } catch (e) {
             _jsonData = '{}';
         }
-        getDynamicForm(taskData.stage.id, _jsonData).then(res => {
+        getDynamicForm(taskData.stage.id, _jsonData, taskData.id).then(res => {
             const { schema, ...rest } = taskData;
             const dynamicSchema = res.schema;
             setData({ schema: dynamicSchema, ...rest })
@@ -71,7 +71,7 @@ const Common = (props: TaskProps & { update?: boolean, forceUpdate?: (value: boo
         const data = await getData(id);
         const prev = await getPreviousData(id);
 
-        if (!data.complete && data.stage.hasOwnProperty("dynamic_jsons")) {
+        if (!data.complete && data.stage.hasOwnProperty("dynamic_jsons_target")) {
             setDynamic(true);
             setDynamicForm(data, data.responses);
         }

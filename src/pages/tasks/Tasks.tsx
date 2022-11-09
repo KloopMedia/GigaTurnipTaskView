@@ -61,14 +61,14 @@ const Tasks = () => {
         })) as any;
     }
 
-    const getSelectable = (campaign: number, page?: number, filter?: string) => {
+    const getSelectable = (campaign: number, page?: number, filter?: {query: string, mode: "simple" | "complex"}) => {
         return getSelectableTasks(campaign, page, filter).then(res => {
             setTotalPages(Math.ceil(res.count / 10))
             return res.results;
         })
     };
 
-    const getData = (id: number, tab: string, page?: number, filter?: string) => {
+    const getData = (id: number, tab: string, page?: number, filter?: {query: string, mode: "simple" | "complex"}) => {
         if (tab === "1") {
             getOpenTasks(id).then(res => setOpenTasks(res));
         } else if (tab === "2") {
@@ -97,7 +97,7 @@ const Tasks = () => {
         setPage(value);
     };
 
-    const getFilteredData = (filter: string) => {
+    const getFilteredData = (filter: {query: string, mode: "simple" | "complex"}) => {
         getSelectableTasks(parsedCampaignId, 1, filter).then(res => {
             if (res.count > 0) {
                 setFilterFormData(filter)

@@ -8,7 +8,8 @@ import {
     LinkWidget,
     RadioWidget,
     SelectWidget,
-    CounterWidget
+    CounterWidget,
+    SimpleAutoComplete
 } from "./custom-widgets";
 import JsonForm from "@rjsf/bootstrap-4";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -41,6 +42,7 @@ const Form: React.FC<Props> = (props) => {
         DateTimeWidget: DateTimeWidget,
         DateWidget: DateWidget,
         SelectWidget: SelectWidget,
+        simple_autocomplete: SimpleAutoComplete,
     };
 
     const fields = {

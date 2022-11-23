@@ -50,7 +50,7 @@ const SimpleAutoComplete = ({
                 onFocus={_onFocus}
                 disablePortal
                 id={id}
-                options={(schema.examples as string[]).concat(schema.default ? ([schema.default] as string[]) : [])}
+                options={(schema.enum as string[]).concat(schema.default ? ([schema.default] as string[]) : [])}
                 sx={{ width: 300 }}
                 renderInput={(params) => <TextField required={required} autoFocus={autofocus} {...params} error={rawErrors.length > 0 ? true : false} hiddenLabel label="option" size="small" />}
             />

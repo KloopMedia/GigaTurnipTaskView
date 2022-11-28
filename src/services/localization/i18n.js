@@ -1,5 +1,5 @@
 import i18next from "i18next";
-import {initReactI18next} from "react-i18next";
+import { initReactI18next } from "react-i18next";
 
 const resources = {
     en: {
@@ -76,12 +76,12 @@ const resources = {
                 filter_label: "Filter",
                 field_label: "Field",
                 type_label: "Field's type",
-                types: ["Text", "Number", "Date-Time"],
+                types: ["Boolean", "Number", "Integer", "Date-Time", "Text"],
                 conditions_label: "Conditions",
                 value_label: "Value",
                 value_description: "If field's type is Date-Time, please write in format year-month-day. Example: 2022-04-03",
                 operator_label: "Operators",
-                operators: ["Equal", "Not equal", "Less", "Greater", "Less or Equal", "Greater or Equal"],
+                operators: ["Starts with", "Search", "Regex", "Equal", "Not equal", "Less", "Greater", "Less or Equal", "Greater or Equal"],
                 search_button: "Search"
             }
         },
@@ -160,12 +160,12 @@ const resources = {
                 filter_label: "Фильтр",
                 field_label: "Поле",
                 type_label: "Тип поля",
-                types: ["Текст", "Число", "Дата-Время"],
+                types: ["Логический", "Число", "Целое число", "Дата-Время", "Текст"],
                 conditions_label: "Условия",
                 value_label: "Значение",
                 value_description: "Если тип поля Дата-Время, пожалуйста заполняйте в формате год-месяц-день. Пример: 2022-04-03",
                 operator_label: "Оператор",
-                operators: ["Равно", "Не равно", "Меньше", "Больше", "Меньше или Равно", "Больше или Равно"],
+                operators: ["Начинается с", "Поиск", "Регекс", "Равно", "Не равно", "Меньше", "Больше", "Меньше или Равно", "Больше или Равно"],
                 search_button: "Поиск"
             }
         },

@@ -6,8 +6,8 @@ import Form from "../../components/form/Form";
 import useHelpers from "../../utils/hooks/UseHelpers";
 import { useTranslation } from "react-i18next";
 
-const OPERATORS = ["==", "!=", "<", ">", "<=", ">=", "in"];
-const TYPES = ["string", "int", "datetime"]
+const OPERATORS = ["^", "@", "$", "==", "!=", "<", ">", "<=", ">=", "in"];
+const TYPES = ["boolean", "number", "integer", "datetime", "string"]
 
 const TaskFilter = (props: { campaign: number, onFilter: (filter: { query: string, mode: "simple" | "complex" }) => void }) => {
     const { campaign, onFilter } = props;
@@ -151,7 +151,7 @@ const TaskFilter = (props: { campaign: number, onFilter: (filter: { query: strin
     const handleFormSubmit = () => {
         const parsedFormStageId = formStageId ? parseId(formStageId) : null;
         const parsedSearchStageId = searchStageId ? parseId(searchStageId) : null;
-        const query = { all_conditions: formResponses, stage: parsedFormStageId, search_stage: parsedSearchStageId };
+        const query = { items_conditions: formResponses, stage: parsedFormStageId, search_stage: parsedSearchStageId };
         const queryString = JSON.stringify(query)
         if (simpleFilterMode) {
             onFilter({ query: simpleFilterQuery, mode: "simple" })
@@ -232,7 +232,7 @@ const TaskFilter = (props: { campaign: number, onFilter: (filter: { query: strin
         <Box>
             <Box display={"flex"} alignItems="center" m={1}>
                 <Typography>Простой фильтр</Typography>
-                <Switch checked={simpleFilterMode} onChange={(event) => setSimpleFilterMode(event.target.checked)}/>
+                <Switch checked={simpleFilterMode} onChange={(event) => setSimpleFilterMode(event.target.checked)} />
             </Box>
 
             {

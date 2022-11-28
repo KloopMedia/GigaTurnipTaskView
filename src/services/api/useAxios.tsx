@@ -155,9 +155,13 @@ const useAxios = () => {
             url += `&responses_contains=${filter.query}`
         }
         if (filter?.mode == "complex") {
-            url += `&task_responses=${filter.query}`
+            const query = JSON.parse(filter.query)
+            url += `&responses_filter_values=Yes`
+            return axios.post(url, query).then(res => {
+                console.log("getSelectableTasks", res.data)
+                return res.data;
+            })
         }
-        console.log(url)
         return axios.get(url).then(res => {
             console.log("getSelectableTasks", res.data)
             return res.data;

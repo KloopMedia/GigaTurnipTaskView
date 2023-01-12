@@ -5,15 +5,16 @@ import {Box} from '@mui/material';
 type Props = {
     data?: string
     hidden?: boolean
+    id?: string
 };
 
 const TextViewer = (props: Props) => {
-    const {data, hidden} = props;
+    const {data, hidden, id} = props;
 
     return (
         <Box hidden={hidden}>
             <Editor
-                id={"ViewerTinyMCE"}
+                id={id ?? "ViewerTinyMCE"}
                 value={data}
                 inline={false}
                 disabled={true}

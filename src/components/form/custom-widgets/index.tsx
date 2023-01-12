@@ -8,6 +8,7 @@ import DateWidget from "./date-widget/CustomDateWidget";
 import SelectWidget from "./select-widget/FixedSelectWidget";
 import CounterWidget from './counter-widget/Counter'
 import SimpleAutoComplete from "./simple-auto-complete/SimpleAutoComplete";
+import EditorWidget from "./editor-widget/EditorWidget";
 
 export {
     AudioWidget,
@@ -19,5 +20,6 @@ export {
     DateWidget,
     SelectWidget,
     CounterWidget,
-    SimpleAutoComplete
+    SimpleAutoComplete,
+    EditorWidget,
 }

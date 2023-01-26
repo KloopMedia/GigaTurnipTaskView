@@ -9,6 +9,7 @@ import SelectWidget from "./select-widget/FixedSelectWidget";
 import CounterWidget from './counter-widget/Counter'
 import SimpleAutoComplete from "./simple-auto-complete/SimpleAutoComplete";
 import EditorWidget from "./editor-widget/EditorWidget";
+import WebhookWidget from "./webhook-stub/WebhookWidget";
 
 export {
     AudioWidget,
@@ -22,4 +23,5 @@ export {
     CounterWidget,
     SimpleAutoComplete,
     EditorWidget,
+    WebhookWidget,
 }

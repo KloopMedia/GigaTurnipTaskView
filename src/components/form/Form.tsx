@@ -11,6 +11,7 @@ import {
     CounterWidget,
     SimpleAutoComplete,
     EditorWidget,
+    WebhookWidget,
 } from "./custom-widgets";
 import JsonForm from "@rjsf/bootstrap-4";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -45,6 +46,7 @@ const Form: React.FC<Props> = (props) => {
         SelectWidget: SelectWidget,
         simple_autocomplete: SimpleAutoComplete,
         editor: EditorWidget,
+        webhook: WebhookWidget,
     };
 
     const fields = {
